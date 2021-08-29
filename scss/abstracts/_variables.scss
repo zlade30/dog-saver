@@ -1,0 +1,97 @@
+// -----------------------------------------------------------------------------
+// This file contains all application-wide Sass variables.
+// -----------------------------------------------------------------------------
+
+// Main app color
+/// @type Color
+$primary-color: #42C2D3 !default;
+$secondary-color: #F4F6FA !default;
+$white: #FFFFFF !default;
+$text-color: #334D67 !default;
+
+
+
+
+
+
+
+// /// Regular font family
+// /// @type List
+// $text-font-stack: "Montreux Classic Regular",
+// sans-serif !default;
+
+// $text-font-stack-strong: "Montreux Classic Demi Bold",
+// sans-serif !default;
+
+// $text-font-stack-bold: 'Montreux Classic Bold', sans-serif !default;
+
+// /// Code (monospace) font family
+// /// @type List
+// $code-font-stack: "Montreux Classic Regular",
+// monospace !default;
+
+// /// Copy text color
+// /// @type Color
+// $text-color: #50506E !default;
+
+// /// Main brand color
+// /// @type Color
+// $brand-color: #50506E !default;
+// $secondary-text: #9F9FAE !default;
+
+// /// Light grey
+// /// @type Color
+// $light-grey: rgb(237, 237, 237) !default;
+
+// /// Medium grey
+// /// @type Color
+// $mid-grey: rgb(153, 153, 153) !default;
+
+// /// Dark grey
+// /// @type Color
+// $dark-grey: rgb(68, 68, 68) !default;
+
+// /// Form colors
+// $form-standard-color       : #50506E;
+// $form-secondary-color      : #82829F;
+// $form-field-border-color   : #ced4da;
+// $form-field-outlines-color : #C2C1CD;
+// $form-multiple-select-color: #E7EAF6;
+// $form-disabled-color       : #E6E6EE;
+// $form-error-color          : #E96178;
+// $fs-extra-large: 29px !important;
+// $fs-large: 21px !important;
+// $fs-medium: 18px !important;
+// $fs-small: 16px !important;
+// $fs-extra-small: 14px !important;
+
+// $fs-max-extra-large: 32px !important;
+// $fs-max-large: 24px !important;
+// $fs-max-medium: 21px !important;
+// $fs-max-small: 18px !important;
+// $fs-max-extra-small: 16px !important;
+
+// $fs-min-extra-large: 29px !important;
+// $fs-min-large: 21px !important;
+// $fs-min-medium: 18px !important;
+// $fs-min-small: 16px !important;
+// $fs-min-extra-small: 14px !important;
+
+// $fs-back-btn: 24px !important;
+// /// Container's maximum width
+// /// @type Length
+// $max-width: 1180px !default;
+
+// /// Breakpoints map
+// /// @prop {String} keys - Keys are identifiers mapped to a given length
+// /// @prop {Map} values - Values are actual breakpoints expressed in pixels
+// $breakpoints: ("small": 320px, "medium": 768px, "large": 1024px) !default;
+
+// /// Relative or absolute URL where all assets are served from
+// /// @type String
+// /// @example scss - When using a CDN
+// ///   $base-url: 'http://cdn.example.com/assets/';
+// $base-url      : "/assets/" !default;
+
+
+// $primary-color: $text-color
