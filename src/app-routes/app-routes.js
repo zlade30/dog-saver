@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Redirect, Switch, withRouter } from 'react-router-dom'
+import { Switch, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Routing from 'routes/routing'
 import { publicRoutes } from 'utils/constants'
@@ -20,7 +20,7 @@ const AppRoutes = () => {
         {routes &&
           routes.length &&
           routes.map((route) => <Routing key={route.path} {...route} />)}
-        <Redirect from="/" to="/login" />
+        {/* <Redirect from="/" to="/login" /> */}
       </Switch>
     </Suspense>
   )

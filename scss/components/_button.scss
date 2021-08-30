@@ -1,0 +1,23 @@
+@import "../abstracts/variables";
+
+.button {
+  width: auto;
+  height: 40px;
+  border: none;
+  color: $white;
+  font-weight: 500;
+  font-size: 12px;
+  border-radius: 12px;
+  padding-left: 15px;
+  padding-right: 15px;
+  outline: none;
+  background: $primary-color;
+  background-color: $primary-color;
+  font-family: Montserrat, sans-serif;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: $button-hover-color;
+  background-color: $button-hover-color;
+}
