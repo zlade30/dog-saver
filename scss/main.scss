@@ -33,10 +33,12 @@
 // 5. Components
 
 @import 'components/button';
+@import 'components/text-field';
 
 // 6. Page-specific styles
 
 @import 'pages/overview';
+@import 'pages/auth';
 
 
 // @import "pages/apps";

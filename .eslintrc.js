@@ -21,12 +21,12 @@ module.exports = {
   },
   plugins: ["babel", "react", "import", "prettier"],
   rules: {
+    "react/jsx-no-bind": ["error", { allowArrowFunctions: true, allowBind: true }],
     "import/no-duplicates": "error",
     'import/named': 'error',
     "prettier/prettier": "error",
     "react/no-typos": "error",
     "react/no-unused-state": "error",
-    "react/jsx-no-bind": "error",
     "array-callback-return": "error",
     "consistent-return": "error",
     "babel/no-invalid-this": "error",
@@ -35,8 +35,8 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        paths: ['src'],
-      },
+        paths: ['src']
+      }
     }
   }
 }
