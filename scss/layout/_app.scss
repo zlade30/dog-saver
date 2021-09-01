@@ -25,6 +25,12 @@ label {
   justify-content: space-between;
 }
 
+.justify-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .justify-between-column {
   display: flex;
   flex-direction: column;

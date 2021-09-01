@@ -1,6 +1,9 @@
 import React from 'react'
+import { useHistory } from 'react-router-dom'
 
 const Header = () => {
+  const history = useHistory()
+
   return (
     <div className="header header-title">
       <div className="header-panel">
@@ -8,9 +11,9 @@ const Header = () => {
         Dog Saver
       </div>
       <div className="header-panel">
-        <label className="header-txt">Login</label>
+        <label onClick={() => history.push('/login')} className="header-txt">Sign In</label>
         <label className="header-txt">|</label>
-        <label className="header-txt">Register</label>
+        <label onClick={() => history.push('/register')} className="header-txt">Sign Up</label>
       </div>
     </div>
   )

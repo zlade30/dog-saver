@@ -14,8 +14,8 @@ const Overview = () => {
           Damilag Manolo Fortich Bukidnon, 8703
         </span>
         <span className="overview-btn-container">
-          <Button value="Would you like to register your dog?" />
-          <Button value="Visit impounding" />
+          <Button width={240} value="Would you like to register your dog?" />
+          <Button width={150} value="Visit impounding" />
         </span>
       </div>
     </>

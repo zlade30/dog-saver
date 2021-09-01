@@ -2,10 +2,10 @@ import React from 'react'
 import PasswordField from 'components/text-fields/PasswordField'
 import TextField from 'components/text-fields/TextField'
 import Button from 'components/buttons/Button'
-import Checkbox from 'components/checkboxes/Checkbox'
+import AvatarSelection from 'components/avatar/AvatarSelection'
 import { useHistory } from 'react-router-dom'
 
-const Login = () => {
+const Register = () => {
   const history = useHistory()
 
   return (
@@ -16,26 +16,43 @@ const Login = () => {
             <img className="logo-img" src="assets/icons/dog.png" />
             Dog Saver
           </div>
+          <AvatarSelection />
           <TextField
             width={320}
             placeholder="Email or Phone"
             errorLabel="Please input your email or phone!"
+          />
+          <TextField
+            width={320}
+            placeholder="Last Name"
+            errorLabel="Please input your last name!"
+          />
+          <TextField
+            width={320}
+            placeholder="First Name"
+            errorLabel="Please input your first name!"
+          />
+          <TextField
+            width={320}
+            placeholder="Middle Name"
+            errorLabel="Please input your middle name!"
+          />
+          <TextField
+            width={320}
+            placeholder="Address"
+            errorLabel="Please input your address!"
           />
           <PasswordField
             width={320}
             placeholder="Password"
             errorLabel="Please input your password!"
           />
-          <div className="checkbox-container form-item justify-between">
-            <Checkbox value="Remember Me" />
-            <label onClick={() => history.push('/forgot-password')} className="forgot-password">Forgot Password?</label>
-          </div>
-          <Button width={320} value="Sign In" />
+          <Button width={320} value="Sign Up" />
         </div>
         <div>
           <span>
-            <label>Do not have an account yet?</label>
-            <label onClick={() => history.push('/register')} className="register">Sign Up</label>
+            <label>Already have an account?</label>
+            <label onClick={() => history.push('/login')} className="register">Sign In</label>
           </span>
         </div>
       </div>
@@ -46,4 +63,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default Register

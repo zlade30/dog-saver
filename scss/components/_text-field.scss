@@ -11,6 +11,10 @@
   margin-bottom: 10px;
 }
 
+.text-field::placeholder {
+  color: #B9D0E7;
+}
+
 .text-field-empty {
   padding: 10px 16px;
   border-radius: 12px;
