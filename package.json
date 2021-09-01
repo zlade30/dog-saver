@@ -1,7 +1,8 @@
 {
   "name": "dog-saver",
-  "version": "1.0.0",
-  "description": "",
+  "homepage": "https://zlade30.github.io/dog-saver/",
+  "version": "0.1.0",
+  "description": "Damilag dog impounding system",
   "main": "index.js",
   "scripts": {
     "start": "cross-env APP_ENV=development webpack serve --config config/webpack.dev.js",
@@ -39,6 +40,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react": "^7.21.2",
     "html-webpack-plugin": "^4.5.0",
+    "mini-css-extract-plugin": "^2.2.1",
     "node-sass": "^6.0.1",
     "optimize-css-assets-webpack-plugin": "^5.0.4",
     "prettier": "^2.1.2",
@@ -53,6 +55,7 @@
   "dependencies": {
     "@babel/runtime": "^7.15.3",
     "antd": "^4.16.12",
+    "gh-pages": "^3.2.3",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
