@@ -2,6 +2,7 @@ import { lazy } from 'react'
 
 const Login = lazy(() => import('pages/auth/login'))
 const Overview = lazy(() => import('pages/overview'))
+const Dashboard = lazy(() => import('pages/dashboard'))
 const Register = lazy(() => import('pages/auth/register'))
 const ForgotPassword = lazy(() => import('pages/auth/forgot-password'))
 // const Login = lazy(() => import(''))
@@ -28,9 +29,15 @@ const Routes = [
   },
   {
     path: '/',
+    name: 'Dashboard',
+    component: Dashboard,
+    hidden: false
+  },
+  {
+    path: '/overview',
     name: 'Overview',
     component: Overview,
-    hidden: false
+    hidden: true
   }
 ]
 

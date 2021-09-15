@@ -38,6 +38,15 @@ label {
   justify-content: space-between;
 }
 
+.align-center {
+  display: flex;
+  align-items: center;
+}
+
 .bold {
   font-weight: bold;
+}
+
+.cursor-pointer {
+  cursor: pointer;
 }

@@ -1,0 +1,18 @@
+@import "../abstracts/variables";
+
+.error-alert {
+  height: 35px;
+  color: $white;
+  border-radius: 10px;
+  background-color: $error;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  padding: 0px 14px;
+  font-size: 14px;
+}
+
+.alert-message {
+  font-size: 14px;
+  margin-left: 4px;
+}

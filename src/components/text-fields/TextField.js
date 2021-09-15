@@ -1,45 +1,37 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
+import { Field } from 'formik'
 
-const TextField = ({ width, placeholder, onChange, errorLabel }) => {
-  const [value, setValue] = useState('')
-  const [isBlur, setIsBlur] = useState(false)
-
-  const showError = () => {
-    if (!value && isBlur)
-      return <label className="text-field-error">{errorLabel}</label>
-    else return <div />
-  }
-
+const TextField = ({ errors, touched, width, placeholder, ...rest }) => {
   return (
     <div className="text-field-container">
-      <input
+      <Field
         style={{ width }}
-        className={!value && isBlur ? 'text-field-empty' : 'text-field'}
+        className={
+          errors[rest.name] && touched[rest.name]
+            ? 'text-field-error'
+            : 'text-field'
+        }
         placeholder={placeholder}
-        onChange={(evt) => {
-          setIsBlur(true)
-          onChange(evt)
-          setValue(evt.target.value)
-        }}
+        {...rest}
       />
-      {showError()}
+      {errors[rest.name] && touched[rest.name] && (
+        <div className="label-error">{`${placeholder} is Required!`}</div>
+      )}
     </div>
   )
 }
 
 TextField.defaultProps = {
   width: 200,
-  placeholder: '',
-  onChange: () => {},
-  errorLabel: 'Field is empty!'
+  placeholder: ''
 }
 
 TextField.propTypes = {
+  errors: PropTypes.object,
+  touched: PropTypes.object,
   width: PropTypes.number,
-  placeholder: PropTypes.string,
-  onChange: PropTypes.func,
-  errorLabel: PropTypes.string
+  placeholder: PropTypes.string
 }
 
 export default TextField

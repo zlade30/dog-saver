@@ -8,6 +8,22 @@ import { useHistory } from 'react-router-dom'
 const Login = () => {
   const history = useHistory()
 
+  // useEffect(() => {
+  //   const signIn = async () => {
+  //     try {
+  //       const res = await auth.signInWithEmailAndPassword(
+  //         'sample@gmail.com',
+  //         '123123'
+  //       )
+  //       console.log(res)
+  //     } catch (err) {
+  //       console.error(err)
+  //       alert(err.message)
+  //     }
+  //   }
+  //   signIn()
+  // }, [])
+
   return (
     <div className="auth-container">
       <div className="auth-form">
@@ -28,14 +44,22 @@ const Login = () => {
           />
           <div className="checkbox-container form-item justify-between">
             <Checkbox value="Remember Me" />
-            <label onClick={() => history.push('/forgot-password')} className="forgot-password">Forgot Password?</label>
+            <label
+              onClick={() => history.push('/forgot-password')}
+              className="forgot-password">
+              Forgot Password?
+            </label>
           </div>
           <Button width={320} value="Sign In" />
         </div>
         <div>
           <span>
             <label>Do not have an account yet?</label>
-            <label onClick={() => history.push('/register')} className="register">Sign Up</label>
+            <label
+              onClick={() => history.push('/register')}
+              className="register">
+              Sign Up
+            </label>
           </span>
         </div>
       </div>

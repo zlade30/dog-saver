@@ -35,6 +35,20 @@
 }
 
 .text-field-error {
+  padding: 10px 16px;
+  border-radius: 12px;
+  border-width: 1px;
+  border-color: $error;
+  border-style: solid;
+  font-family: Montserrat, sans-serif;
+  outline: none;
+}
+
+.text-field-error::placeholder {
+  color: #B9D0E7;
+}
+
+.label-error {
   color: $error;
   font-size: 12px;
   margin-top: 5px;
