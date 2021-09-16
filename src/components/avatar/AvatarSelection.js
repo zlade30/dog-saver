@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 
-const AvatarSelection = ({ setImg }) => {
-  const [selectedImg, setSelectedImg] = useState(null)
+const AvatarSelection = ({ width, height, setImg, isClickable, src }) => {
+  const [selectedImg, setSelectedImg] = useState(src)
 
   const onHandleImage = (event) => {
     if (event.target.files[0]) {
@@ -12,9 +12,10 @@ const AvatarSelection = ({ setImg }) => {
   }
 
   return (
-    <div className="profile-selection logo">
+    <div
+      className={`${!isClickable ? 'no-margin' : ''} profile-selection logo `}>
       <input
-        id="file-input"
+        id={`${isClickable ? 'file-input' : ''}`}
         style={{ display: 'none' }}
         type="file"
         accept="image/png, image/jpeg"
@@ -23,8 +24,8 @@ const AvatarSelection = ({ setImg }) => {
       <label htmlFor="file-input">
         <img
           style={{
-            height: 100,
-            width: 100,
+            height,
+            width,
             objectFit: 'cover',
             cursor: 'pointer',
             borderRadius: '100%'
@@ -37,11 +38,19 @@ const AvatarSelection = ({ setImg }) => {
 }
 
 AvatarSelection.defaultProps = {
-  setImg: () => {}
+  setImg: () => {},
+  width: 100,
+  height: 100,
+  isClickable: true,
+  src: null
 }
 
 AvatarSelection.propTypes = {
-  setImg: PropTypes.func.isRequired
+  setImg: PropTypes.func.isRequired,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  isClickable: PropTypes.bool,
+  src: PropTypes.string
 }
 
 export default AvatarSelection

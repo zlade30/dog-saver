@@ -37,11 +37,14 @@
 @import 'components/text-field';
 @import 'components/alerts';
 @import 'components/loading-overlay';
+@import 'components/sidebar';
+@import 'components/divider';
 
 // 6. Page-specific styles
 
 @import 'pages/overview';
 @import 'pages/auth';
+@import 'pages/home';
 
 
 // @import "pages/apps";
