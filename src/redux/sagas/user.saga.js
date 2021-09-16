@@ -7,8 +7,25 @@ import {
   createAccountActionSuccess,
   createUserAction,
   createUserActionFailed,
-  createUserActionSuccess
+  createUserActionSuccess,
+  getUserAction,
+  getUserActionFailed,
+  getUserActionSuccess,
+  signInAction,
+  signInActionFailed,
+  signInActionSuccess
 } from '../actions/user.action'
+
+const get = async (payload) => {
+  try {
+    const result = await payload
+    let snapshot = null
+    result.forEach((doc) => (snapshot = doc.data()))
+    return { isSuccess: true, data: snapshot }
+  } catch (error) {
+    return { isSuccess: false, data: error }
+  }
+}
 
 const create = async (payload) => {
   try {
@@ -32,24 +49,47 @@ const signUp = async (payload) => {
   }
 }
 
+function* signIn(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+
+  const response = yield call(
+    signUp,
+    auth.signInWithEmailAndPassword(data?.email, data?.password)
+  )
+
+  if (response?.isSuccess) {
+    yield put(signInActionSuccess(response))
+    yield call(onSuccess, response?.data)
+  } else {
+    yield put(signInActionFailed(response))
+    yield call(onFailure, response?.data)
+  }
+}
+
+function* getUser(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+
+  const response = yield call(
+    get,
+    firestore.collection('users').where('email', '==', data?.email).get()
+  )
+
+  if (response?.isSuccess) {
+    yield put(getUserActionSuccess(response))
+    yield call(onSuccess, response?.data)
+  } else {
+    yield put(getUserActionFailed(response))
+    yield call(onFailure, response?.data)
+  }
+}
+
 function* createAccount(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
 
-  let response = null
-  if (data?.isEmail) {
-    response = yield call(
-      signUp,
-      auth.createUserWithEmailAndPassword(data.username, data.password)
-    )
-  } else {
-    response = yield call(
-      signUp,
-      auth.signInWithPhoneNumber(
-        `+639${data?.username?.slice('2')}`,
-        data?.appVerifier
-      )
-    )
-  }
+  const response = yield call(
+    signUp,
+    auth.createUserWithEmailAndPassword(data?.email, data?.password)
+  )
 
   if (response?.isSuccess) {
     yield put(createAccountActionSuccess(response))
@@ -75,6 +115,8 @@ function* createUser(action) {
 export default function* root() {
   yield all([
     takeLatest(createUserAction.toString(), createUser),
-    takeLatest(createAccountAction.toString(), createAccount)
+    takeLatest(createAccountAction.toString(), createAccount),
+    takeLatest(getUserAction.toString(), getUser),
+    takeLatest(signInAction.toString(), signIn)
   ])
 }
