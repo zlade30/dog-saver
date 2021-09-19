@@ -2,9 +2,8 @@
 
 .sidebar {
   width: 350px;
-  height: 100vh;
   background-color: $white;
-  padding: 40px 20px;
+  padding: 40px 0px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,15 +18,49 @@
 }
 
 .user-info-cont {
-  width: 100%;
+  width: 290px;
   display: flex;
   align-items: center;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 0px;
 }
 
 .logout-cont {
-  width: 100%;
+  width: 290px;
   display: flex;
   align-items: center;
+  margin-bottom: 10px;
+}
+
+.sidebar-menu-cont {
+  width: 100%;
+  padding: 10px 0px;
+}
+
+.sidebar-menu {
+  width: 320px;
+  margin-left: 30px;
+  height: 45px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding-left: 10px;
+}
+
+.sidebar-menu:hover {
+  width: 320px;
+  margin-left: 30px;
+  height: 45px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  background-color: $secondary-color;
+}
+
+.sidebar-menu-icon {
+  width: 30px;
+  margin-right: 15px;
 }

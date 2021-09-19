@@ -111,8 +111,10 @@ const Register = () => {
                   },
                   onSuccess: () => {
                     delete values.password
-                    if (profile) onCreateUpload(values)
-                    else onCreateAccount(values)
+                    if (profile)
+                      onCreateUpload({ ...values, phone: `0${values?.phone}` })
+                    else
+                      onCreateAccount({ ...values, phone: `0${values?.phone}` })
                   },
                   onFailure: (error) => {
                     setErrorMsg(error)

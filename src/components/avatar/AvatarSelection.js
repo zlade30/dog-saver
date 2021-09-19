@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 const AvatarSelection = ({ width, height, setImg, isClickable, src }) => {
@@ -10,6 +10,10 @@ const AvatarSelection = ({ width, height, setImg, isClickable, src }) => {
       setSelectedImg(URL.createObjectURL(event.target.files[0]))
     }
   }
+
+  useEffect(() => {
+    setSelectedImg(src)
+  }, [src])
 
   return (
     <div
@@ -41,8 +45,7 @@ AvatarSelection.defaultProps = {
   setImg: () => {},
   width: 100,
   height: 100,
-  isClickable: true,
-  src: null
+  isClickable: true
 }
 
 AvatarSelection.propTypes = {
