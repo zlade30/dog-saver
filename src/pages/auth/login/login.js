@@ -64,7 +64,7 @@ const Login = () => {
                   data: values,
                   onSuccess: () => {
                     setShowLoader(false)
-                    history.push('/')
+                    history.push('/dashboard')
                   },
                   onFailure: (error) => {
                     setShowLoader(false)

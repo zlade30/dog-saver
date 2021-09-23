@@ -102,3 +102,132 @@ input[type=number] {
 .flex {
   display: flex;
 }
+
+.swipeable {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: #dcddde96;
+  padding-top: 40px;
+  padding-bottom: 70px;
+  position: relative;
+}
+
+.swipeable-dots-cont {
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 30px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.swipeable-dots {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: $primary-color;
+  margin-right: 5px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.swipeable-arrow-l {
+  position: absolute;
+  left: 0;
+  margin-left: 40px;
+}
+
+.swipeable-arrow-r {
+  position: absolute;
+  right: 0;
+  margin-right: 40px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.card {
+  width: 95%;
+  border-radius: 12px;
+  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 20px;
+  position: relative;
+
+  &-header {
+    width: 100%;
+    height: 30px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    padding-left: 30px;
+    font-size: 12px;
+  }
+}
+
+.items-center {
+  align-items: center;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.avatar-container {
+  width: 95%;
+  display: flex;
+  align-items: center;
+}
+
+.user-card {
+  width: 170px;
+  height: 280px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  margin-top: 5px;
+  margin-right: 15px;
+
+  &-name {
+    font-weight: bold;
+    width: 120px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: center;
+  }
+  &-info {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  &-label {
+    font-weight: bold;
+    margin-right: 10px;
+    width: 80px;
+    margin-bottom: 3px;
+  }
+  &-value {
+    width: 90px;
+    margin-bottom: 3px;
+    word-wrap: break-word;
+  }
+}
+
+.usercard-arrow-r {
+  position: absolute;
+  right: 0;
+  margin-right: 10px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}

@@ -1,4 +1,4 @@
-import React, { Suspense, useContext, useEffect } from 'react'
+import React, { Suspense, useContext, useEffect, useState } from 'react'
 import { Switch, withRouter } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import Routing from 'routes/routing'
@@ -9,12 +9,13 @@ import { UserContext } from 'contexts/user.context'
 import { auth } from 'firebase'
 import { getUserAction } from 'redux/actions/user.action'
 import Sidebar from 'components/sidebar/Sidebar'
+import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 
 const AppRoutes = ({ history }) => {
   const isPublic = publicRoutes.includes(window.location.pathname)
 
   const dispatch = useDispatch()
-
+  const [showLoader, setShowLoader] = useState(false)
   const { user, setUser } = useContext(UserContext)
 
   useEffect(() => {
@@ -42,17 +43,30 @@ const AppRoutes = ({ history }) => {
     return () => listener?.()
   }, [])
 
+  const onLogout = () => {
+    setShowLoader(true)
+    setTimeout(() => {
+      auth.signOut()
+      setShowLoader(false)
+      history.push('/login')
+      localStorage.removeItem('authUser')
+    }, 1000)
+  }
+
   return (
     <div className="flex">
-      {routes?.length && !isPublic && <Sidebar user={user} />}
+      {showLoader && <LoadingOverlay />}
+      {routes?.length && !isPublic && (
+        <Sidebar onLogout={onLogout} user={user} />
+      )}
       {routes?.length && isPublic ? (
         routes.map((route) => (
-          <Suspense key={route.path} fallback={<div>Loading</div>}>
+          <Suspense key={route.path} fallback={<LoadingOverlay />}>
             <Routing {...route} />
           </Suspense>
         ))
       ) : (
-        <Suspense fallback={<div>Loading</div>}>
+        <Suspense fallback={<LoadingOverlay />}>
           <Switch>
             {routes &&
               routes.length &&

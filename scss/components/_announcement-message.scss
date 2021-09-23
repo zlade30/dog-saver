@@ -5,6 +5,9 @@
   min-height: 100px;
   background-color: $white;
   border-radius: 12px;
+  padding-bottom: 100px;
+  padding-top: 20px;
+  position: relative;
 }
 
 .ancmnt-msg-header {
@@ -19,7 +22,27 @@
 .ancmnt-msg-header-icon {
   display: flex;
   align-items: center;
-  width: 98%;
+  width: 95%;
   font-weight: bold;
+  font-size: 12px;
+}
+
+.ancmnt-msg-content {
+  display: flex;
+  align-items: center;
+  width: 95%;
+  font-size: 12px;
+  padding-left: 30px;
+  margin-top: 6px;
+  text-align: justify;
+  line-height: 18px;
+}
+
+.ancmnt-date {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin-right: 24px;
+  margin-bottom: 20px;
   font-size: 12px;
 }

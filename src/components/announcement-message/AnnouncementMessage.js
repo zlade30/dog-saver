@@ -24,9 +24,20 @@ const AnnouncementMessage = () => {
           <HornIcon />
           <label>Title of announcement</label>
         </div>
-        <Divider width="98%" />
-        <label>Hello</label>
+        <Divider width="95%" />
       </div>
+      <div className="ancmnt-msg-content">
+        <label>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
+          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+          aliquip ex ea commodo consequat. Duis aute irure dolor in
+          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
+          culpa qui officia deserunt mollit anim id est laborum.
+        </label>
+      </div>
+      <label className="ancmnt-date">08/12/2021</label>
     </div>
   )
 }

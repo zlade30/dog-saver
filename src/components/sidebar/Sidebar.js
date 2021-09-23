@@ -5,7 +5,7 @@ import AvatarSelection from 'components/avatar/AvatarSelection'
 import LogoutBoxRLineIcon from 'remixicon-react/LogoutBoxRLineIcon'
 import Home4LineIcon from 'remixicon-react/Home4LineIcon'
 import User3LineIcon from 'remixicon-react/User3LineIcon'
-import { useHistory } from 'react-router'
+import { useHistory, useLocation } from 'react-router'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -39,6 +39,8 @@ const HornIcon = ({ color = '#334D67' }) => (
 
 const Sidebar = ({ user, onLogout }) => {
   const history = useHistory()
+  const location = useLocation()
+
   const [menus, setMenus] = useState([
     {
       name: 'Home',
@@ -124,8 +126,8 @@ const Sidebar = ({ user, onLogout }) => {
             key={menu?.name}
             className="sidebar-menu"
             style={{
-              backgroundColor: menu?.isActive && '#F4F6FA',
-              color: menu?.isActive ? '#42C2D3' : '#334D67'
+              backgroundColor: location.pathname === menu.path && '#F4F6FA',
+              color: location.pathname === menu.path ? '#42C2D3' : '#334D67'
             }}
             onClick={() => onSelectMenu(menu)}>
             {renderIcon(menu)}
@@ -143,7 +145,7 @@ Sidebar.defaultProps = {
 }
 
 Sidebar.propTypes = {
-  user: PropTypes.object.isRequired,
+  user: PropTypes.object,
   onLogout: PropTypes.func.isRequired
 }
 
