@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 export const UserContext = createContext()
 
 const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('authUser')))
 
   const payload = {
     user,

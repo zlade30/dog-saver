@@ -2,6 +2,12 @@ import { auth, firestore } from 'firebase'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { deconstructSagaPayload, renderAuthErrorCode } from 'utils/helpers'
 import {
+  adminRemoveUserAction,
+  adminRemoveUserActionFailed,
+  adminRemoveUserActionSuccess,
+  adminUpdateUserAction,
+  adminUpdateUserActionFailed,
+  adminUpdateUserActionSuccess,
   createAccountAction,
   createAccountActionFailed,
   createAccountActionSuccess,
@@ -11,10 +17,17 @@ import {
   getUserAction,
   getUserActionFailed,
   getUserActionSuccess,
+  getUserListAction,
+  getUserListActionFailed,
+  getUserListActionSuccess,
+  sendCredentialAction,
+  sendCredentialActionFailed,
+  sendCredentialActionSuccess,
   signInAction,
   signInActionFailed,
   signInActionSuccess
 } from '../actions/user.action'
+import emailjs from 'emailjs-com'
 
 const get = async (payload) => {
   try {
@@ -27,9 +40,44 @@ const get = async (payload) => {
   }
 }
 
+const getList = async (payload) => {
+  try {
+    const result = await payload
+    return {
+      isSuccess: true,
+      data: result.docs.map((item) => ({ ...item.data(), id: item.id }))
+    }
+  } catch (error) {
+    return { isSuccess: false, data: error }
+  }
+}
+
 const create = async (payload) => {
   try {
     const result = await payload
+    return { isSuccess: true, data: result.id }
+  } catch (error) {
+    return { isSuccess: false, data: error }
+  }
+}
+
+const update = async (payload) => {
+  try {
+    const result = await payload
+    return { isSuccess: true, data: result }
+  } catch (error) {
+    return { isSuccess: false, data: error }
+  }
+}
+
+const send = async (payload) => {
+  try {
+    console.log(payload)
+    const result = await emailjs.send(
+      payload?.serviceID,
+      payload?.templateID,
+      payload?.templatePrams
+    )
     return { isSuccess: true, data: result }
   } catch (error) {
     return { isSuccess: false, data: error }
@@ -112,11 +160,74 @@ function* createUser(action) {
   }
 }
 
+function* updateUser(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const response = yield call(
+    update,
+    firestore.doc(`users/${data?.id}`).update(data?.values)
+  )
+  if (response) {
+    yield put(adminUpdateUserActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(adminUpdateUserActionFailed('Error updating user'))
+    yield call(onFailure, 'Error updating user!')
+  }
+}
+
+function* removeUser(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const response = yield call(
+    update,
+    firestore.doc(`users/${data?.id}`).update(data?.values)
+  )
+  if (response) {
+    yield put(adminRemoveUserActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(adminRemoveUserActionFailed('Error removing user'))
+    yield call(onFailure, 'Error removing user!')
+  }
+}
+
+function* sendCredential(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const response = yield call(send, data)
+  if (response) {
+    yield put(sendCredentialActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(sendCredentialActionFailed('Error sending credential'))
+    yield call(onFailure, 'Error sending credential!')
+  }
+}
+
+function* getUserList(action) {
+  const { onSuccess, onFailure } = deconstructSagaPayload(action.payload)
+
+  const response = yield call(
+    getList,
+    firestore.collection('users').where('role', '!=', 'admin').get()
+  )
+
+  if (response?.isSuccess) {
+    yield put(getUserListActionSuccess(response))
+    yield call(onSuccess, response?.data)
+  } else {
+    yield put(getUserListActionFailed(response))
+    yield call(onFailure, response?.data)
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(createUserAction.toString(), createUser),
     takeLatest(createAccountAction.toString(), createAccount),
     takeLatest(getUserAction.toString(), getUser),
-    takeLatest(signInAction.toString(), signIn)
+    takeLatest(signInAction.toString(), signIn),
+    takeLatest(adminUpdateUserAction.toString(), updateUser),
+    takeLatest(adminRemoveUserAction.toString(), removeUser),
+    takeLatest(sendCredentialAction.toString(), sendCredential),
+    takeLatest(getUserListAction.toString(), getUserList)
   ])
 }

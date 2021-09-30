@@ -24,15 +24,22 @@ const AppRoutes = ({ history }) => {
         // console.log(JSON.parse(JSON.stringify(authUser)))
         const currentUser = JSON.parse(JSON.stringify(authUser))
         // console.log(currentUser?.email)
-        dispatch(
-          getUserAction({
-            data: { email: currentUser?.email },
-            onSuccess: (response) => setUser(response),
-            onFailure: (error) => console.log(error)
-          })
-        )
-        history.push('/dashboard')
-        localStorage.setItem('authUser', JSON.stringify(user))
+        if (!currentUser) {
+          dispatch(
+            getUserAction({
+              data: { email: currentUser?.email },
+              onSuccess: (response) => setUser(response),
+              onFailure: (error) => console.log(error)
+            })
+          )
+          if (
+            history?.location?.pathname === '/login' ||
+            history?.location?.pathname === '/register' ||
+            history?.location?.pathname === '/forgot-password'
+          )
+            history.push('/dashboard')
+          localStorage.setItem('authUser', JSON.stringify(user))
+        }
       } else {
         localStorage.removeItem('authUser')
         setUser(null)

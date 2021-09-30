@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-const Button = ({ value, width, ...rest }) => {
+const Button = ({ value, width, height, ...rest }) => {
   return (
-    <button style={{ width }} {...rest} className="button">
+    <button style={{ width, height }} {...rest} className="button">
       {value}
     </button>
   )
@@ -16,7 +16,8 @@ Button.defaultProps = {
 
 Button.propTypes = {
   value: PropTypes.string,
-  width: PropTypes.number
+  width: PropTypes.number,
+  height: PropTypes.number
 }
 
 export default Button

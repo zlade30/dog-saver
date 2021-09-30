@@ -46,7 +46,7 @@ const Register = () => {
               onSuccess: () => {
                 setShowLoader(false)
                 setUser({ ...values, profile: response?.data })
-                history.push('/')
+                history.push('/dashboard')
               },
               onFailure: (error) => {
                 setShowLoader(false)
@@ -70,7 +70,7 @@ const Register = () => {
         onSuccess: () => {
           setShowLoader(false)
           setUser(values)
-          history.push('/')
+          history.push('/dashboard')
         },
         onFailure: (error) => {
           console.log(error)
@@ -98,30 +98,42 @@ const Register = () => {
               middleName: '',
               phone: '',
               address: '',
-              password: ''
+              password: '',
+              role: 'user'
             }}
             validationSchema={schema}
             onSubmit={(values) => {
               setShowLoader(true)
-              dispatch(
-                createAccountAction({
-                  data: {
-                    email: values?.email,
-                    password: values?.password
-                  },
-                  onSuccess: () => {
-                    delete values.password
-                    if (profile)
-                      onCreateUpload({ ...values, phone: `0${values?.phone}` })
-                    else
-                      onCreateAccount({ ...values, phone: `0${values?.phone}` })
-                  },
-                  onFailure: (error) => {
-                    setErrorMsg(error)
-                    setShowLoader(false)
-                  }
-                })
-              )
+              if (String(values?.phone)?.length === 10) {
+                dispatch(
+                  createAccountAction({
+                    data: {
+                      email: values?.email,
+                      password: values?.password
+                    },
+                    onSuccess: () => {
+                      delete values.password
+                      if (profile)
+                        onCreateUpload({
+                          ...values,
+                          phone: `0${values?.phone}`
+                        })
+                      else
+                        onCreateAccount({
+                          ...values,
+                          phone: `0${values?.phone}`
+                        })
+                    },
+                    onFailure: (error) => {
+                      setErrorMsg(error)
+                      setShowLoader(false)
+                    }
+                  })
+                )
+              } else {
+                setShowLoader(false)
+                setErrorMsg('Error: phone number should be 11 digits.')
+              }
             }}
             validator={() => ({})}>
             {({ errors, touched }) => (

@@ -40,12 +40,14 @@
 @import 'components/sidebar';
 @import 'components/divider';
 @import 'components/announcement-message';
+@import 'components/modal';
 
 // 6. Page-specific styles
 
 @import 'pages/overview';
 @import 'pages/auth';
 @import 'pages/home';
+@import 'pages/users';
 
 
 // @import "pages/apps";

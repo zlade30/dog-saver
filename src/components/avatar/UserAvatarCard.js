@@ -1,38 +1,86 @@
 import Divider from 'components/divider/Divider'
 import React from 'react'
 import Avatar from './Avatar'
+import PropTypes from 'prop-types'
+import PencilLineIcon from 'remixicon-react/PencilLineIcon'
+import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
+import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
+import Home2LineIcon from 'remixicon-react/Home2LineIcon'
+import MailLineIcon from 'remixicon-react/MailLineIcon'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import moment from 'moment'
 
-const UserAvatarCard = () => {
+const UserAvatarCard = ({ value, onUpdate, onRemove }) => {
   return (
     <div className="user-card">
-      <Avatar width={70} height={70} />
-      <label className="user-card-name">First Name</label>
-      <label className="user-card-name">Lastname</label>
+      <Avatar src={value?.profile} width={70} height={70} />
+      <label className="user-card-name">{value?.firstName}</label>
+      <label className="user-card-name">{value?.lastName}</label>
       <Divider width="100%" />
-      <div className="user-card-info">
+      {/* <div className="user-card-info">
         <div className="flex">
           <label className="user-card-label">Phone:</label>
-          <label className="user-card-value">09350042268</label>
+          <label className="user-card-value">{value?.phone}</label>
         </div>
         <div className="flex">
           <label className="user-card-label">Address:</label>
-          <label className="user-card-value">Purok PCH2</label>
+          <label className="user-card-value">{value?.address}</label>
         </div>
         <div className="flex">
           <label className="user-card-label">Email:</label>
-          <label className="user-card-value">sample@gmail.com</label>
-        </div>
-        <div className="flex">
-          <label className="user-card-label">Gender:</label>
-          <label className="user-card-value">Male</label>
+          <label className="user-card-value">{value?.email}</label>
         </div>
         <div className="flex">
           <label className="user-card-label">Date Added:</label>
-          <label className="user-card-value">09/12/2021</label>
+          <label className="user-card-value">{value?.dateAdded}</label>
+        </div>
+      </div> */}
+      <div className="user-card-info">
+        <div className="flex">
+          <div className="user-card-label">
+            <PhoneLineIcon size={18} />
+          </div>
+          <label className="user-card-value">{value?.phone}</label>
+        </div>
+        <div className="flex">
+          <div className="user-card-label">
+            <Home2LineIcon size={18} />
+          </div>
+          <label className="user-card-value">{value?.address}</label>
+        </div>
+        <div className="flex">
+          <div className="user-card-label">
+            <MailLineIcon size={18} />
+          </div>
+          <label className="user-card-value">{value?.email}</label>
+        </div>
+        <div className="flex">
+          <div className="user-card-label">
+            <CalendarLineIcon size={18} />
+          </div>
+          <label className="user-card-value">
+            {moment(value?.dateAdded?.toDate()).format('L')}
+          </label>
+        </div>
+      </div>
+      <div className="card-btn-panel">
+        <div onClick={onUpdate} className="card-btn-panel-l">
+          <PencilLineIcon size={20} />
+          <label className="cursor-pointer">Update</label>
+        </div>
+        <div onClick={onRemove} className="card-btn-panel-r">
+          <DeleteBinLineIcon size={18} />
+          <label className="cursor-pointer">Remove</label>
         </div>
       </div>
     </div>
   )
+}
+
+UserAvatarCard.propTypes = {
+  value: PropTypes.object.isRequired,
+  onRemove: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired
 }
 
 export default UserAvatarCard

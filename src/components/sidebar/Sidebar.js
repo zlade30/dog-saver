@@ -52,7 +52,8 @@ const Sidebar = ({ user, onLogout }) => {
       name: 'Users',
       color: '#334D67',
       isActive: false,
-      path: '/users'
+      path: '/users',
+      isHidden: user?.role !== 'admin'
     },
     {
       name: 'Dogs',
@@ -112,7 +113,9 @@ const Sidebar = ({ user, onLogout }) => {
             {`${user?.firstName || ''} 
               ${user?.lastName || ''}`}
           </label>
-          <label>User</label>
+          <label>
+            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
+          </label>
         </div>
       </div>
       <div onClick={onLogout} className="logout-cont cursor-pointer">
@@ -121,19 +124,22 @@ const Sidebar = ({ user, onLogout }) => {
       </div>
       <Divider width={290} />
       <div className="sidebar-menu-cont">
-        {menus.map((menu) => (
-          <div
-            key={menu?.name}
-            className="sidebar-menu"
-            style={{
-              backgroundColor: location.pathname === menu.path && '#F4F6FA',
-              color: location.pathname === menu.path ? '#42C2D3' : '#334D67'
-            }}
-            onClick={() => onSelectMenu(menu)}>
-            {renderIcon(menu)}
-            <label className="cursor-pointer">{menu?.name}</label>
-          </div>
-        ))}
+        {menus.map(
+          (menu) =>
+            !menu?.isHidden && (
+              <div
+                key={menu?.name}
+                className="sidebar-menu"
+                style={{
+                  backgroundColor: location.pathname === menu.path && '#F4F6FA',
+                  color: location.pathname === menu.path ? '#42C2D3' : '#334D67'
+                }}
+                onClick={() => onSelectMenu(menu)}>
+                {renderIcon(menu)}
+                <label className="cursor-pointer">{menu?.name}</label>
+              </div>
+            )
+        )}
       </div>
     </div>
   )

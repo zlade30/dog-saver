@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "dog-saver-248ac"
-  }
+    "dog-saver": "dog-saver-727aa"
+  },
+  "targets": {}
 }

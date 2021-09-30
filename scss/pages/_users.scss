@@ -1,0 +1,34 @@
+.user-list-panel {
+  width: 98%;
+  height: calc(100vh - 100px);
+  padding-left: 28px;
+  background-color: white;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.panel {
+  width: 98%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  column-gap: 20px;
+  row-gap: 15px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 20px;
+}
+
+.empty-panel {
+  width: 98%;
+  display: flex;
+  height: calc(100vh - 100px);
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  &-label {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+}

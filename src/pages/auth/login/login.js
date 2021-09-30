@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import TextField from 'components/text-fields/TextField'
 import Button from 'components/buttons/Button'
 import { useHistory } from 'react-router-dom'
@@ -7,7 +7,8 @@ import ErrorAlert from 'components/alerts/ErrorAlert'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
-import { signInAction } from 'redux/actions/user.action'
+import { getUserAction, signInAction } from 'redux/actions/user.action'
+import { UserContext } from 'contexts/user.context'
 
 const Login = () => {
   const history = useHistory()
@@ -20,6 +21,7 @@ const Login = () => {
 
   const [errorMsg, setErrorMsg] = useState('')
   const [showLoader, setShowLoader] = useState(false)
+  const { setUser } = useContext(UserContext)
 
   // useEffect(() => {
   //   const signIn = async () => {
@@ -49,11 +51,6 @@ const Login = () => {
           <Formik
             initialValues={{
               email: '',
-              lastName: '',
-              firstName: '',
-              middleName: '',
-              phone: '',
-              address: '',
               password: ''
             }}
             validationSchema={schema}
@@ -63,8 +60,24 @@ const Login = () => {
                 signInAction({
                   data: values,
                   onSuccess: () => {
-                    setShowLoader(false)
-                    history.push('/dashboard')
+                    dispatch(
+                      getUserAction({
+                        data: { email: values?.email },
+                        onSuccess: (response) => {
+                          setShowLoader(false)
+                          setUser(response)
+                          localStorage.setItem(
+                            'authUser',
+                            JSON.stringify(response)
+                          )
+                          history.push('/dashboard')
+                        },
+                        onFailure: (error) => {
+                          setShowLoader(false)
+                          setErrorMsg(error)
+                        }
+                      })
+                    )
                   },
                   onFailure: (error) => {
                     setShowLoader(false)

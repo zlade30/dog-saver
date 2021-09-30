@@ -4,18 +4,19 @@ import 'firebase/compat/firestore'
 import 'firebase/compat/storage'
 
 const app = firebase.initializeApp({
-  apiKey: 'AIzaSyCxHvI4F9D6KuY9jZhBefw7mzPmf0Ldb0U',
-  authDomain: 'dog-saver-248ac.firebaseapp.com',
-  projectId: 'dog-saver-248ac',
-  storageBucket: 'dog-saver-248ac.appspot.com',
-  messagingSenderId: '738029908010',
-  appId: '1:738029908010:web:636f9ddc4ab578f0ef5353',
-  measurementId: 'G-Z39Q2CGL9X'
+  apiKey: 'AIzaSyBT2kqnxIlgApTb0oPjOE5Hp7eSKO-D25E',
+  authDomain: 'dog-saver-727aa.firebaseapp.com',
+  projectId: 'dog-saver-727aa',
+  storageBucket: 'dog-saver-727aa.appspot.com',
+  messagingSenderId: '965457119439',
+  appId: '1:965457119439:web:8d92083202e0fc8572cfba',
+  measurementId: 'G-TKHDMZDKWV'
 })
 
 export const authRecaptcha = firebase.auth
 export const auth = app.auth()
 export const firestore = app.firestore()
 export const storage = app.storage()
+export const fire = firebase
 
 export default app
