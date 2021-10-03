@@ -36,8 +36,23 @@ export const validateEmail = (value) => {
   }
 }
 
-export const toBase64 = (file) =>
-  new Promise((resolve, reject) => {
+export const userFilterOptions = [
+  { label: 'Active Users', value: 'activeUsers' },
+  { label: 'Archived Users', value: 'archivedUsers' }
+]
+
+export const userSortOptions = [
+  { label: 'Date Added', value: 'dateAdded' },
+  { label: 'Name', value: 'name' }
+]
+
+export const orderOptions = [
+  { label: 'Desc', value: 'desc' },
+  { label: 'Asc', value: 'asc' }
+]
+
+export const toBase64 = (file) => {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onload = () => resolve(reader.result)
     reader.onerror = (error) => reject(error)
@@ -45,3 +60,47 @@ export const toBase64 = (file) =>
       reader.readAsDataURL(file)
     }
   })
+}
+
+export const selectStyles = {
+  menu: (provided) => ({ ...provided, zIndex: 9999 }),
+  control: (provided) => ({
+    ...provided,
+    borderRadius: '12px',
+    borderColor: '#42C2D3',
+    borderStyle: 'solid',
+    fontFamily: 'Montserrat, sans-serif',
+    outline: 'none',
+    borderWidth: '1px',
+    fontSize: 13,
+    marginTop: 10,
+    paddingLeft: 4
+  }),
+  indicatorSeparator: (_) => ({
+    display: 'none'
+  }),
+  dropdownIndicator: (provided, state) => ({
+    ...provided,
+    color: '#42C2D3',
+    padding: '0.375rem',
+    transition: 'transform .25s ease',
+    transform: state.selectProps.menuIsOpen ? 'rotate(180deg)' : null
+  }),
+  option: (styles, { isSelected }) => {
+    return {
+      ...styles,
+      backgroundColor: isSelected ? '#4c8fca' : null,
+      ':hover': {
+        backgroundColor: '#2A70AD',
+        color: '#ffffff'
+      },
+      cursor: 'pointer',
+      fontSize: '0.75rem',
+      minHeight: '33px',
+      height: '33px',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }
+  }
+}

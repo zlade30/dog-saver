@@ -8,9 +8,16 @@ import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
 import Home2LineIcon from 'remixicon-react/Home2LineIcon'
 import MailLineIcon from 'remixicon-react/MailLineIcon'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import RestartLineIcon from 'remixicon-react/RestartLineIcon'
 import moment from 'moment'
 
-const UserAvatarCard = ({ value, onUpdate, onRemove }) => {
+const UserAvatarCard = ({
+  value,
+  onUpdate,
+  onRemove,
+  onRestore,
+  isShowAction
+}) => {
   return (
     <div className="user-card">
       <Avatar src={value?.profile} width={70} height={70} />
@@ -63,24 +70,43 @@ const UserAvatarCard = ({ value, onUpdate, onRemove }) => {
           </label>
         </div>
       </div>
-      <div className="card-btn-panel">
-        <div onClick={onUpdate} className="card-btn-panel-l">
-          <PencilLineIcon size={20} />
-          <label className="cursor-pointer">Update</label>
-        </div>
-        <div onClick={onRemove} className="card-btn-panel-r">
-          <DeleteBinLineIcon size={18} />
-          <label className="cursor-pointer">Remove</label>
-        </div>
-      </div>
+      {isShowAction ? (
+        !value?.archive ? (
+          <div className="card-btn-panel">
+            <div onClick={onUpdate} className="card-btn-panel-l">
+              <PencilLineIcon size={20} />
+              <label className="cursor-pointer">Update</label>
+            </div>
+            <div onClick={onRemove} className="card-btn-panel-r">
+              <DeleteBinLineIcon size={18} />
+              <label className="cursor-pointer">Archive</label>
+            </div>
+          </div>
+        ) : (
+          <div className="card-btn-panel items-center justify-center">
+            <div onClick={onRestore} className="card-btn-panel-m">
+              <RestartLineIcon className="margin-r-10" size={18} />
+              <label className="cursor-pointer">Restore</label>
+            </div>
+          </div>
+        )
+      ) : (
+        <div />
+      )}
     </div>
   )
+}
+
+UserAvatarCard.defaultProps = {
+  isShowAction: true
 }
 
 UserAvatarCard.propTypes = {
   value: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired
+  onUpdate: PropTypes.func.isRequired,
+  onRestore: PropTypes.func,
+  isShowAction: PropTypes.bool
 }
 
 export default UserAvatarCard

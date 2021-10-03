@@ -61,6 +61,10 @@ label {
   margin-top: 10px;
 }
 
+.margin-l-10 {
+  margin-left: 10px;
+}
+
 .margin-t-20 {
   margin-top: 20px;
 }
@@ -71,6 +75,10 @@ label {
 
 .margin-r-10 {
   margin-right: 10px !important;
+}
+
+.margin-r-20 {
+  margin-right: 20px !important;
 }
 
 .margin-b-20 {
@@ -170,6 +178,7 @@ input[type=number] {
   align-items: center;
   padding-bottom: 20px;
   position: relative;
+  height: 402px;
 
   &-header {
     width: 100%;
@@ -272,6 +281,16 @@ input[type=number] {
     color: $error;
     cursor: pointer;
   }
+
+  &-m {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $primary-color;
+    cursor: pointer;
+  }
 }
 
 .usercard-arrow-r {
@@ -280,4 +299,8 @@ input[type=number] {
   margin-right: 10px;
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
+}
+
+.toast-style {
+  font-family: Montserrat, sans-serif;
 }

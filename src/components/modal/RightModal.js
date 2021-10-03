@@ -136,7 +136,8 @@ RightModal.defaultProps = {
     middleName: '',
     phone: '',
     address: '',
-    role: 'user'
+    role: 'user',
+    archive: false
   },
   isUpdate: false
 }

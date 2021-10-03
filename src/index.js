@@ -1,4 +1,3 @@
-import '../scss/main.scss'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -7,6 +6,10 @@ import store from 'redux/store'
 import { AppRoutes } from 'app-routes'
 import UserProvider from 'contexts/user.context'
 import { init } from 'emailjs-com'
+import '../scss/main.scss'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
+
 init('user_65vfAkMVOcGJOobP11WVD')
 
 const App = () => {
@@ -14,6 +17,7 @@ const App = () => {
     <Provider store={store}>
       <Router>
         <UserProvider>
+          <ToastContainer toastClassName="toast-style" />
           <AppRoutes />
         </UserProvider>
       </Router>

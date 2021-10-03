@@ -1,6 +1,6 @@
 import { auth, firestore } from 'firebase'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { deconstructSagaPayload, renderAuthErrorCode } from 'utils/helpers'
+import { deconstructSagaPayload, orderOptions, renderAuthErrorCode, userFilterOptions, userSortOptions } from 'utils/helpers'
 import {
   adminRemoveUserAction,
   adminRemoveUserActionFailed,
@@ -28,6 +28,7 @@ import {
   signInActionSuccess
 } from '../actions/user.action'
 import emailjs from 'emailjs-com'
+import { query } from 'firebase/firestore'
 
 const get = async (payload) => {
   try {
@@ -95,6 +96,24 @@ const signUp = async (payload) => {
       data: renderAuthErrorCode(error)
     }
   }
+}
+
+const returnSelectedOptions = (data) => {
+  let query = firestore.collection('users').where('role', '==', 'user')
+
+  if (data.filterBy === userFilterOptions[0].value)
+    query = query.where('archive', '==', false)
+  else query = query.where('archive', '==', true)
+
+  if (data.sortBy === userSortOptions[0].value)
+    query = query.orderBy('dateAdded', data.order)
+  else {
+    query = query
+      .orderBy('firstName', data.order)
+      .orderBy('lastName', data.order)
+  }
+
+  return query.get()
 }
 
 function* signIn(action) {
@@ -203,12 +222,9 @@ function* sendCredential(action) {
 }
 
 function* getUserList(action) {
-  const { onSuccess, onFailure } = deconstructSagaPayload(action.payload)
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
 
-  const response = yield call(
-    getList,
-    firestore.collection('users').where('role', '!=', 'admin').get()
-  )
+  const response = yield call(getList, returnSelectedOptions(data))
 
   if (response?.isSuccess) {
     yield put(getUserListActionSuccess(response))

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AnnouncementMessage from 'components/announcement-message/AnnouncementMessage'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
@@ -8,13 +8,21 @@ import User3LineIcon from 'remixicon-react/User3LineIcon'
 import UserAvatarCard from 'components/avatar/UserAvatarCard'
 import DogAvatarCard from 'components/avatar/DogAvatarCard'
 import { useHistory } from 'react-router'
+import { firestore } from 'firebase'
+import { useDispatch } from 'react-redux'
+import { getUserListAction } from 'redux/actions/user.action'
+import { UserContext } from 'contexts/user.context'
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
   const history = useHistory()
+  const dispatch = useDispatch()
 
   const [index, setIndex] = useState(0)
+  const [userList, setUserList] = useState([])
+
+  const { user } = useContext(UserContext)
 
   const handleChangeIndex = (index) => {
     setIndex(index)
@@ -36,6 +44,21 @@ const Dashboard = () => {
       />
     </svg>
   )
+
+  useEffect(() => {
+    if (user?.role === 'admin') {
+      dispatch(
+        getUserListAction({
+          onSuccess: (payload) => {
+            setUserList(payload.sort((a, b) => b.dateAdded - a.dateAdded))
+          },
+          onFailure: (error) => {
+            console.log(error)
+          }
+        })
+      )
+    }
+  }, [])
 
   return (
     <div className="container">
@@ -75,34 +98,50 @@ const Dashboard = () => {
           </div>
         </div>
         <div className="flex">
-          <div style={{ width: '50%', marginTop: 10 }}>
-            <h1>Users</h1>
-            <div className="card">
-              <div className="card-header">
-                <User3LineIcon className="sidebar-menu-icon" size={20} />
-                <label>New Users</label>
-              </div>
-              <Divider width="95%" />
-              <div className="avatar-container">
-                <UserAvatarCard />
-                <UserAvatarCard />
-                <UserAvatarCard />
-                <ArrowLeftIcon
-                  onClick={() => history.push('/users')}
-                  className="usercard-arrow-r cursor-pointer"
-                />
+          {user?.role === 'admin' ? (
+            <div style={{ width: '50%', marginTop: 10 }}>
+              <h1>Users</h1>
+              <div className="card">
+                <div className="card-header">
+                  <User3LineIcon className="sidebar-menu-icon" size={20} />
+                  <label>New Users</label>
+                </div>
+                <Divider width="95%" />
+                <div className="avatar-container">
+                  {userList?.slice(0, 3)?.map((item) => (
+                    <UserAvatarCard
+                      key={item?.id}
+                      value={item}
+                      isShowAction={false}
+                    />
+                  ))}
+                  {userList?.length ? (
+                    <ArrowLeftIcon
+                      onClick={() => history.push('/users')}
+                      className="usercard-arrow-r cursor-pointer"
+                    />
+                  ) : (
+                    <div />
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-          <div style={{ width: '50%', marginTop: 10 }}>
-            <h1>Dogs</h1>
+          ) : (
+            <div />
+          )}
+          <div
+            style={{
+              width: user?.role === 'admin' ? '50%' : '100%',
+              marginTop: 10
+            }}>
+            <h1>{user?.role === 'admin' ? 'Dogs' : 'My Dogs'}</h1>
             <div className="card">
               <div className="card-header">
                 <DogIcon />
                 <label>New Dogs</label>
               </div>
               <Divider width="95%" />
-              <div className="avatar-container">
+              {/* <div className="avatar-container">
                 <DogAvatarCard />
                 <DogAvatarCard />
                 <DogAvatarCard />
@@ -110,7 +149,7 @@ const Dashboard = () => {
                   onClick={() => history.push('/dogs')}
                   className="usercard-arrow-r cursor-pointer"
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

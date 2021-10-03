@@ -2,6 +2,7 @@ import UserAvatarCard from 'components/avatar/UserAvatarCard'
 import Button from 'components/buttons/Button'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import RightModal from 'components/modal/RightModal'
+import ConfirmationModal from 'components/modal/ConfirmationModal'
 import SearchField from 'components/text-fields/SearchField'
 import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
@@ -15,8 +16,16 @@ import {
 } from 'redux/actions/user.action'
 import { uploadUserImageAction } from 'redux/actions/utils.action'
 import { fire } from 'firebase'
-import { toBase64 } from 'utils/helpers'
+import {
+  orderOptions,
+  selectStyles,
+  toBase64,
+  userFilterOptions,
+  userSortOptions
+} from 'utils/helpers'
 import UserFillIcon from 'remixicon-react/UserFillIcon'
+import { toast } from 'react-toastify'
+import Select from 'react-select'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -25,11 +34,17 @@ const Users = () => {
   const [profile, setProfile] = useState()
   const [password, setPassword] = useState('')
   const [showFormModal, setShowFormModal] = useState(false)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [confirmContent, setConfirmContent] = useState('')
   const [userList, setUserList] = useState([])
   const [list, setList] = useState([])
   const [formValues, setFormValues] = useState()
   const [isUpdate, setIsUpdate] = useState(false)
   const [userId, setUserId] = useState()
+  const [filterBy, setFilterBy] = useState(userFilterOptions[0].value)
+  const [sortBy, setSortBy] = useState(userSortOptions[0].value)
+  const [order, setOrder] = useState(orderOptions[0].value)
+  const [isArchiveClick, setIsArchiveClick] = useState(false)
 
   const onSubmit = (values) => {
     setShowLoader(true)
@@ -107,6 +122,31 @@ const Users = () => {
                           : item
                       )
                     )
+                    setList((prevList) =>
+                      prevList?.map((item) =>
+                        item?.id === userId
+                          ? {
+                              ...item,
+                              ...values,
+                              profile: response?.data,
+                              phone: `${
+                                values?.phone[0] !== 0
+                                  ? `0${values?.phone}`
+                                  : `${values?.phone}`
+                              }`
+                            }
+                          : item
+                      )
+                    )
+                    toast.success('User updated successfully.', {
+                      position: 'bottom-right',
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined
+                    })
                   },
                   onFailure: (error) => {
                     setErrorMsg(error)
@@ -118,6 +158,15 @@ const Users = () => {
             onFailure: (error) => {
               setShowLoader(false)
               setErrorMsg(error)
+              toast.error('User update failed.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
             }
           })
         )
@@ -153,10 +202,43 @@ const Users = () => {
                     : item
                 )
               )
+              setList((prevList) =>
+                prevList?.map((item) =>
+                  item?.id === userId
+                    ? {
+                        ...item,
+                        ...values,
+                        phone: `${
+                          values?.phone[0] !== 0
+                            ? `0${values?.phone}`
+                            : `${values?.phone}`
+                        }`
+                      }
+                    : item
+                )
+              )
+              toast.success('User updated successfully.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
             },
             onFailure: (error) => {
               setErrorMsg(error)
               setShowLoader(false)
+              toast.error('User update failed.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
             }
           })
         )
@@ -182,6 +264,15 @@ const Users = () => {
               onFailure: (error) => {
                 setShowLoader(false)
                 setErrorMsg(error)
+                toast.error('User creation failed.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
               }
             })
           )
@@ -189,6 +280,15 @@ const Users = () => {
         onFailure: (error) => {
           setShowLoader(false)
           setErrorMsg(error)
+          toast.error('User creation failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
         }
       })
     )
@@ -202,13 +302,21 @@ const Users = () => {
           dateAdded: new Date()
         },
         onSuccess: (payload) => {
-          console.log('hey', payload)
           onSendCredential({ ...values, id: payload?.data })
         },
         onFailure: (error) => {
           console.log(error)
           setShowLoader(false)
           setErrorMsg(error)
+          toast.error('User creation failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
         }
       })
     )
@@ -217,8 +325,7 @@ const Users = () => {
   const onSendCredential = async (values) => {
     setShowLoader(false)
     setShowFormModal(false)
-    let prof = undefined
-    if (profile) prof = await toBase64(profile)
+    const prof = await toBase64(profile)
     setUserList((prevList) => [
       {
         ...values,
@@ -227,6 +334,15 @@ const Users = () => {
       },
       ...prevList
     ])
+    toast.success('User created successfully.', {
+      position: 'bottom-right',
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined
+    })
     // dispatch(
     //   sendCredentialAction({
     //     data: {
@@ -257,25 +373,20 @@ const Users = () => {
   }
 
   const onRemove = (user) => {
-    setShowLoader(true)
-    dispatch(
-      adminRemoveUserAction({
-        data: {
-          id: user?.id,
-          values: {
-            archive: true
-          }
-        },
-        onSuccess: () => {
-          setShowLoader(false)
-          setUserList((prevList) =>
-            prevList.map((item) =>
-              item?.id === user?.id ? { ...item, archive: true } : item
-            )
-          )
-        },
-        onFailure: (error) => console.error(error)
-      })
+    setUserId(user?.id)
+    setShowConfirmModal(true)
+    setIsArchiveClick(true)
+    setConfirmContent(
+      `Are you sure you want to remove ${user?.firstName} ${user?.lastName}?`
+    )
+  }
+
+  const onRestore = (user) => {
+    setUserId(user?.id)
+    setShowConfirmModal(true)
+    setIsArchiveClick(false)
+    setConfirmContent(
+      `Are you sure you want to restore ${user?.firstName} ${user?.lastName}?`
     )
   }
 
@@ -286,26 +397,135 @@ const Users = () => {
     setFormValues(user)
   }
 
+  const handleYesAction = () => {
+    if (isArchiveClick) {
+      setShowLoader(true)
+      dispatch(
+        adminRemoveUserAction({
+          data: {
+            id: userId,
+            values: {
+              archive: true
+            }
+          },
+          onSuccess: () => {
+            setShowLoader(false)
+            setUserList((prevList) =>
+              prevList.filter((item) => item.id !== userId)
+            )
+            setList((prevList) => prevList.filter((item) => item.id !== userId))
+            toast.success('User archived successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowConfirmModal(false)
+          },
+          onFailure: (error) => {
+            toast.error('User archived failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            console.error(error)
+            setShowConfirmModal(false)
+          }
+        })
+      )
+    } else {
+      setShowLoader(true)
+      dispatch(
+        adminRemoveUserAction({
+          data: {
+            id: userId,
+            values: {
+              archive: false
+            }
+          },
+          onSuccess: () => {
+            setShowLoader(false)
+            setUserList((prevList) =>
+              prevList.filter((item) => item.id !== userId)
+            )
+            setList((prevList) => prevList.filter((item) => item.id !== userId))
+            toast.success('User restored successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowConfirmModal(false)
+          },
+          onFailure: (error) => {
+            toast.error('User restore failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            console.error(error)
+            setShowConfirmModal(false)
+          }
+        })
+      )
+    }
+  }
+
   useEffect(() => {
     setShowLoader(true)
     dispatch(
       getUserListAction({
+        data: {
+          filterBy,
+          sortBy,
+          order,
+          searchKey: 'Nara Shikamaru'
+        },
         onSuccess: (payload) => {
           setShowLoader(false)
-          setList(payload.sort((a, b) => b.dateAdded - a.dateAdded))
-          setUserList(payload.sort((a, b) => b.dateAdded - a.dateAdded))
+          setList(payload)
+          setUserList(payload)
         },
         onFailure: (error) => {
           setShowLoader(false)
+          toast.error('Retrieving user list failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
           console.log(error)
         }
       })
     )
-  }, [])
+  }, [filterBy, sortBy, order])
 
   return (
     <div className="container">
       {showLoader && <LoadingOverlay />}
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        content={confirmContent}
+        onYes={handleYesAction}
+      />
       <RightModal
         isOpen={showFormModal}
         onClose={() => setShowFormModal(false)}
@@ -319,7 +539,32 @@ const Users = () => {
       <div className="right-container">
         <div className="w-full justify-between">
           <h1>Users</h1>
-          <div className="justify-between" style={{ width: 480 }}>
+          <div className="justify-between" style={{ width: 1050 }}>
+            <div className="flex items-center">
+              <label className="margin-t-10 margin-r-10">Filter By:</label>
+              <Select
+                styles={selectStyles}
+                defaultValue={userFilterOptions[0]}
+                options={userFilterOptions}
+                onChange={(selected) => setFilterBy(selected.value)}
+              />
+            </div>
+            <div className="flex items-center">
+              <label className="margin-t-10 margin-r-10">Sort By:</label>
+              <Select
+                className="margin-r-10"
+                styles={selectStyles}
+                defaultValue={userSortOptions[0]}
+                options={userSortOptions}
+                onChange={(selected) => setSortBy(selected.value)}
+              />
+              <Select
+                styles={selectStyles}
+                defaultValue={orderOptions[0]}
+                options={orderOptions}
+                onChange={(selected) => setOrder(selected.value)}
+              />
+            </div>
             <SearchField
               width={320}
               id="search-name"
@@ -327,7 +572,7 @@ const Users = () => {
               placeholder="Search Name"
               onChange={(evt) => {
                 evt.persist()
-                setUserList((prevList) =>
+                setUserList(() =>
                   list.filter((product) =>
                     `${product.firstName} ${product.lastName}`
                       .toLowerCase()
@@ -351,17 +596,15 @@ const Users = () => {
         <div className="user-list-panel">
           {userList?.length ? (
             <div className="panel">
-              {userList?.map(
-                (user) =>
-                  !user?.archive && (
-                    <UserAvatarCard
-                      key={user?.id}
-                      value={user}
-                      onUpdate={() => onUpdate(user)}
-                      onRemove={() => onRemove(user)}
-                    />
-                  )
-              )}
+              {userList?.map((user) => (
+                <UserAvatarCard
+                  key={user?.id}
+                  value={user}
+                  onUpdate={() => onUpdate(user)}
+                  onRemove={() => onRemove(user)}
+                  onRestore={() => onRestore(user)}
+                />
+              ))}
             </div>
           ) : (
             <div className="empty-panel">
