@@ -586,6 +586,7 @@ const Users = () => {
                 setIsUpdate(false)
                 setShowFormModal(true)
                 setProfile(null)
+                setFormValues()
               }}
               width={80}
               height={35}

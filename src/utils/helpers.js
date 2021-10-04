@@ -51,6 +51,15 @@ export const orderOptions = [
   { label: 'Asc', value: 'asc' }
 ]
 
+export const dogFilterOptions = [
+  { label: 'All', value: 'all' },
+  { label: 'Adoption', value: 'adoption' },
+  { label: 'Ransom', value: 'ransom' },
+  { label: 'Surrendered', value: 'surrendered' },
+  { label: 'Impound', value: 'impound' },
+  { label: 'Euthanasia', value: 'euthanasia' }
+]
+
 export const toBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -74,7 +83,8 @@ export const selectStyles = {
     borderWidth: '1px',
     fontSize: 13,
     marginTop: 10,
-    paddingLeft: 4
+    paddingLeft: 4,
+    width: '100%'
   }),
   indicatorSeparator: (_) => ({
     display: 'none'
@@ -94,6 +104,7 @@ export const selectStyles = {
         backgroundColor: '#2A70AD',
         color: '#ffffff'
       },
+      width: '100%',
       cursor: 'pointer',
       fontSize: '0.75rem',
       minHeight: '33px',
