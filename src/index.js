@@ -8,6 +8,7 @@ import UserProvider from 'contexts/user.context'
 import { init } from 'emailjs-com'
 import '../scss/main.scss'
 import 'react-toastify/dist/ReactToastify.css'
+import 'react-datepicker/dist/react-datepicker.css'
 import { ToastContainer } from 'react-toastify'
 
 init('user_65vfAkMVOcGJOobP11WVD')

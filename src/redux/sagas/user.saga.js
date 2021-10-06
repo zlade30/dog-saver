@@ -1,6 +1,11 @@
 import { auth, firestore } from 'firebase'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { deconstructSagaPayload, orderOptions, renderAuthErrorCode, userFilterOptions, userSortOptions } from 'utils/helpers'
+import {
+  deconstructSagaPayload,
+  renderAuthErrorCode,
+  userFilterOptions,
+  userSortOptions
+} from 'utils/helpers'
 import {
   adminRemoveUserAction,
   adminRemoveUserActionFailed,
@@ -14,6 +19,9 @@ import {
   createUserAction,
   createUserActionFailed,
   createUserActionSuccess,
+  getPuroksAction,
+  getPuroksActionFailed,
+  getPuroksActionSuccess,
   getUserAction,
   getUserActionFailed,
   getUserActionSuccess,
@@ -28,7 +36,6 @@ import {
   signInActionSuccess
 } from '../actions/user.action'
 import emailjs from 'emailjs-com'
-import { query } from 'firebase/firestore'
 
 const get = async (payload) => {
   try {
@@ -235,6 +242,21 @@ function* getUserList(action) {
   }
 }
 
+function* getPuroks(action) {
+  const { onSuccess, onFailure } = deconstructSagaPayload(action.payload)
+
+  const query = firestore.collection('purok').get()
+  const response = yield call(getList, query)
+
+  if (response?.isSuccess) {
+    yield put(getPuroksActionSuccess(response))
+    yield call(onSuccess, response?.data)
+  } else {
+    yield put(getPuroksActionFailed(response))
+    yield call(onFailure, response?.data)
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(createUserAction.toString(), createUser),
@@ -244,6 +266,7 @@ export default function* root() {
     takeLatest(adminUpdateUserAction.toString(), updateUser),
     takeLatest(adminRemoveUserAction.toString(), removeUser),
     takeLatest(sendCredentialAction.toString(), sendCredential),
-    takeLatest(getUserListAction.toString(), getUserList)
+    takeLatest(getUserListAction.toString(), getUserList),
+    takeLatest(getPuroksAction.toString(), getPuroks)
   ])
 }

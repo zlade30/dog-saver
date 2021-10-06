@@ -68,3 +68,6 @@ export const getUserListActionSuccess = createAction(
 export const getUserListActionFailed = createAction(
   'user/GET_USER_LIST_ACTION_FAILED'
 )
+export const getPuroksAction = createAction('GET_PUROKS_ACTION')
+export const getPuroksActionSuccess = createAction('GET_PUROKS_ACTION_SUCCESS')
+export const getPuroksActionFailed = createAction('GET_PUROKS_ACTION_FAILED')

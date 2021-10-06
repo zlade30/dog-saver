@@ -31,3 +31,10 @@ export const selEuthSchedSuccess = createAction(
 export const selEuthSchedFailed = createAction(
   'dog/SELECT_EUTHANIZE_SCHEDULE_ACTION_FAILED'
 )
+export const getDogBreedsAction = createAction('GET_DOG_BREEDS_ACTION')
+export const getDogBreedsActionSuccess = createAction(
+  'GET_DOG_BREEDS_ACTION_SUCCESS'
+)
+export const getDogBreedsActionFailed = createAction(
+  'GET_DOG_BREEDS_ACTION_FAILED'
+)

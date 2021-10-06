@@ -325,7 +325,8 @@ const Users = () => {
   const onSendCredential = async (values) => {
     setShowLoader(false)
     setShowFormModal(false)
-    const prof = await toBase64(profile)
+    let prof = null
+    if (profile) prof = await toBase64(profile)
     setUserList((prevList) => [
       {
         ...values,
@@ -377,7 +378,7 @@ const Users = () => {
     setShowConfirmModal(true)
     setIsArchiveClick(true)
     setConfirmContent(
-      `Are you sure you want to remove ${user?.firstName} ${user?.lastName}?`
+      `Are you sure you want to archive ${user?.firstName} ${user?.lastName}?`
     )
   }
 

@@ -51,13 +51,18 @@ export const orderOptions = [
   { label: 'Asc', value: 'asc' }
 ]
 
+export const dogOptions = [
+  { label: 'Active Dogs', value: 'Active Dogs' },
+  { label: 'Archive Dogs', value: 'Archive Dogs' },
+  { label: 'Dog Status', value: 'Dog Status' }
+]
+
 export const dogFilterOptions = [
-  { label: 'All', value: 'all' },
-  { label: 'Adoption', value: 'adoption' },
-  { label: 'Ransom', value: 'ransom' },
-  { label: 'Surrendered', value: 'surrendered' },
-  { label: 'Impound', value: 'impound' },
-  { label: 'Euthanasia', value: 'euthanasia' }
+  { label: 'Adoption', value: 'Adoption' },
+  { label: 'Ransom', value: 'Ransom' },
+  { label: 'Surrendered', value: 'Surrendered' },
+  { label: 'Impound', value: 'Impound' },
+  { label: 'Euthanasia', value: 'Euthanasia' }
 ]
 
 export const toBase64 = (file) => {

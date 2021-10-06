@@ -1,6 +1,11 @@
 import { firestore } from 'firebase'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
-import { deconstructSagaPayload } from 'utils/helpers'
+import {
+  deconstructSagaPayload,
+  dogFilterOptions,
+  dogOptions,
+  userSortOptions
+} from 'utils/helpers'
 import {
   createDogAction,
   createDogActionFailed,
@@ -8,15 +13,15 @@ import {
   removeDogAction,
   removeDogActionFailed,
   removeDogActionSuccess,
-  selEuthSched,
-  selEuthSchedFailed,
-  selEuthSchedSuccess,
   updateDogAction,
   updateDogActionFailed,
   updateDogActionSuccess,
   getDogsAction,
   getDogsActionFailed,
-  getDogsActionSuccess
+  getDogsActionSuccess,
+  getDogBreedsActionSuccess,
+  getDogBreedsActionFailed,
+  getDogBreedsAction
 } from '../actions/dog.action'
 
 const getList = async (payload) => {
@@ -49,35 +54,51 @@ const update = async (payload) => {
   }
 }
 
-const send = async (payload) => {
-  try {
-    console.log(payload)
-    const result = await emailjs.send(
-      payload?.serviceID,
-      payload?.templateID,
-      payload?.templatePrams
-    )
-    return { isSuccess: true, data: result }
-  } catch (error) {
-    return { isSuccess: false, data: error }
+const returnSelectedOptions = (data) => {
+  let query = null
+  if (data.emailOwner === 'admin@dogsaver.com') {
+    query = firestore.collection('dogs')
+  } else {
+    query = firestore.collection('dogs').where('owner', '==', data?.emailOwner)
   }
+
+  switch (data.filterBy) {
+    case dogOptions[0].value:
+      query = query.where('archive', '==', false)
+      break
+    case dogOptions[1].value:
+      query = query.where('archive', '==', true)
+      break
+    case dogFilterOptions[0].value:
+      query = query.where('status.value', '==', dogFilterOptions[0].value)
+      break
+    case dogFilterOptions[1].value:
+      query = query.where('status.value', '==', dogFilterOptions[1].value)
+      break
+    case dogFilterOptions[2].value:
+      query = query.where('status.value', '==', dogFilterOptions[2].value)
+      break
+    case dogFilterOptions[3].value:
+      query = query.where('status.value', '==', dogFilterOptions[3].value)
+      break
+    case dogFilterOptions[4].value:
+      query = query.where('status.value', '==', dogFilterOptions[4].value)
+      break
+  }
+
+  if (data.sortBy === userSortOptions[0].value)
+    query = query.orderBy('dateAdded', data.order)
+  else {
+    query = query.orderBy('name', data.order)
+  }
+
+  return query.get()
 }
 
 function* getDogs(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
 
-  let query = null
-
-  if (data.emailOwner === 'admin@dogsaver.com') {
-    query = firestore.collection('dogs').get()
-  } else {
-    query = firestore
-      .collection('dogs')
-      .where('owner', '==', data?.emailOwner)
-      .get()
-  }
-
-  const response = yield call(getList, query)
+  const response = yield call(getList, returnSelectedOptions(data))
 
   if (response?.isSuccess) {
     yield put(getDogsActionSuccess(response))
@@ -88,12 +109,27 @@ function* getDogs(action) {
   }
 }
 
+function* getDogBreeds(action) {
+  const { onSuccess, onFailure } = deconstructSagaPayload(action.payload)
+
+  let query = firestore.collection('breed').get()
+  const response = yield call(getList, query)
+
+  if (response?.isSuccess) {
+    yield put(getDogBreedsActionSuccess(response))
+    yield call(onSuccess, response?.data)
+  } else {
+    yield put(getDogBreedsActionFailed(response))
+    yield call(onFailure, response?.data)
+  }
+}
+
 function* createDog(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
   const response = yield call(create, firestore.collection('dogs').add(data))
-  if (response) {
-    yield put(createDogActionSuccess(response))
-    yield call(onSuccess, response)
+  if (response?.isSuccess) {
+    yield put(createDogActionSuccess(response?.data))
+    yield call(onSuccess, response?.data)
   } else {
     yield put(createDogActionFailed('Error creating dog'))
     yield call(onFailure, 'Error creating dog!')
@@ -106,7 +142,7 @@ function* updateDog(action) {
     update,
     firestore.doc(`dogs/${data?.id}`).update(data?.values)
   )
-  if (response) {
+  if (response?.isSuccess) {
     yield put(updateDogActionSuccess(response))
     yield call(onSuccess, response)
   } else {
@@ -135,6 +171,7 @@ export default function* root() {
     takeLatest(createDogAction.toString(), createDog),
     takeLatest(updateDogAction.toString(), updateDog),
     takeLatest(removeDogAction.toString(), removeDog),
-    takeLatest(getDogsAction.toString(), getDogs)
+    takeLatest(getDogsAction.toString(), getDogs),
+    takeLatest(getDogBreedsAction.toString(), getDogBreeds)
   ])
 }

@@ -1,19 +1,30 @@
 import Button from 'components/buttons/Button'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
-import RightModal from 'components/modal/RightModal'
+import DogRightModal from 'components/modal/DogRightModal'
 import ConfirmationModal from 'components/modal/ConfirmationModal'
 import SearchField from 'components/text-fields/SearchField'
-import React, { useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import UserFillIcon from 'remixicon-react/UserFillIcon'
 import Select from 'react-select'
 import DogAvatarCard from 'components/avatar/DogAvatarCard'
 import {
   dogFilterOptions,
+  dogOptions,
   orderOptions,
   selectStyles,
+  toBase64,
   userSortOptions
 } from 'utils/helpers'
+import { UserContext } from 'contexts/user.context'
+import {
+  createDogAction,
+  getDogsAction,
+  removeDogAction,
+  updateDogAction
+} from 'redux/actions/dog.action'
+import { toast } from 'react-toastify'
+import { uploadDogImageAction } from 'redux/actions/utils.action'
+import { fire } from 'firebase'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -25,10 +36,17 @@ const Dogs = () => {
   const [isUpdate, setIsUpdate] = useState(false)
   const [formValues, setFormValues] = useState()
   const [profile, setProfile] = useState(null)
-  const [filterBy, setFilterBy] = useState(dogFilterOptions[0].value)
+  const [filterBy, setFilterBy] = useState(dogOptions[0].value)
   const [sortBy, setSortBy] = useState(userSortOptions[0].value)
   const [order, setOrder] = useState(orderOptions[0].value)
   const [dogList, setDogList] = useState([])
+  const [list, setList] = useState([])
+  const [euthSched, setEuthSched] = useState()
+  const [dogId, setDogId] = useState('')
+  const [isArchiveClick, setIsArchiveClick] = useState(false)
+  const [selDogOption, setSelDogOption] = useState(dogOptions[0])
+
+  const { user } = useContext(UserContext)
 
   const DogIcon = ({ color = '#334D67' }) => (
     <svg
@@ -44,15 +62,281 @@ const Dogs = () => {
     </svg>
   )
 
-  const handleYesAction = () => {}
+  const handleYesAction = () => {
+    if (isArchiveClick) {
+      setShowLoader(true)
+      dispatch(
+        removeDogAction({
+          data: {
+            id: dogId,
+            values: {
+              archive: true
+            }
+          },
+          onSuccess: () => {
+            setShowLoader(false)
+            setDogList((prevList) =>
+              prevList.filter((item) => item.id !== dogId)
+            )
+            setList((prevList) => prevList.filter((item) => item.id !== dogId))
+            toast.success('Dog archived successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowConfirmModal(false)
+          },
+          onFailure: (error) => {
+            toast.error('Dog archived failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            console.error(error)
+            setShowConfirmModal(false)
+          }
+        })
+      )
+    } else {
+      setShowLoader(true)
+      dispatch(
+        removeDogAction({
+          data: {
+            id: dogId,
+            values: {
+              archive: false
+            }
+          },
+          onSuccess: () => {
+            setShowLoader(false)
+            setDogList((prevList) =>
+              prevList.filter((item) => item.id !== dogId)
+            )
+            setList((prevList) => prevList.filter((item) => item.id !== dogId))
+            toast.success('User restored successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowConfirmModal(false)
+          },
+          onFailure: (error) => {
+            toast.error('User restore failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            console.error(error)
+            setShowConfirmModal(false)
+          }
+        })
+      )
+    }
+  }
 
-  const onSubmit = () => {}
+  const onSubmit = async (values) => {
+    let payload = values
+    if (profile) payload = { ...values, profile }
+    if (euthSched) payload = { ...values, euthSched }
+    console.log(payload)
 
-  const onUpdate = () => {}
+    setShowLoader(true)
 
-  const onRemove = () => {}
+    if (profile) {
+      dispatch(
+        uploadDogImageAction({
+          data: { file: profile },
+          onSuccess: (response) => {
+            if (!isUpdate) addDog(response?.data, payload)
+            else updateDog(response?.data, payload)
+          },
+          onFailure: (error) => {
+            setShowLoader(false)
+            setErrorMsg(error)
+            toast.error('User creation failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+      )
+    } else {
+      if (!isUpdate) addDog(null, payload)
+      else updateDog(values?.profile, payload)
+    }
+  }
 
-  const onRestore = () => {}
+  const addDog = (url, payload) => {
+    dispatch(
+      createDogAction({
+        data: url
+          ? { ...payload, profile: url, dateAdded: new Date() }
+          : { ...payload, dateAdded: new Date() },
+        onSuccess: async (response) => {
+          setShowLoader(false)
+          console.log(response)
+          let prof = null
+          if (profile) prof = await toBase64(profile)
+          setDogList((prevList) => [
+            {
+              ...payload,
+              id: response,
+              profile: prof,
+              dateAdded: fire.firestore.Timestamp.now()
+            },
+            ...prevList
+          ])
+          toast.success('Dog created successfully.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+          setShowFormModal(false)
+        },
+        onFailure: (error) => {
+          console.log(error)
+          setShowLoader(false)
+          toast.error('Dog creation failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+        }
+      })
+    )
+  }
+
+  const updateDog = (url, payload) => {
+    dispatch(
+      updateDogAction({
+        data: {
+          id: dogId,
+          values: url ? { ...payload, profile: url } : payload
+        },
+        onSuccess: async (response) => {
+          setShowLoader(false)
+          console.log(response)
+          setDogList((prevList) =>
+            prevList?.map((item) =>
+              item?.id === dogId ? { ...item, ...payload, profile: url } : item
+            )
+          )
+          setList((prevList) =>
+            prevList?.map((item) =>
+              item?.id === dogId ? { ...item, ...payload, profile: url } : item
+            )
+          )
+          toast.success('Dog updated successfully.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+          setShowFormModal(false)
+        },
+        onFailure: (error) => {
+          console.log(error)
+          setShowLoader(false)
+          toast.error('Dog creation failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+        }
+      })
+    )
+  }
+
+  const onUpdate = (dog) => {
+    setDogId(dog?.id)
+    setIsUpdate(true)
+    setShowFormModal(true)
+    setFormValues(dog)
+  }
+
+  const onRemove = (dog) => {
+    setDogId(dog?.id)
+    setShowConfirmModal(true)
+    setIsArchiveClick(true)
+    setConfirmContent(`Are you sure you want to archive ${dog?.name}?`)
+  }
+
+  const onRestore = (dog) => {
+    setDogId(dog?.id)
+    setShowConfirmModal(true)
+    setIsArchiveClick(false)
+    setConfirmContent(`Are you sure you want to restore ${dog?.name}?`)
+  }
+
+  useEffect(() => {
+    console.log('hey')
+    setShowLoader(true)
+    dispatch(
+      getDogsAction({
+        data: {
+          emailOwner: user?.email,
+          filterBy,
+          sortBy,
+          order
+        },
+        onSuccess: (payload) => {
+          setShowLoader(false)
+          setList(payload)
+          setDogList(payload)
+        },
+        onFailure: (error) => {
+          setShowLoader(false)
+          toast.error('Retrieving user list failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+          console.log(error)
+        }
+      })
+    )
+  }, [filterBy, sortBy, order])
+
   return (
     <div className="container">
       {showLoader && <LoadingOverlay />}
@@ -62,29 +346,52 @@ const Dogs = () => {
         content={confirmContent}
         onYes={handleYesAction}
       />
-      <RightModal
+      <DogRightModal
         isOpen={showFormModal}
         onClose={() => setShowFormModal(false)}
         onSubmit={onSubmit}
         errorMsg={errorMsg}
         setErrorMsg={setErrorMsg}
         initialValues={formValues}
+        setFormValues={setFormValues}
         isUpdate={isUpdate}
+        setProfile={setProfile}
+        setEuthSched={setEuthSched}
       />
       <div className="right-container">
         <div className="w-full justify-between">
           <h1>Dogs</h1>
-          <div className="justify-between" style={{ width: 1050 }}>
+          <div
+            className="justify-between"
+            style={{
+              width: selDogOption === dogOptions[2].value ? 1280 : 1050
+            }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
               <div style={{ width: 150 }}>
                 <Select
                   styles={selectStyles}
-                  defaultValue={dogFilterOptions[0]}
-                  options={dogFilterOptions}
-                  onChange={(selected) => setFilterBy(selected.value)}
+                  defaultValue={dogOptions[0]}
+                  options={dogOptions}
+                  onChange={(selected) => {
+                    setSelDogOption(selected.value)
+                    if (selected.value !== dogOptions[2].value)
+                      setFilterBy(selected.value)
+                  }}
                 />
               </div>
+              {selDogOption === dogOptions[2].value ? (
+                <div style={{ width: 150, marginLeft: 10 }}>
+                  <Select
+                    styles={selectStyles}
+                    options={dogFilterOptions}
+                    placeholder="Select Status"
+                    onChange={(selected) => setFilterBy(selected.value)}
+                  />
+                </div>
+              ) : (
+                <div />
+              )}
             </div>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Sort By:</label>
@@ -109,13 +416,13 @@ const Dogs = () => {
               placeholder="Search Dog"
               onChange={(evt) => {
                 evt.persist()
-                // setUserList(() =>
-                //   list.filter((product) =>
-                //     `${product.firstName} ${product.lastName}`
-                //       .toLowerCase()
-                //       .includes(evt?.target?.value?.toLowerCase())
-                //   )
-                // )
+                setDogList(() =>
+                  list.filter((product) =>
+                    `${product.name}`
+                      .toLowerCase()
+                      .includes(evt?.target?.value?.toLowerCase())
+                  )
+                )
               }}
             />
             <Button
