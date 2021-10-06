@@ -53,7 +53,7 @@ const UserAvatarCard = ({
           <div className="user-card-label">
             <Home2LineIcon size={18} />
           </div>
-          <label className="user-card-value">{value?.address}</label>
+          <label className="user-card-value">{value?.address?.label}</label>
         </div>
         <div className="flex">
           <div className="user-card-label">

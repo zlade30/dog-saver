@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -8,6 +8,10 @@ import * as Yup from 'yup'
 import TextField from 'components/text-fields/TextField'
 import ErrorAlert from 'components/alerts/ErrorAlert'
 import Button from 'components/buttons/Button'
+import { useDispatch } from 'react-redux'
+import { getPuroksAction } from 'redux/actions/user.action'
+import Select from 'react-select'
+import { selectStyles } from 'utils/helpers'
 
 const RightModal = ({
   isOpen,
@@ -19,14 +23,40 @@ const RightModal = ({
   initialValues,
   isUpdate
 }) => {
+  const dispatch = useDispatch()
+  const [purokList, setPurokList] = useState([])
+
   const schema = Yup.object().shape({
     email: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     firstName: Yup.string().required('Required'),
     middleName: Yup.string().required('Required'),
     phone: Yup.string().required('Required'),
-    address: Yup.string().required('Required')
+    address: Yup.object().required('Required').nullable()
   })
+
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(
+        getPuroksAction({
+          onSuccess: (payload) => {
+            const list = payload?.map((item) => ({
+              label: `${item.name}`,
+              value: item?.id
+            }))
+            setPurokList(() => list)
+          },
+          onFailure: (error) => {
+            console.log(error)
+          }
+        })
+      )
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    console.log('hey', purokList)
+  }, [purokList])
 
   return (
     <ReactModal
@@ -47,7 +77,7 @@ const RightModal = ({
           validationSchema={schema}
           onSubmit={onSubmit}
           validator={() => ({})}>
-          {({ errors, touched }) => (
+          {({ errors, touched, values, setFieldValue }) => (
             <Form>
               <Field name="profile">
                 {() => (
@@ -76,6 +106,10 @@ const RightModal = ({
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={
+                  values.firstName.charAt(0).toUpperCase() +
+                  values.firstName.slice(1)
+                }
                 id="firstName"
                 name="firstName"
                 placeholder="First Name"
@@ -84,6 +118,10 @@ const RightModal = ({
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={
+                  values.lastName.charAt(0).toUpperCase() +
+                  values.lastName.slice(1)
+                }
                 id="lastName"
                 name="lastName"
                 placeholder="Last Name"
@@ -92,6 +130,10 @@ const RightModal = ({
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={
+                  values.middleName.charAt(0).toUpperCase() +
+                  values.middleName.slice(1)
+                }
                 id="middleName"
                 name="middleName"
                 placeholder="Middle Name"
@@ -104,14 +146,27 @@ const RightModal = ({
                 name="phone"
                 placeholder="Phone Number"
                 type="number"
+                style={{ marginBottom: 0 }}
               />
-              <TextField
-                errors={errors}
-                touched={touched}
-                width={320}
+              <Field
                 id="address"
                 name="address"
-                placeholder="Address"
+                render={() => (
+                  <div className="margin-b-10">
+                    <Select
+                      options={purokList}
+                      styles={selectStyles}
+                      placeholder="Select Address"
+                      value={values.address}
+                      onChange={(selected) =>
+                        setFieldValue('address', selected)
+                      }
+                    />
+                    {errors['address'] && touched['address'] && (
+                      <div className="label-error">{`Address is Required.`}</div>
+                    )}
+                  </div>
+                )}
               />
               <Button
                 id="sign-up"

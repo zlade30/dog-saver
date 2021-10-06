@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import TextField from 'components/text-fields/TextField'
 import Button from 'components/buttons/Button'
 import AvatarSelection from 'components/avatar/AvatarSelection'
@@ -8,12 +8,15 @@ import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
 import {
   createAccountAction,
-  createUserAction
+  createUserAction,
+  getPuroksAction
 } from 'redux/actions/user.action'
 import { uploadUserImageAction } from 'redux/actions/utils.action'
 import ErrorAlert from 'components/alerts/ErrorAlert'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import { UserContext } from 'contexts/user.context'
+import Select from 'react-select'
+import { selectStyles } from 'utils/helpers'
 
 const Register = () => {
   const history = useHistory()
@@ -24,6 +27,7 @@ const Register = () => {
   const [errorMsg, setErrorMsg] = useState('')
   const [profile, setProfile] = useState()
   const [showLoader, setShowLoader] = useState(false)
+  const [purokList, setPurokList] = useState([])
 
   const schema = Yup.object().shape({
     email: Yup.string().required('Required'),
@@ -31,7 +35,7 @@ const Register = () => {
     firstName: Yup.string().required('Required'),
     middleName: Yup.string().required('Required'),
     phone: Yup.string().required('Required'),
-    address: Yup.string().required('Required'),
+    address: Yup.object().required('Required').nullable(),
     password: Yup.string().required('Required')
   })
 
@@ -80,6 +84,23 @@ const Register = () => {
       })
     )
   }
+
+  useEffect(() => {
+    dispatch(
+      getPuroksAction({
+        onSuccess: (payload) => {
+          const list = payload?.map((item) => ({
+            label: `${item.name}`,
+            value: item?.id
+          }))
+          setPurokList(() => list)
+        },
+        onFailure: (error) => {
+          console.log(error)
+        }
+      })
+    )
+  }, [])
 
   return (
     <div className="auth-container">
@@ -136,7 +157,7 @@ const Register = () => {
               }
             }}
             validator={() => ({})}>
-            {({ errors, touched }) => (
+            {({ errors, touched, values, setFieldValue }) => (
               <Form>
                 <Field name="profile">
                   {() => <AvatarSelection setImg={setProfile} />}
@@ -160,6 +181,10 @@ const Register = () => {
                   errors={errors}
                   touched={touched}
                   width={320}
+                  value={
+                    values.firstName.charAt(0).toUpperCase() +
+                    values.firstName.slice(1)
+                  }
                   id="firstName"
                   name="firstName"
                   placeholder="First Name"
@@ -168,6 +193,10 @@ const Register = () => {
                   errors={errors}
                   touched={touched}
                   width={320}
+                  value={
+                    values.lastName.charAt(0).toUpperCase() +
+                    values.lastName.slice(1)
+                  }
                   id="lastName"
                   name="lastName"
                   placeholder="Last Name"
@@ -176,6 +205,10 @@ const Register = () => {
                   errors={errors}
                   touched={touched}
                   width={320}
+                  value={
+                    values.middleName.charAt(0).toUpperCase() +
+                    values.middleName.slice(1)
+                  }
                   id="middleName"
                   name="middleName"
                   placeholder="Middle Name"
@@ -188,14 +221,27 @@ const Register = () => {
                   name="phone"
                   placeholder="Phone Number"
                   type="number"
+                  style={{ marginBottom: 0 }}
                 />
-                <TextField
-                  errors={errors}
-                  touched={touched}
-                  width={320}
+                <Field
                   id="address"
                   name="address"
-                  placeholder="Address"
+                  render={() => (
+                    <div className="margin-b-10">
+                      <Select
+                        options={purokList}
+                        styles={selectStyles}
+                        placeholder="Select Address"
+                        value={values.address}
+                        onChange={(selected) =>
+                          setFieldValue('address', selected)
+                        }
+                      />
+                      {errors['address'] && touched['address'] && (
+                        <div className="label-error">{`Address is Required.`}</div>
+                      )}
+                    </div>
+                  )}
                 />
                 <TextField
                   type="password"

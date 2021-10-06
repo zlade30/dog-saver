@@ -13,6 +13,7 @@ const TextField = ({ errors, touched, width, placeholder, ...rest }) => {
             : 'text-field'
         }
         placeholder={placeholder}
+        autocomplete="off"
         {...rest}
       />
       {errors[rest.name] && touched[rest.name] && (

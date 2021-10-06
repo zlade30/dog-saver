@@ -121,7 +121,7 @@ const Dogs = () => {
               prevList.filter((item) => item.id !== dogId)
             )
             setList((prevList) => prevList.filter((item) => item.id !== dogId))
-            toast.success('User restored successfully.', {
+            toast.success('Dog restored successfully.', {
               position: 'bottom-right',
               autoClose: 3000,
               hideProgressBar: false,
@@ -133,7 +133,7 @@ const Dogs = () => {
             setShowConfirmModal(false)
           },
           onFailure: (error) => {
-            toast.error('User restore failed.', {
+            toast.error('Dog restore failed.', {
               position: 'bottom-right',
               autoClose: 3000,
               hideProgressBar: false,

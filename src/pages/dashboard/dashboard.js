@@ -186,7 +186,7 @@ const Dashboard = () => {
               marginTop: 10
             }}>
             <h1>{user?.role === 'admin' ? 'Dogs' : 'My Dogs'}</h1>
-            <div className="card">
+            <div className="card" style={{ paddingRight: 0 }}>
               <div className="card-header">
                 <DogIcon />
                 <label>New Dogs</label>

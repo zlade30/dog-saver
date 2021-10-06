@@ -156,6 +156,9 @@ const DogRightModal = ({
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={
+                  values.name.charAt(0).toUpperCase() + values.name.slice(1)
+                }
                 id="name"
                 name="name"
                 placeholder="Dog Name"
