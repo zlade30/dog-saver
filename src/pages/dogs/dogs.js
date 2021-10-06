@@ -305,7 +305,6 @@ const Dogs = () => {
   }
 
   useEffect(() => {
-    console.log('hey')
     setShowLoader(true)
     dispatch(
       getDogsAction({

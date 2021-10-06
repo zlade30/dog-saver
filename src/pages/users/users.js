@@ -23,7 +23,7 @@ import {
   userFilterOptions,
   userSortOptions
 } from 'utils/helpers'
-import UserFillIcon from 'remixicon-react/UserFillIcon'
+import UserLineIcon from 'remixicon-react/UserLineIcon'
 import { toast } from 'react-toastify'
 import Select from 'react-select'
 
@@ -610,7 +610,7 @@ const Users = () => {
             </div>
           ) : (
             <div className="empty-panel">
-              <UserFillIcon size={100} />
+              <UserLineIcon size={80} />
               <label className="empty-panel-label">Data is empty</label>
             </div>
           )}
