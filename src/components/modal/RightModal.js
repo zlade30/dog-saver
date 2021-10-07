@@ -54,10 +54,6 @@ const RightModal = ({
     }
   }, [isOpen])
 
-  useEffect(() => {
-    console.log('hey', purokList)
-  }, [purokList])
-
   return (
     <ReactModal
       isOpen={isOpen}

@@ -186,20 +186,24 @@ const Dashboard = () => {
               marginTop: 10
             }}>
             <h1>{user?.role === 'admin' ? 'Dogs' : 'My Dogs'}</h1>
-            <div className="card" style={{ paddingRight: 0 }}>
+            <div
+              className="card"
+              style={{ width: user?.role === 'admin' ? '' : '100%' }}>
               <div className="card-header">
                 <DogIcon />
                 <label>New Dogs</label>
               </div>
-              <Divider width="95%" />
+              <Divider width={user?.role === 'admin' ? '95%' : '98%'} />
               {dogList?.length ? (
                 <div className="avatar-container">
-                  {dogList?.slice(0, 3)?.map((item) => (
-                    <DogAvatarCard
-                      key={item?.id}
-                      value={item}
-                      isShowAction={false}
-                    />
+                  {dogList
+                    ?.slice(0, user?.role === 'admin' ? 3 : 6)
+                    ?.map((item) => (
+                      <DogAvatarCard
+                        key={item?.id}
+                        value={item}
+                        isShowAction={false}
+                      />
                   ))}
                   {dogList?.length ? (
                     <ArrowLeftIcon

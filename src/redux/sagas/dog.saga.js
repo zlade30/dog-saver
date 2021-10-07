@@ -55,11 +55,14 @@ const update = async (payload) => {
 }
 
 const returnSelectedOptions = (data) => {
+  console.log(data)
   let query = null
   if (data.emailOwner === 'admin@dogsaver.com') {
     query = firestore.collection('dogs')
   } else {
-    query = firestore.collection('dogs').where('owner', '==', data?.emailOwner)
+    query = firestore
+      .collection('dogs')
+      .where('owner.value', '==', data?.emailOwner)
   }
 
   switch (data.filterBy) {

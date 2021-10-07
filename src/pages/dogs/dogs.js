@@ -153,7 +153,8 @@ const Dogs = () => {
   const onSubmit = async (values) => {
     let payload = values
     if (profile) payload = { ...values, profile }
-    if (euthSched) payload = { ...values, euthSched }
+    if (euthSched && values.status.value === 'Euthanasia')
+      payload = { ...values, euthSched }
     console.log(payload)
 
     setShowLoader(true)
@@ -183,7 +184,7 @@ const Dogs = () => {
       )
     } else {
       if (!isUpdate) addDog(null, payload)
-      else updateDog(values?.profile, payload)
+      else updateDog(values?.profile || null, payload)
     }
   }
 
@@ -429,7 +430,19 @@ const Dogs = () => {
                 setIsUpdate(false)
                 setShowFormModal(true)
                 setProfile(null)
-                setFormValues()
+                if (user?.role === 'admin') setFormValues()
+                else {
+                  setFormValues({
+                    owner: {
+                      label: `${user?.firstName} ${user?.lastName}`,
+                      value: user?.email
+                    },
+                    name: '',
+                    breed: '',
+                    status: '',
+                    archive: false
+                  })
+                }
               }}
               width={80}
               height={35}

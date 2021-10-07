@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, useContext, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -23,6 +23,8 @@ import Select from 'react-select'
 import { getDogBreedsAction } from 'redux/actions/dog.action'
 import ReactDatePicker from 'react-datepicker'
 import moment from 'moment'
+import { UserContext } from 'contexts/user.context'
+import { fire } from 'firebase'
 
 const DogRightModal = ({
   isOpen,
@@ -40,6 +42,7 @@ const DogRightModal = ({
   const [breedList, setBreedList] = useState([])
   const [startDate, setStartDate] = useState(new Date())
   const [selectedStatus, setSelectedStatus] = useState('')
+  const { user } = useContext(UserContext)
 
   const schema = Yup.object().shape({
     owner: Yup.object().required('Required').nullable(),
@@ -55,27 +58,29 @@ const DogRightModal = ({
   useEffect(() => {
     if (isOpen) {
       setSelectedStatus(initialValues?.status?.value)
-      setEuthSched(initialValues?.euthSched || new Date())
-      dispatch(
-        getUserListAction({
-          data: {
-            filterBy: userFilterOptions[0].value,
-            sortBy: userSortOptions[0].value,
-            order: orderOptions[0].value
-          },
-          onSuccess: (payload) => {
-            const list = payload?.map((item) => ({
-              label: `${item.firstName} ${item.lastName}`,
-              value: item?.email
-            }))
-            console.log(list)
-            setUserList(list)
-          },
-          onFailure: (error) => {
-            console.log(error)
-          }
-        })
-      )
+      setEuthSched(initialValues?.euthSched || fire.firestore.Timestamp.now())
+      if (user?.role === 'admin') {
+        dispatch(
+          getUserListAction({
+            data: {
+              filterBy: userFilterOptions[0].value,
+              sortBy: userSortOptions[0].value,
+              order: orderOptions[0].value
+            },
+            onSuccess: (payload) => {
+              const list = payload?.map((item) => ({
+                label: `${item.firstName} ${item.lastName}`,
+                value: item?.email
+              }))
+              console.log(list)
+              setUserList(list)
+            },
+            onFailure: (error) => {
+              console.log(error)
+            }
+          })
+        )
+      }
 
       dispatch(
         getDogBreedsAction({
@@ -94,10 +99,6 @@ const DogRightModal = ({
       )
     }
   }, [isOpen])
-
-  useEffect(() => {
-    console.log(initialValues)
-  }, [initialValues])
 
   return (
     <ReactModal
@@ -134,24 +135,30 @@ const DogRightModal = ({
                   onClose={() => setErrorMsg('')}
                 />
               )}
-              <Field
-                id="owner"
-                name="owner"
-                render={() => (
-                  <div className="margin-b-10">
-                    <Select
-                      options={userList}
-                      styles={selectStyles}
-                      placeholder="Select Owner"
-                      value={values.owner}
-                      onChange={(selected) => setFieldValue('owner', selected)}
-                    />
-                    {errors['owner'] && touched['owner'] && (
-                      <div className="label-error">{`Owner is Required.`}</div>
-                    )}
-                  </div>
-                )}
-              />
+              {user?.role === 'admin' ? (
+                <Field
+                  id="owner"
+                  name="owner"
+                  render={() => (
+                    <div className="margin-b-10">
+                      <Select
+                        options={userList}
+                        styles={selectStyles}
+                        placeholder="Select Owner"
+                        value={values.owner}
+                        onChange={(selected) =>
+                          setFieldValue('owner', selected)
+                        }
+                      />
+                      {errors['owner'] && touched['owner'] && (
+                        <div className="label-error">{`Owner is Required.`}</div>
+                      )}
+                    </div>
+                  )}
+                />
+              ) : (
+                <div />
+              )}
               <TextField
                 errors={errors}
                 touched={touched}
@@ -225,7 +232,7 @@ const DogRightModal = ({
                         dateFormat="MM/dd/yyyy"
                         onChange={(date) => {
                           setStartDate(date)
-                          setEuthSched(date)
+                          setEuthSched(fire.firestore.Timestamp.fromDate(date))
                         }}
                         onChangeRaw={(evt) => evt.preventDefault()}
                         placeholderText="Select euthanize schedule"

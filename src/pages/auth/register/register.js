@@ -17,6 +17,7 @@ import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import { UserContext } from 'contexts/user.context'
 import Select from 'react-select'
 import { selectStyles } from 'utils/helpers'
+import { fire } from 'firebase'
 
 const Register = () => {
   const history = useHistory()
@@ -46,10 +47,29 @@ const Register = () => {
         onSuccess: (response) => {
           dispatch(
             createUserAction({
-              data: { ...values, profile: response?.data },
+              data: {
+                ...values,
+                profile: response?.data,
+                dateAdded: new Date(),
+                archive: false
+              },
               onSuccess: () => {
                 setShowLoader(false)
-                setUser({ ...values, profile: response?.data })
+                setUser({
+                  ...values,
+                  profile: response?.data,
+                  dateAdded: fire.firestore.Timestamp.fromDate(new Date()),
+                  archive: false
+                })
+                localStorage.setItem(
+                  'authUser',
+                  JSON.stringify({
+                    ...values,
+                    profile: response?.data,
+                    dateAdded: fire.firestore.Timestamp.fromDate(new Date()),
+                    archive: false
+                  })
+                )
                 history.push('/dashboard')
               },
               onFailure: (error) => {
@@ -70,10 +90,26 @@ const Register = () => {
   const onCreateAccount = (values) => {
     dispatch(
       createUserAction({
-        data: values,
+        data: {
+          ...values,
+          dateAdded: new Date(),
+          archive: false
+        },
         onSuccess: () => {
           setShowLoader(false)
-          setUser(values)
+          setUser({
+            ...values,
+            dateAdded: fire.firestore.Timestamp.fromDate(new Date()),
+            archive: false
+          })
+          localStorage.setItem(
+            'authUser',
+            JSON.stringify({
+              ...values,
+              dateAdded: fire.firestore.Timestamp.fromDate(new Date()),
+              archive: false
+            })
+          )
           history.push('/dashboard')
         },
         onFailure: (error) => {

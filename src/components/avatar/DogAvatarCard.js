@@ -84,7 +84,7 @@ const DogAvatarCard = ({
             {moment(value?.dateAdded?.toDate()).format('L')}
           </label>
         </div>
-        {value?.euthSched ? (
+        {value?.euthSched && value?.status?.value === 'Euthanasia' ? (
           <div className="flex">
             <div className="user-card-label">
               <SyringeLineIcon size={18} />
