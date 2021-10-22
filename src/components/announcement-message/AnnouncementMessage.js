@@ -1,7 +1,11 @@
-import Divider from 'components/divider/Divider'
 import React from 'react'
+import PropTypes from 'prop-types'
+import Divider from 'components/divider/Divider'
+import moment from 'moment'
+import PencilLineIcon from 'remixicon-react/PencilLineIcon'
+import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 
-const AnnouncementMessage = () => {
+const AnnouncementMessage = ({ item, onArchive, onUpdate }) => {
   const HornIcon = ({ color = '#334D67' }) => (
     <svg
       className="sidebar-menu-icon"
@@ -18,28 +22,47 @@ const AnnouncementMessage = () => {
   )
 
   return (
-    <div className="announcement-message">
+    <div className="announcement-message mb-10">
       <div className="ancmnt-msg-header">
         <div className="ancmnt-msg-header-icon">
-          <HornIcon />
-          <label>Title of announcement</label>
+          <div className="flex items-center">
+            <HornIcon />
+            <label>{item?.title}</label>
+          </div>
+          <div className="flex items-center">
+            <div onClick={onUpdate} className="flex items-center update">
+              <PencilLineIcon size={20} />
+              <label className="cursor-pointer">Update</label>
+            </div>
+            <div
+              onClick={onArchive}
+              className="flex items-center archive"
+              style={{ marginLeft: 12 }}>
+              <DeleteBinLineIcon size={18} />
+              <label className="cursor-pointer">Archive</label>
+            </div>
+          </div>
         </div>
         <Divider width="95%" />
       </div>
       <div className="ancmnt-msg-content">
-        <label>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum.
-        </label>
+        <label>{item?.content}</label>
       </div>
-      <label className="ancmnt-date">08/12/2021</label>
+      <label className="ancmnt-date">
+        {moment(item?.dateAdded?.toDate()).format('L')}
+      </label>
     </div>
   )
+}
+
+AnnouncementMessage.defaultProps = {
+  item: {}
+}
+
+AnnouncementMessage.propTypes = {
+  item: PropTypes.object.isRequired,
+  onArchive: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired
 }
 
 export default AnnouncementMessage
