@@ -11,6 +11,7 @@ import BubbleChartLineIcon from 'remixicon-react/BubbleChartLineIcon'
 import SyringeLineIcon from 'remixicon-react/SyringeLineIcon'
 
 import moment from 'moment'
+import Select from 'components/icons/Select'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -27,36 +28,12 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const DogAvatarCard = ({
-  value,
-  onUpdate,
-  onRemove,
-  onRestore,
-  isShowAction
-}) => {
+const DogAvatarCard = ({ value, isImpound, onUpdate, onRemove, onRestore }) => {
   return (
     <div className="user-card">
       <Avatar src={value?.profile} width={70} height={70} />
       <label className="user-card-name">{value?.name}</label>
       <Divider width="100%" />
-      {/* <div className="user-card-info">
-        <div className="flex">
-          <label className="user-card-label">Phone:</label>
-          <label className="user-card-value">{value?.phone}</label>
-        </div>
-        <div className="flex">
-          <label className="user-card-label">Address:</label>
-          <label className="user-card-value">{value?.address}</label>
-        </div>
-        <div className="flex">
-          <label className="user-card-label">Email:</label>
-          <label className="user-card-value">{value?.email}</label>
-        </div>
-        <div className="flex">
-          <label className="user-card-label">Date Added:</label>
-          <label className="user-card-value">{value?.dateAdded}</label>
-        </div>
-      </div> */}
       <div className="user-card-info">
         <div className="flex">
           <div className="user-card-label">
@@ -97,7 +74,7 @@ const DogAvatarCard = ({
           <div />
         )}
       </div>
-      {isShowAction ? (
+      {!isImpound ? (
         !value?.archive ? (
           <div className="card-btn-panel">
             <div onClick={onUpdate} className="card-btn-panel-l">
@@ -118,14 +95,19 @@ const DogAvatarCard = ({
           </div>
         )
       ) : (
-        <div />
+        <div className="card-btn-panel items-center justify-center">
+          <div onClick={onRestore} className="card-btn-panel-m mb-10">
+            <Select size={20} />
+            <label className="cursor-pointer margin-l-10">Select</label>
+          </div>
+        </div>
       )}
     </div>
   )
 }
 
 DogAvatarCard.defaultProps = {
-  isShowAction: true
+  isImpound: false
 }
 
 DogAvatarCard.propTypes = {
@@ -133,7 +115,7 @@ DogAvatarCard.propTypes = {
   onRemove: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
   onRestore: PropTypes.func,
-  isShowAction: PropTypes.bool
+  isImpound: PropTypes.bool
 }
 
 export default DogAvatarCard

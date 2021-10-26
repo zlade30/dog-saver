@@ -271,6 +271,10 @@ input[type=number] {
   }
 }
 
+.user-card:hover {
+  box-shadow: $primary-color 0px 2px 8px 0px;
+}
+
 .card-btn-panel {
   bottom: 0;
   width: 100%;
