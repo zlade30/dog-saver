@@ -17,6 +17,7 @@ const AppRoutes = ({ history }) => {
   const dispatch = useDispatch()
   const [showLoader, setShowLoader] = useState(false)
   const { user, setUser } = useContext(UserContext)
+  const savedUser = localStorage.getItem('authUser')
 
   useEffect(() => {
     const listener = auth.onAuthStateChanged((authUser) => {
@@ -43,7 +44,12 @@ const AppRoutes = ({ history }) => {
       } else {
         localStorage.removeItem('authUser')
         setUser(null)
-        history.push('/login')
+        if (history?.location?.pathname === '/welcome') history.push('/welcome')
+        else if (history?.location?.pathname === '/about-us')
+          history?.push('/about-us')
+        else if (history?.location?.pathname === '/impound')
+          history?.push('/impound')
+        else history.push('/login')
       }
     })
 
@@ -63,7 +69,7 @@ const AppRoutes = ({ history }) => {
   return (
     <div className="flex">
       {showLoader && <LoadingOverlay />}
-      {routes?.length && !isPublic && (
+      {routes?.length && !isPublic && savedUser && (
         <Sidebar onLogout={onLogout} user={user} />
       )}
       {routes?.length && isPublic ? (

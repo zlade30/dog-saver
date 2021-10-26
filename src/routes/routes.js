@@ -8,8 +8,8 @@ const Users = lazy(() => import('pages/users'))
 const Dogs = lazy(() => import('pages/dogs'))
 const Announcements = lazy(() => import('pages/announcements'))
 const ForgotPassword = lazy(() => import('pages/auth/forgot-password'))
-// const Login = lazy(() => import(''))
-// const Login = lazy(() => import(''))
+const AboutUs = lazy(() => import('pages/about-us'))
+const Impound = lazy(() => import('pages/impound'))
 
 const Routes = [
   {
@@ -31,9 +31,15 @@ const Routes = [
     hidden: true
   },
   {
-    path: '/overview',
+    path: '/welcome',
     name: 'Overview',
     component: Overview,
+    hidden: true
+  },
+  {
+    path: '/about-us',
+    name: 'AboutUs',
+    component: AboutUs,
     hidden: true
   },
   {
@@ -53,6 +59,12 @@ const Routes = [
     name: 'Dogs',
     component: Dogs,
     hidden: false
+  },
+  {
+    path: '/impound',
+    name: 'Impound',
+    component: Impound,
+    both: true
   },
   {
     path: '/announcements',

@@ -98,7 +98,7 @@ const Sidebar = ({ user, onLogout }) => {
     <div className="sidebar">
       <div className="logo margin-b-20">
         <img className="logo-img" src="assets/icons/dog.png" />
-        Dog Saver
+        BARK
       </div>
       <Divider width={290} />
       <div className="user-info-cont">

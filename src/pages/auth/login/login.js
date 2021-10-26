@@ -46,7 +46,7 @@ const Login = () => {
         <div>
           <div className="logo">
             <img className="logo-img" src="assets/icons/dog.png" />
-            Dog Saver
+            BARK
           </div>
           <Formik
             initialValues={{

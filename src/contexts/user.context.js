@@ -17,7 +17,7 @@ const UserProvider = ({ children }) => {
 UserProvider.propTypes = {
   user: PropTypes.string,
   setUser: PropTypes.func,
-  children: PropTypes.object
+  children: PropTypes.array
 }
 
 export default UserProvider

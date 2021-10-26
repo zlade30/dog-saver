@@ -12,10 +12,13 @@ const ForgotPassword = () => {
         <div>
           <div className="logo">
             <img className="logo-img" src="assets/icons/dog.png" />
-            Dog Saver
+            BARK
           </div>
           <div className="form-item" style={{ width: 200 }}>
-            <label style={{ textJustify: 'inter-word', textAlign: 'justify' }}>Forgot Password? Kindly put your email or phone number for us to send you the method on resetting your password?</label>
+            <label style={{ textJustify: 'inter-word', textAlign: 'justify' }}>
+              Forgot Password? Kindly put your email or phone number for us to
+              send you the method on resetting your password?
+            </label>
           </div>
           <TextField
             width={320}
@@ -27,7 +30,9 @@ const ForgotPassword = () => {
         <div>
           <span>
             <label>Already have an account?</label>
-            <label onClick={() => history.push('/login')} className="register">Sign In</label>
+            <label onClick={() => history.push('/login')} className="register">
+              Sign In
+            </label>
           </span>
         </div>
       </div>

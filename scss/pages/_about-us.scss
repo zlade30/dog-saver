@@ -1,0 +1,33 @@
+.au-subtitle {
+  font-size: 20px;
+  padding: 0px !important;
+  margin: 0px !important;
+  font-weight: normal !important;
+}
+
+.au-title {
+  font-size: 50px;
+  font-weight: bold;
+}
+
+.au-panel {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.au-content {
+  width: 50%;
+  background-color: white;
+  padding: 20px 40px;
+  font-size: 14px;
+  text-align: justify;
+  border-radius: 12px;
+}
+
+.au-back {
+  margin-top: 20px;
+  cursor: pointer;
+}

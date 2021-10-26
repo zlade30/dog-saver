@@ -8,12 +8,16 @@ const Header = () => {
     <div className="header header-title">
       <div className="header-panel">
         <img className="header-icon" src="assets/icons/dog.png" />
-        Dog Saver
+        BARK
       </div>
       <div className="header-panel">
-        <label onClick={() => history.push('/login')} className="header-txt">Sign In</label>
+        <label onClick={() => history.push('/login')} className="header-txt">
+          Sign In
+        </label>
         <label className="header-txt">|</label>
-        <label onClick={() => history.push('/register')} className="header-txt">Sign Up</label>
+        <label onClick={() => history.push('/register')} className="header-txt">
+          Sign Up
+        </label>
       </div>
     </div>
   )
