@@ -10,6 +10,7 @@ const Announcements = lazy(() => import('pages/announcements'))
 const ForgotPassword = lazy(() => import('pages/auth/forgot-password'))
 const AboutUs = lazy(() => import('pages/about-us'))
 const Impound = lazy(() => import('pages/impound'))
+const Activities = lazy(() => import('pages/activities'))
 
 const Routes = [
   {
@@ -64,6 +65,12 @@ const Routes = [
     path: '/impound',
     name: 'Impound',
     component: Impound,
+    both: true
+  },
+  {
+    path: '/activities',
+    name: 'Activities',
+    component: Activities,
     both: true
   },
   {

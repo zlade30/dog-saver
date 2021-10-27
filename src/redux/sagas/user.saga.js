@@ -41,7 +41,7 @@ const get = async (payload) => {
   try {
     const result = await payload
     let snapshot = null
-    result.forEach((doc) => (snapshot = doc.data()))
+    result.forEach((doc) => (snapshot = { ...doc.data(), id: doc.id }))
     return { isSuccess: true, data: snapshot }
   } catch (error) {
     return { isSuccess: false, data: error }

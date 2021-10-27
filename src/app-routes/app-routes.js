@@ -59,7 +59,7 @@ const AppRoutes = ({ history }) => {
       } else {
         localStorage.removeItem('authUser')
         setUser(null)
-        if (path === '/welcome' || path === '/') history.push('/welcome')
+        if (path === '/') history.push('/login')
         else if (path === '/about-us') history?.push('/about-us')
         else if (path === '/impound') history?.push('/impound')
         else history.push('/login')

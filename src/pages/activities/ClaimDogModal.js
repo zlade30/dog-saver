@@ -1,6 +1,4 @@
-/* eslint-disable react/display-name */
-/* eslint-disable react/prop-types */
-import React, { useRef } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -8,26 +6,25 @@ import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 import moment from 'moment'
 
-const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
-  const nameRef = useRef()
-  const purokRef = useRef()
-  const genderRef = useRef()
-  const colorRef = useRef()
-  const addressRef = useRef()
-  const dateCaughtRef = useRef()
-  const dogFoodFeeRef = useRef()
-  const agreementFeeRef = useRef()
-  const offenseFeeRef = useRef()
-
-  const RenderField = React.forwardRef(({ key, value, onChange }, ref) => (
-    <input
-      key={key}
-      value={value}
-      ref={ref}
-      onChange={onChange}
-      style={{ fontWeight: 'normal', fontFamily: 'Montserrat' }}
-    />
-  ))
+const ClaimDogModal = ({
+  isOpen,
+  onClose,
+  onApprove,
+  onReject,
+  values,
+  role
+}) => {
+  const renderLabel = (value) => (
+    <label
+      style={{
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        textDecorationLine: 'underline',
+        fontSize: 14
+      }}>
+      {value}
+    </label>
+  )
 
   return (
     <ReactModal
@@ -198,24 +195,22 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   textIndent: 50
                 }}>
                 <label style={{ textAlign: 'justify', lineHeight: 3 }}>
-                  AKO/KAMI SI {<RenderField key="name" ref={nameRef} />} NGA
-                  LUMULUPYO SA PUROK-
-                  {<RenderField key="purok" ref={purokRef} />} DAMILAG, MANOLO
-                  FORTICH, BUKIDNON. NGA KAMI NANAG-IYA SA IRO/IRING NGA
-                  (KASARIAN) {<RenderField key="gender" ref={genderRef} />}
-                  (COLOR) {<RenderField key="color" ref={colorRef} />} NGA
-                  NADAKPAN SA ATONG BARANGAY DOG IMPOUNDING PERSONNEL DIDTO SA{' '}
-                  {<RenderField key="address" ref={addressRef} />} NIADTONG
-                  {<RenderField key="dateCaught" ref={dateCaughtRef} />}
+                  AKO/KAMI SI {renderLabel(values?.claimForm?.name)} {` `}
+                  NGA LUMULUPYO SA PUROK-{renderLabel(values?.claimForm?.purok)}
+                  {` `}DAMILAG, MANOLO FORTICH, BUKIDNON. NGA KAMI NANAG-IYA SA
+                  IRO/IRING NGA (KASARIAN) {` `}
+                  {renderLabel(values?.claimForm?.gender)} (COLOR) {` `}
+                  {renderLabel(values?.claimForm?.color)} {` `}
+                  NGA NADAKPAN SA ATONG BARANGAY DOG IMPOUNDING PERSONNEL DIDTO
+                  SA {renderLabel(values?.claimForm?.address)} NIADTONG
+                  {` `} {renderLabel(values?.claimForm?.dateCaught)} {` `}
                   KAMI NASAYOD NGA ADUNA KAMI TULUBAGON PINANSYAL NGA NAGKATIDAD
-                  (P10.00/DAY DOG FOOD)
-                  {<RenderField key="dogFoodFee" ref={dogFoodFeeRef} />},
-                  (P100.00 AGREEMENT FEE).
-                  {<RenderField key="agreementFee" ref={agreementFeeRef} />}
-                  FIRST OFFENSE, P1,500 - SECOND OFFENSE AS PER MUN. ORD. NO.
-                  2019-1255){' '}
-                  {<RenderField key="offenseFee" ref={offenseFeeRef} />} 1st/2nd
-                  OFFENSE.
+                  (P10.00/DAY DOG FOOD) {` `}
+                  {renderLabel(values?.claimForm?.dogFoodFee)}, P100.00
+                  AGREEMENT FEE). {renderLabel(values?.claimForm?.agreementFee)}
+                  {` `}FIRST OFFENSE, P1,500 - SECOND OFFENSE AS PER MUN. ORD.
+                  NO. 2019-1255) {renderLabel(values?.claimForm?.offenseFee)}
+                  {` `} 1st/2nd OFFENSE.
                 </label>
               </div>
               <div
@@ -344,37 +339,51 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
               color: 'brown'
             }}>{`"We thrive as one."`}</label>
         </div>
-        <div className="modal-footer" style={{ marginRight: 20 }}>
-          <Button
-            onClick={() =>
-              onSendForm({
-                name: nameRef.current.value,
-                purok: purokRef.current.value,
-                gender: genderRef.current.value,
-                color: colorRef.current.value,
-                address: addressRef.current.value,
-                dateCaught: dateCaughtRef.current.value,
-                dogFoodFee: dogFoodFeeRef.current.value,
-                agreementFee: agreementFeeRef.current.value,
-                offenseFee: offenseFeeRef.current.value
-              })
-            }
-            value="Send Form"
-            width={100}
-          />
-        </div>
+        {role === 'admin' ? (
+          <div className="modal-footer" style={{ marginRight: 20 }}>
+            <div
+              className="flex items-center"
+              style={{ justifyContent: 'space-between' }}>
+              <Button
+                value="Approve"
+                onClick={onApprove}
+                style={{
+                  backgroundColor: '#42C2D3',
+                  width: 150,
+                  marginRight: 5
+                }}
+              />
+              <Button
+                value="Reject"
+                onClick={onReject}
+                style={{
+                  backgroundColor: '#ff4d4f',
+                  width: 150,
+                  marginLeft: 5
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
       </div>
     </ReactModal>
   )
 }
 
-ClaimModal.defaultProps = {
-  isOpen: false
+ClaimDogModal.defaultProps = {
+  isOpen: false,
+  role: 'admin'
 }
 
-ClaimModal.propTypes = {
+ClaimDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired,
+  values: PropTypes.object.isRequired,
+  onApprove: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  role: PropTypes.string
 }
 
-export default ClaimModal
+export default ClaimDogModal

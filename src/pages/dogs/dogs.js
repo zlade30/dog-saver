@@ -360,7 +360,7 @@ const Dogs = () => {
       />
       <div className="right-container">
         <div className="w-full justify-between">
-          <h1>Dogs</h1>
+          <h1>{user?.role === 'admin' ? 'Dogs' : 'My Dogs'}</h1>
           <div
             className="justify-between"
             style={{

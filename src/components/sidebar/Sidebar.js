@@ -5,6 +5,8 @@ import AvatarSelection from 'components/avatar/AvatarSelection'
 import LogoutBoxRLineIcon from 'remixicon-react/LogoutBoxRLineIcon'
 import Home4LineIcon from 'remixicon-react/Home4LineIcon'
 import User3LineIcon from 'remixicon-react/User3LineIcon'
+import GovernmentLineIcon from 'remixicon-react/GovernmentLineIcon'
+import BookLine from 'remixicon-react/BookLineIcon'
 import { useHistory, useLocation } from 'react-router'
 
 const DogIcon = ({ color = '#334D67' }) => (
@@ -56,7 +58,7 @@ const Sidebar = ({ user, onLogout }) => {
       isHidden: user?.role !== 'admin'
     },
     {
-      name: 'Dogs',
+      name: user?.role === 'admin' ? 'Dogs' : 'My Dogs',
       color: '#334D67',
       isActive: false,
       path: '/dogs'
@@ -66,6 +68,12 @@ const Sidebar = ({ user, onLogout }) => {
       color: '#334D67',
       isActive: false,
       path: '/impound'
+    },
+    {
+      name: 'Activities',
+      color: '#334D67',
+      isActive: false,
+      path: '/activities'
     },
     {
       name: 'Announcements',
@@ -94,8 +102,12 @@ const Sidebar = ({ user, onLogout }) => {
         return <User3LineIcon className="sidebar-menu-icon" size={20} />
       case 'Dogs':
         return <DogIcon color={menu?.color} />
-      case 'Dog Impound':
+      case 'Activities':
+        return <BookLine className="sidebar-menu-icon" size={20} />
+      case 'My Dogs':
         return <DogIcon color={menu?.color} />
+      case 'Dog Impound':
+        return <GovernmentLineIcon className="sidebar-menu-icon" size={20} />
       case 'Announcements':
         return <HornIcon color={menu?.color} />
     }

@@ -22,6 +22,9 @@ import Select from 'react-select'
 import { selectStyles } from 'utils/helpers'
 import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
 import Header from 'components/headers/Header'
+import InformationModal from 'components/modal/InformationModal'
+import SurrenderForm from './SurrenderForm'
+import { createActivityAction } from 'redux/actions/activities.action'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -39,9 +42,23 @@ const DogIcon = ({ color = '#334D67' }) => (
 
 const Impound = () => {
   const dispatch = useDispatch()
+  const initialFormValues = {
+    profile: '',
+    color: '',
+    breed: '',
+    gender: '',
+    locationCaught: '',
+    dateCaught: fire.firestore.Timestamp.now(),
+    euthSched: fire.firestore.Timestamp.now(),
+    archive: false,
+    status: 'Impound',
+    owner: null,
+    dateAdded: fire.firestore.Timestamp.now()
+  }
   const [showLoader, setShowLoader] = useState(false)
   const [dogImpoundList, setDogImpoundList] = useState([])
   const [showImpoundModal, setShowImpoundModal] = useState(false)
+  const [showSurrenderModal, setShowSurrenderModal] = useState(false)
   const [dogId, setDogId] = useState(null)
   const [filterStatus, setFilterStatus] = useState({
     label: 'Active',
@@ -54,21 +71,11 @@ const Impound = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isArchiveClick, setIsArchiveClick] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
+  const [infoContent, setInfoContent] = useState('')
+  const [isShowInfoModal, setIsShowInfoModal] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [isUpdate, setIsUpdate] = useState(false)
-  const [formValues, setFormValues] = useState({
-    profile: '',
-    color: '',
-    breed: '',
-    gender: '',
-    locationCaught: '',
-    dateCaught: new Date(),
-    euthSched: new Date(),
-    archive: false,
-    status: 'Impound',
-    owner: null,
-    dateAdded: fire.firestore.Timestamp.now()
-  })
+  const [formValues, setFormValues] = useState(initialFormValues)
 
   const { user } = useContext(UserContext)
 
@@ -244,6 +251,142 @@ const Impound = () => {
     }
   }
 
+  const onSurrender = (values) => {
+    console.log(user)
+    setShowLoader(true)
+    dispatch(
+      uploadDogImageAction({
+        data: { file: values?.profile },
+        onSuccess: (response) => {
+          const profileUrl = response?.data
+          dispatch(
+            createActivityAction({
+              data: {
+                user,
+                dog: { ...values, profile: profileUrl },
+                status: 'pending',
+                dateAdded: new Date(),
+                archive: false,
+                type: 'surrender'
+              },
+              onSuccess: async () => {
+                setShowLoader(false)
+                toast.success('Activity sent successfully.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+                setShowImpoundModal(false)
+              },
+              onFailure: () => {
+                setShowLoader(false)
+                toast.error('Activity send failed.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+              }
+            })
+          )
+        },
+        onFailure: (error) => {
+          setShowLoader(false)
+          setErrorMsg(error)
+          toast.error('Activity send failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+        }
+      })
+    )
+  }
+
+  const onSendForm = (values) => {
+    const name = values.name
+    const purok = values.purok
+    const gender = values.gender
+    const color = values.color
+    const address = values.address
+    const dateCaught = values.dateCaught
+    const dogFoodFee = values.dogFoodFee
+    const agreementFee = values.agreementFee
+    const offenseFee = values.offenseFee
+
+    if (
+      name &&
+      purok &&
+      gender &&
+      color &&
+      address &&
+      dateCaught &&
+      dogFoodFee &&
+      agreementFee &&
+      offenseFee
+    ) {
+      dispatch(
+        createActivityAction({
+          data: {
+            user,
+            claimForm: values,
+            status: 'pending',
+            dateAdded: new Date(),
+            archive: false,
+            type: 'claim'
+          },
+          onSuccess: async () => {
+            setShowLoader(false)
+            toast.success('Activity sent successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setIsOpenClaimModal(false)
+          },
+          onFailure: () => {
+            setShowLoader(false)
+            setIsOpenClaimModal(false)
+            toast.error('Activity send failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+      )
+    } else {
+      toast.error('Fields must not be empty.', {
+        position: 'bottom-right',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined
+      })
+    }
+  }
+
   const handleYesAction = () => {
     setShowLoader(true)
     dispatch(
@@ -345,13 +488,29 @@ const Impound = () => {
       <OptionModal
         isOpen={isOpenOptionModal}
         onClaim={() => {
-          setIsOpenOptionModal(false)
-          setIsOpenClaimModal(true)
+          if (!user) {
+            setIsOpenOptionModal(false)
+            setInfoContent(
+              'Before you can claim a dog! Kindly login or create an account if you wish to continue.'
+            )
+            setIsShowInfoModal(true)
+          } else {
+            setIsOpenOptionModal(false)
+            setIsOpenClaimModal(true)
+          }
         }}
         onAdopt={() => {
           console.log('hello')
-          setIsOpenOptionModal(false)
-          setIsOpenAdoptModal(true)
+          if (!user) {
+            setIsOpenOptionModal(false)
+            setInfoContent(
+              'Before you can adopt a dog! Kindly login or create an account if you wish to continue.'
+            )
+            setIsShowInfoModal(true)
+          } else {
+            setIsOpenOptionModal(false)
+            setIsOpenAdoptModal(true)
+          }
         }}
         onView={() => {
           setIsOpenOptionModal(false)
@@ -362,6 +521,7 @@ const Impound = () => {
       <ClaimModal
         isOpen={isOpenClaimModal}
         onClose={() => setIsOpenClaimModal(false)}
+        onSendForm={onSendForm}
       />
       <AdoptModal
         isOpen={isOpenAdoptModal}
@@ -372,6 +532,24 @@ const Impound = () => {
         onClose={() => setShowConfirmModal(false)}
         content={confirmContent}
         onYes={handleYesAction}
+      />
+      <InformationModal
+        isOpen={isShowInfoModal}
+        content={infoContent}
+        okay={() => {
+          setIsShowInfoModal(false)
+        }}
+      />
+      <SurrenderForm
+        isOpen={showSurrenderModal}
+        onClose={() => setShowSurrenderModal(false)}
+        initialValues={{
+          profile: '',
+          color: '',
+          breed: '',
+          gender: ''
+        }}
+        onSubmit={onSurrender}
       />
       <ImpoundForm
         isOpen={showImpoundModal}
@@ -406,16 +584,38 @@ const Impound = () => {
                 onClick={() => {
                   setIsUpdate(false)
                   setShowImpoundModal(true)
+                  setFormValues(initialFormValues)
                 }}
                 value="Add"
                 width={80}
               />
             </div>
           ) : (
-            <div />
+            <div className="flex items-center">
+              <Button
+                onClick={() => {
+                  if (!user) {
+                    setShowSurrenderModal(false)
+                    setInfoContent(
+                      'Before you can surrender a dog! Kindly login or create an account if you wish to continue.'
+                    )
+                    setIsShowInfoModal(true)
+                  } else {
+                    setShowSurrenderModal(true)
+                  }
+                }}
+                value="Surrender"
+                width={80}
+              />
+            </div>
           )}
         </div>
-        <div className="user-list-panel">
+        <div
+          className="user-list-panel"
+          style={{
+            height: user ? 'calc(100vh - 100px)' : 'calc(100vh - 150px)',
+            overflow: 'hidden'
+          }}>
           {dogImpoundList?.length ? (
             <div className="panel">
               {dogImpoundList?.map((item) => (

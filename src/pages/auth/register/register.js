@@ -18,6 +18,7 @@ import { UserContext } from 'contexts/user.context'
 import Select from 'react-select'
 import { selectStyles } from 'utils/helpers'
 import { fire } from 'firebase'
+import Overview from 'pages/overview'
 
 const Register = () => {
   const history = useHistory()
@@ -308,7 +309,7 @@ const Register = () => {
         </div>
       </div>
       <div className="auth-content">
-        <img src="assets/icons/auth-img.png" />
+        <Overview />
       </div>
     </div>
   )

@@ -3,7 +3,6 @@ import Button from 'components/buttons/Button'
 import MapPin from 'components/icons/MapPin'
 import { useHistory } from 'react-router-dom'
 import DonateModal from 'components/modal/DonateModal'
-import Header from 'components/headers/Header'
 import { UserContext } from 'contexts/user.context'
 import RegisterModal from 'components/modal/RegisterModal'
 
@@ -16,12 +15,11 @@ const Overview = () => {
 
   return (
     <div className="container" style={{ overflow: 'hidden' }}>
-      <Header />
       <RegisterModal
-        content="Kindly create an account first before you proceed to register a dog."
+        content="Before you register a dog! Kindly login or create an account first if you wish to continue."
         isOpen={isOpenRegisterModal}
         onClose={() => setIsRegisterModal(false)}
-        okay={() => history.push('/register')}
+        okay={() => setIsRegisterModal(false)}
       />
       <DonateModal
         content="We appreciate your kindness, if you want to donate. Kindly contact this number 09553144476 for more info."

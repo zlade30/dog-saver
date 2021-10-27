@@ -7,9 +7,9 @@ import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import AvatarSelection from 'components/avatar/AvatarSelection'
 import PaintFillIcon from 'remixicon-react/PaintFillIcon'
-import moment from 'moment'
-import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
-import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import UserLineIcon from 'remixicon-react/UserLineIcon'
+import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
+import Button from 'components/buttons/Button'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -26,7 +26,14 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
+const SurrenderDogModal = ({
+  role,
+  isOpen,
+  onClose,
+  values,
+  onApprove,
+  onReject
+}) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -59,14 +66,14 @@ const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
             flexDirection: 'column',
             paddingTop: 40
           }}>
-          <AvatarSelection src={values?.profile} isClickable={false} />
+          <AvatarSelection src={values?.dog?.profile} isClickable={false} />
           <div className="flex items-center w-full">
             <PaintFillIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Color:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.color || ''}</label>
+            <label style={{ fontSize: 14 }}>{values?.dog?.color || ''}</label>
           </div>
           <div className="flex items-center w-full">
             <DogIcon />
@@ -74,10 +81,12 @@ const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Breed:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.breed?.label || ''}</label>
+            <label style={{ fontSize: 14 }}>
+              {values?.dog?.breed?.label || ''}
+            </label>
           </div>
           <div className="flex items-center w-full">
-            {values?.gender?.label === 'Male' ? (
+            {values?.dog?.gender?.label === 'Male' ? (
               <MenLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             ) : (
               <WomenLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
@@ -87,75 +96,74 @@ const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
               Gender:
             </label>
             <label style={{ fontSize: 14 }}>
-              {values?.gender?.label || ''}
+              {values?.dog?.gender?.label || ''}
             </label>
           </div>
           <div className="flex items-center w-full">
-            <MapPinLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+            <UserLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Location Caught:
+              Owner Name:
             </label>
             <label style={{ fontSize: 14 }}>
-              {values?.locationCaught?.label}
+              {`${values?.user?.firstName} ${values?.user?.lastName}` || ''}
             </label>
           </div>
           <div className="flex items-center w-full">
-            <CalendarLineIcon
-              style={{ margin: 10, marginLeft: 20 }}
-              size={20}
-            />
+            <PhoneLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Date Caught:
+              Owner Contact:
             </label>
-            <label style={{ fontSize: 14 }}>
-              {moment(values?.dateCaught?.toDate()).format('ll')}
-            </label>
+            <label style={{ fontSize: 14 }}>{values?.user?.phone || ''}</label>
           </div>
-          <div className="flex items-center w-full">
-            <CalendarLineIcon
-              style={{ margin: 10, marginLeft: 20 }}
-              size={20}
-            />
-            <label
-              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Euthanize Schedule:
-            </label>
-            <label style={{ fontSize: 14 }}>
-              Until {moment(values?.euthSched?.toDate()).format('ll')}
-            </label>
-          </div>
-          <div className="flex items-center w-full">
-            <CalendarLineIcon
-              style={{ margin: 10, marginLeft: 20 }}
-              size={20}
-            />
-            <label
-              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Date Added:
-            </label>
-            <label style={{ fontSize: 14 }}>
-              {moment(values?.dateAdded?.toDate()).format('ll')}
-            </label>
-          </div>
+          {values?.status === 'pending' && role === 'admin' ? (
+            <div
+              className="flex items-center"
+              style={{ justifyContent: 'space-between', marginTop: 20 }}>
+              <Button
+                value="Approve"
+                onClick={onApprove}
+                style={{
+                  backgroundColor: '#42C2D3',
+                  width: 150,
+                  marginRight: 5
+                }}
+              />
+              <Button
+                value="Reject"
+                onClick={onReject}
+                style={{
+                  backgroundColor: '#ff4d4f',
+                  width: 150,
+                  marginLeft: 5
+                }}
+              />
+            </div>
+          ) : (
+            <div />
+          )}
         </div>
       </div>
     </ReactModal>
   )
 }
 
-ViewImpoundDogModal.defaultProps = {
+SurrenderDogModal.defaultProps = {
   isOpen: false,
   values: {
     profile: ''
-  }
+  },
+  role: 'admin'
 }
 
-ViewImpoundDogModal.propTypes = {
+SurrenderDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  values: PropTypes.object.isRequired
+  values: PropTypes.object.isRequired,
+  onApprove: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired
 }
 
-export default ViewImpoundDogModal
+export default SurrenderDogModal

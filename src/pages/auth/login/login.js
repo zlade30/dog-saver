@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
 import { getUserAction, signInAction } from 'redux/actions/user.action'
 import { UserContext } from 'contexts/user.context'
+import Overview from 'pages/overview'
 
 const Login = () => {
   const history = useHistory()
@@ -64,6 +65,7 @@ const Login = () => {
                       getUserAction({
                         data: { email: values?.email },
                         onSuccess: (response) => {
+                          console.log(response)
                           setShowLoader(false)
                           setUser(response)
                           localStorage.setItem(
@@ -159,7 +161,7 @@ const Login = () => {
         </div>
       </div>
       <div className="auth-content">
-        <img src="assets/icons/auth-img.png" />
+        <Overview />
       </div>
     </div>
   )
