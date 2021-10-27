@@ -5,14 +5,18 @@ import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 
-const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
+const ViewImpoundDogModal = ({ isOpen, onClose }) => {
+  const renderField = () => (
+    <input style={{ fontWeight: 'normal', fontFamily: 'Montserrat' }} />
+  )
+
   return (
     <ReactModal
       isOpen={isOpen}
       onRequestClose={onClose}
       ariaHideApp={false}
       shouldCloseOnOverlayClick
-      className="middle-modal"
+      className="claim-modal"
       overlayClassName="overlay">
       <div>
         <div className="header-modal">
@@ -22,7 +26,7 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
               size={25}
               color="white"
             />
-            <label className="header-modal-title">Select</label>
+            <label className="header-modal-title">Claim</label>
           </div>
           <CloseLineIcon
             onClick={onClose}
@@ -31,24 +35,21 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
             color="white"
           />
         </div>
-        <div className="modal-option-body w-100">
-          <Button onClick={onClaim} value="Claim" width={200} />
-          <Button onClick={onAdopt} value="Adopt" width={200} />
+        <div className="modal-footer" style={{ marginRight: 20 }}>
+          <Button value="Send Form" width={60} />
         </div>
       </div>
     </ReactModal>
   )
 }
 
-OptionModal.defaultProps = {
+ViewImpoundDogModal.defaultProps = {
   isOpen: false
 }
 
-OptionModal.propTypes = {
+ViewImpoundDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  onClaim: PropTypes.func.isRequired,
-  onAdopt: PropTypes.func.isRequired
+  onClose: PropTypes.func.isRequired
 }
 
-export default OptionModal
+export default ViewImpoundDogModal

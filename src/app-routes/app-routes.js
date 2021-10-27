@@ -18,6 +18,7 @@ const AppRoutes = ({ history }) => {
   const [showLoader, setShowLoader] = useState(false)
   const { user, setUser } = useContext(UserContext)
   const savedUser = localStorage.getItem('authUser')
+  const path = history?.location?.pathname
 
   useEffect(() => {
     const listener = auth.onAuthStateChanged((authUser) => {
@@ -34,21 +35,33 @@ const AppRoutes = ({ history }) => {
             })
           )
           if (
-            history?.location?.pathname === '/login' ||
-            history?.location?.pathname === '/register' ||
-            history?.location?.pathname === '/forgot-password'
+            path === '/login' ||
+            path === '/register' ||
+            path === '/forgot-password' ||
+            path === '/'
           )
             history.push('/dashboard')
           localStorage.setItem('authUser', JSON.stringify(user))
         }
+
+        if (path === '/') {
+          dispatch(
+            getUserAction({
+              data: { email: currentUser?.email },
+              onSuccess: (response) => {
+                setUser(response)
+                history.push('/dashboard')
+              },
+              onFailure: (error) => console.log(error)
+            })
+          )
+        }
       } else {
         localStorage.removeItem('authUser')
         setUser(null)
-        if (history?.location?.pathname === '/welcome') history.push('/welcome')
-        else if (history?.location?.pathname === '/about-us')
-          history?.push('/about-us')
-        else if (history?.location?.pathname === '/impound')
-          history?.push('/impound')
+        if (path === '/welcome' || path === '/') history.push('/welcome')
+        else if (path === '/about-us') history?.push('/about-us')
+        else if (path === '/impound') history?.push('/impound')
         else history.push('/login')
       }
     })
@@ -60,6 +73,7 @@ const AppRoutes = ({ history }) => {
     setShowLoader(true)
     setTimeout(() => {
       auth.signOut()
+      setUser(null)
       setShowLoader(false)
       history.push('/login')
       localStorage.removeItem('authUser')

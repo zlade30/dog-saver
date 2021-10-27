@@ -1,19 +1,32 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Button from 'components/buttons/Button'
 import MapPin from 'components/icons/MapPin'
 import { useHistory } from 'react-router-dom'
 import DonateModal from 'components/modal/DonateModal'
+import Header from 'components/headers/Header'
+import { UserContext } from 'contexts/user.context'
+import RegisterModal from 'components/modal/RegisterModal'
 
 const Overview = () => {
   const history = useHistory()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpenRegisterModal, setIsRegisterModal] = useState(false)
+  const [isOpenDonateModal, setIsOpenDonateModal] = useState(false)
+
+  const { user } = useContext(UserContext)
 
   return (
-    <div className="container">
+    <div className="container" style={{ overflow: 'hidden' }}>
+      <Header />
+      <RegisterModal
+        content="Kindly create an account first before you proceed to register a dog."
+        isOpen={isOpenRegisterModal}
+        onClose={() => setIsRegisterModal(false)}
+        okay={() => history.push('/register')}
+      />
       <DonateModal
         content="We appreciate your kindness, if you want to donate. Kindly contact this number 09553144476 for more info."
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
+        isOpen={isOpenDonateModal}
+        onClose={() => setIsOpenDonateModal(false)}
       />
       <div className="right-container">
         <div className="db-panel">
@@ -32,7 +45,12 @@ const Overview = () => {
                 <h2>Do you want to?</h2>
               </div>
               <img src="assets/icons/impound.png" width="200px" height="auto" />
-              <Button height={35} fontWeight="bold" value="Visit Impound" />
+              <Button
+                onClick={() => history.push('/impound')}
+                height={35}
+                fontWeight="bold"
+                value="Visit Impound"
+              />
             </div>
             <div className="db-box">
               <div className="db-box-header">
@@ -43,7 +61,15 @@ const Overview = () => {
                 width="200px"
                 height="auto"
               />
-              <Button height={35} fontWeight="bold" value="Register" />
+              <Button
+                onClick={() => {
+                  if (user) history.push('/dogs')
+                  else setIsRegisterModal(true)
+                }}
+                height={35}
+                fontWeight="bold"
+                value="Register"
+              />
             </div>
             <div className="db-box">
               <div className="db-box-header">
@@ -55,7 +81,7 @@ const Overview = () => {
                 height="auto"
               />
               <Button
-                onClick={() => setIsOpen(true)}
+                onClick={() => setIsOpenDonateModal(true)}
                 height={35}
                 fontWeight="bold"
                 value="Donate"

@@ -17,7 +17,7 @@ const TextField = ({ errors, touched, width, placeholder, ...rest }) => {
         {...rest}
       />
       {errors[rest.name] && touched[rest.name] && (
-        <div className="label-error">{`${placeholder} is Required!`}</div>
+        <div className="label-error">{`${placeholder} is required!`}</div>
       )}
     </div>
   )

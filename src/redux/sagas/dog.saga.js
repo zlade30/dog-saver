@@ -21,7 +21,19 @@ import {
   getDogsActionSuccess,
   getDogBreedsActionSuccess,
   getDogBreedsActionFailed,
-  getDogBreedsAction
+  getDogBreedsAction,
+  createDogImpoundActionSuccess,
+  createDogImpoundActionFailed,
+  createDogImpoundAction,
+  updateDogImpoundActionSuccess,
+  updateDogImpoundActionFailed,
+  updateDogImpoundAction,
+  getDogImpoundListActionSuccess,
+  getDogImpoundListActionFailed,
+  getDogImpoundListAction,
+  removeDogImpoundActionSuccess,
+  removeDogImpoundActionFailed,
+  removeDogImpoundAction
 } from '../actions/dog.action'
 
 const getList = async (payload) => {
@@ -169,12 +181,130 @@ function* removeDog(action) {
   }
 }
 
+function* createDogImpound(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const createDogImpoundCall = async (payload) => {
+    try {
+      const result = await payload
+      return { isSuccess: true, data: result.id }
+    } catch (error) {
+      return { isSuccess: false, data: error }
+    }
+  }
+
+  const response = yield call(
+    createDogImpoundCall,
+    firestore.collection('dog-impound').add(data)
+  )
+  if (response) {
+    yield put(createDogImpoundActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(createDogImpoundActionFailed('Error creating dog!'))
+    yield call(onFailure, 'Error creating dog!')
+  }
+}
+
+function* updateDogImpound(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const updateDogImpoundCall = async (payload) => {
+    try {
+      const result = await payload
+      return { isSuccess: true, data: result }
+    } catch (error) {
+      return { isSuccess: false, data: error }
+    }
+  }
+
+  const response = yield call(
+    updateDogImpoundCall,
+    firestore.doc(`dog-impound/${data?.id}`).update(data?.values)
+  )
+  if (response) {
+    yield put(updateDogImpoundActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(updateDogImpoundActionFailed('Error updating dog!'))
+    yield call(onFailure, 'Error updating dog!')
+  }
+}
+
+const handleGetDogImpoundListQuery = (data) => {
+  let query = firestore
+    .collection('dog-impound')
+    .where('archive', '==', data.archive)
+  return query.get()
+}
+
+function* getDogImpoundList(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const getDogImpoundListCall = async (payload) => {
+    try {
+      const result = await payload
+      return {
+        isSuccess: true,
+        data: result.docs.map((item) => ({ ...item.data(), id: item.id }))
+      }
+    } catch (error) {
+      return { isSuccess: false, data: error }
+    }
+  }
+
+  const response = yield call(
+    getDogImpoundListCall,
+    handleGetDogImpoundListQuery(data)
+  )
+  if (response) {
+    yield put(getDogImpoundListActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(getDogImpoundListActionFailed('Error fetching dog list!'))
+    yield call(onFailure, 'Error fetching dog list!')
+  }
+}
+
+function* removeDogImpound(action) {
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+  const removeDogImpoundCall = async (payload) => {
+    try {
+      const result = await payload
+      return { isSuccess: true, data: result }
+    } catch (error) {
+      return { isSuccess: false, data: error }
+    }
+  }
+  const isArchive = data?.values?.archive
+
+  const response = yield call(
+    removeDogImpoundCall,
+    firestore.doc(`dog-impound/${data?.id}`).update(data?.values)
+  )
+  if (response) {
+    yield put(removeDogImpoundActionSuccess(response))
+    yield call(onSuccess, response)
+  } else {
+    yield put(
+      removeDogImpoundActionFailed(
+        `Error ${isArchive ? 'removing' : 'restoring'} a dog!`
+      )
+    )
+    yield call(
+      onFailure,
+      `Error ${isArchive ? 'removing' : 'restoring'} a dog!`
+    )
+  }
+}
+
 export default function* root() {
   yield all([
     takeLatest(createDogAction.toString(), createDog),
     takeLatest(updateDogAction.toString(), updateDog),
     takeLatest(removeDogAction.toString(), removeDog),
     takeLatest(getDogsAction.toString(), getDogs),
-    takeLatest(getDogBreedsAction.toString(), getDogBreeds)
+    takeLatest(getDogBreedsAction.toString(), getDogBreeds),
+    takeLatest(updateDogImpoundAction.toString(), updateDogImpound),
+    takeLatest(createDogImpoundAction.toString(), createDogImpound),
+    takeLatest(getDogImpoundListAction.toString(), getDogImpoundList),
+    takeLatest(removeDogImpoundAction.toString(), removeDogImpound)
   ])
 }

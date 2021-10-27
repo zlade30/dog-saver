@@ -1175,7 +1175,7 @@ const AdoptModal = ({ isOpen, onClose }) => {
           </div>
         </div>
         <div className="modal-footer" style={{ marginRight: 20 }}>
-          <Button value="Send" width={60} />
+          <Button value="Send Form" width={60} />
         </div>
       </div>
     </ReactModal>

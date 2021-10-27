@@ -5,7 +5,7 @@ import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 
-const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
+const RegisterModal = ({ isOpen, onClose, content, okay }) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -22,7 +22,7 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
               size={25}
               color="white"
             />
-            <label className="header-modal-title">Select</label>
+            <label className="header-modal-title">Details</label>
           </div>
           <CloseLineIcon
             onClick={onClose}
@@ -31,24 +31,32 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
             color="white"
           />
         </div>
-        <div className="modal-option-body w-100">
-          <Button onClick={onClaim} value="Claim" width={200} />
-          <Button onClick={onAdopt} value="Adopt" width={200} />
+        <div className="modal-body">
+          <label
+            className="modal-body-text"
+            style={{ fontWeight: 'normal', fontSize: 14 }}>
+            {content}
+          </label>
+        </div>
+        <div className="modal-footer">
+          <Button onClick={okay} value="Okay" width={60} />
         </div>
       </div>
     </ReactModal>
   )
 }
 
-OptionModal.defaultProps = {
-  isOpen: false
+RegisterModal.defaultProps = {
+  isOpen: false,
+  content: ''
 }
 
-OptionModal.propTypes = {
+RegisterModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onClaim: PropTypes.func.isRequired,
-  onAdopt: PropTypes.func.isRequired
+  onYes: PropTypes.func.isRequired,
+  content: PropTypes.string.isRequired,
+  okay: PropTypes.func.isRequired
 }
 
-export default OptionModal
+export default RegisterModal

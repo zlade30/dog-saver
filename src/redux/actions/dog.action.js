@@ -31,10 +31,47 @@ export const selEuthSchedSuccess = createAction(
 export const selEuthSchedFailed = createAction(
   'dog/SELECT_EUTHANIZE_SCHEDULE_ACTION_FAILED'
 )
-export const getDogBreedsAction = createAction('GET_DOG_BREEDS_ACTION')
+export const getDogBreedsAction = createAction('dog/GET_DOG_BREEDS_ACTION')
 export const getDogBreedsActionSuccess = createAction(
-  'GET_DOG_BREEDS_ACTION_SUCCESS'
+  'dog/GET_DOG_BREEDS_ACTION_SUCCESS'
 )
 export const getDogBreedsActionFailed = createAction(
-  'GET_DOG_BREEDS_ACTION_FAILED'
+  'dog/GET_DOG_BREEDS_ACTION_FAILED'
+)
+
+export const createDogImpoundAction = createAction(
+  'dog/CREATE_DOG_IMPOUND_ACTION'
+)
+export const createDogImpoundActionSuccess = createAction(
+  'dog/CREATE_DOG_IMPOUND_ACTION_SUCCESS'
+)
+export const createDogImpoundActionFailed = createAction(
+  'dog/CREATE_DOG_IMPOUND_ACTION_FAILED'
+)
+export const getDogImpoundListAction = createAction(
+  'dog/GET_DOG_IMPOUND_LIST_ACTION'
+)
+export const getDogImpoundListActionSuccess = createAction(
+  'dog/GET_DOG_IMPOUND_LIST_ACTION_SUCCESS'
+)
+export const getDogImpoundListActionFailed = createAction(
+  'dog/GET_DOG_IMPOUND_LIST_ACTION_FAILED'
+)
+export const updateDogImpoundAction = createAction(
+  'dog/UPDATE_DOG_IMPOUND_ACTION'
+)
+export const updateDogImpoundActionSuccess = createAction(
+  'dog/UPDATE_DOG_IMPOUND_ACTION_SUCCESS'
+)
+export const updateDogImpoundActionFailed = createAction(
+  'dog/UPDATE_DOG_IMPOUND_ACTION_FAILED'
+)
+export const removeDogImpoundAction = createAction(
+  'dog/REMOVE_DOG_IMPOUND_ACTION'
+)
+export const removeDogImpoundActionSuccess = createAction(
+  'dog/REMOVE_DOG_IMPOUND_ACTION_SUCCESS'
+)
+export const removeDogImpoundActionFailed = createAction(
+  'dog/REMOVE _DOG_IMPOUND_ACTION_FAILED'
 )
