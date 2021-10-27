@@ -62,6 +62,12 @@ const Sidebar = ({ user, onLogout }) => {
       path: '/dogs'
     },
     {
+      name: 'Dog Impound',
+      color: '#334D67',
+      isActive: false,
+      path: '/impound'
+    },
+    {
       name: 'Announcements',
       color: '#334D67',
       isActive: false,
@@ -87,6 +93,8 @@ const Sidebar = ({ user, onLogout }) => {
       case 'Users':
         return <User3LineIcon className="sidebar-menu-icon" size={20} />
       case 'Dogs':
+        return <DogIcon color={menu?.color} />
+      case 'Dog Impound':
         return <DogIcon color={menu?.color} />
       case 'Announcements':
         return <HornIcon color={menu?.color} />

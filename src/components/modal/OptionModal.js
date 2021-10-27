@@ -5,7 +5,7 @@ import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 
-const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
+const OptionModal = ({ isOpen, onClose, onClaim, onAdopt, onView }) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -34,6 +34,7 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt }) => {
         <div className="modal-option-body w-100">
           <Button onClick={onClaim} value="Claim" width={200} />
           <Button onClick={onAdopt} value="Adopt" width={200} />
+          <Button onClick={onView} value="View" width={200} />
         </div>
       </div>
     </ReactModal>
@@ -48,7 +49,8 @@ OptionModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   onClaim: PropTypes.func.isRequired,
-  onAdopt: PropTypes.func.isRequired
+  onAdopt: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired
 }
 
 export default OptionModal

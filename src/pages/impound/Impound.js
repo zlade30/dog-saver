@@ -21,6 +21,7 @@ import ImpoundForm from './ImpoundForm'
 import Select from 'react-select'
 import { selectStyles } from 'utils/helpers'
 import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
+import Header from 'components/headers/Header'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -49,6 +50,7 @@ const Impound = () => {
   const [isOpenOptionModal, setIsOpenOptionModal] = useState(false)
   const [isOpenClaimModal, setIsOpenClaimModal] = useState(false)
   const [isOpenAdoptModal, setIsOpenAdoptModal] = useState(false)
+  const [isOpenViewImpoundModal, setIsOpenViewImpoundModal] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isArchiveClick, setIsArchiveClick] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
@@ -333,8 +335,13 @@ const Impound = () => {
 
   return (
     <div className="container">
+      {!user && <Header />}
       {showLoader && <LoadingOverlay />}
-      <ViewImpoundDogModal isOpen={true} />
+      <ViewImpoundDogModal
+        isOpen={isOpenViewImpoundModal}
+        values={formValues}
+        onClose={() => setIsOpenViewImpoundModal(false)}
+      />
       <OptionModal
         isOpen={isOpenOptionModal}
         onClaim={() => {
@@ -346,6 +353,11 @@ const Impound = () => {
           setIsOpenOptionModal(false)
           setIsOpenAdoptModal(true)
         }}
+        onView={() => {
+          setIsOpenOptionModal(false)
+          setIsOpenViewImpoundModal(true)
+        }}
+        onClose={() => setIsOpenOptionModal(false)}
       />
       <ClaimModal
         isOpen={isOpenClaimModal}
