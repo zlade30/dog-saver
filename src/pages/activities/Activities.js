@@ -220,7 +220,8 @@ const Activities = () => {
     dispatch(
       getActivityListAction({
         data: {
-          archive: false
+          archive: false,
+          emailOwner: user?.email
         },
         onSuccess: (response) => {
           setShowLoader(false)
@@ -478,14 +479,14 @@ const Activities = () => {
         }}
       />
       <div className="right-container">
-        <div className="w-full justify-between">
+        <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Activities</h1>
         </div>
         <div
           className="user-list-panel"
           style={{
             padding: 0,
-            width: '100%',
+            width: '98%',
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'column'

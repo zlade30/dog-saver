@@ -538,7 +538,7 @@ const Users = () => {
         isUpdate={isUpdate}
       />
       <div className="right-container">
-        <div className="w-full justify-between">
+        <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Users</h1>
           <div className="justify-between" style={{ width: 1050 }}>
             <div className="flex items-center">

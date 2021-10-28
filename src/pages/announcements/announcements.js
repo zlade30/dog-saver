@@ -220,8 +220,10 @@ const Announcements = () => {
         initialValues={formValues}
         onSubmit={onSubmit}
       />
-      <div className="right-container">
-        <div className="w-full justify-between">
+      <div
+        className="right-container"
+        style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Announcements</h1>
           {user?.role === 'admin' && (
             <Button
@@ -240,7 +242,14 @@ const Announcements = () => {
           )}
         </div>
         {announcements?.length ? (
-          <div className="panel">
+          <div
+            style={{
+              width: '98%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column'
+            }}>
             {announcements?.map((item) => (
               <AnnouncementMessage
                 key={item.id}

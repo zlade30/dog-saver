@@ -566,7 +566,7 @@ const Impound = () => {
         isUpdate={isUpdate}
       />
       <div className="right-container">
-        <div className="w-full justify-between">
+        <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Dog Impound</h1>
           {user?.role === 'admin' ? (
             <div className="flex items-center">

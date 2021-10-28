@@ -28,7 +28,6 @@ const Overview = () => {
       />
       <div className="right-container">
         <div className="db-panel">
-          {/* <img className="db-dog-bg" src="assets/icons/dog-bg.jpeg" /> */}
           <h1 className="db-title">
             {user ? `Welcome, ${user?.firstName}!` : 'Welcome!'}
           </h1>

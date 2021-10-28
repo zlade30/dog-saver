@@ -549,7 +549,7 @@ const Dogs = () => {
         isUpdate={isUpdate}
       />
       <div className="right-container">
-        <div className="w-full justify-between">
+        <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>{user?.role === 'admin' ? 'Registered Dogs' : 'My Dogs'}</h1>
           <div
             className="justify-between"

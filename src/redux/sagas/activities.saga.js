@@ -66,9 +66,15 @@ function* updateActivity(action) {
 }
 
 const handleGetActivityListQuery = (data) => {
-  let query = firestore
-    .collection('activities')
-    .where('archive', '==', data.archive)
+  let query = null
+  if (data.emailOwner === 'admin@dogsaver.com') {
+    query = firestore.collection('activities')
+  } else {
+    query = firestore
+      .collection('activities')
+      .where('user.email', '==', data?.emailOwner)
+  }
+  query = query.where('archive', '==', data.archive)
   return query.get()
 }
 
