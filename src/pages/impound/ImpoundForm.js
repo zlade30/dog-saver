@@ -37,7 +37,7 @@ const ImpoundForm = ({
   const schema = Yup.object().shape({
     profile: Yup.mixed().required('Required').nullable(),
     color: Yup.string().required('Required'),
-    breed: Yup.object().required('Required').nullable(),
+    breed: Yup.string().required('Required'),
     gender: Yup.object().required('Required').nullable(),
     locationCaught: Yup.object().required('Required').nullable(),
     dateCaught: Yup.string().required('Required'),
@@ -144,23 +144,19 @@ const ImpoundForm = ({
                 style={{ marginTop: 10 }}
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>Breed</label>
-              <Field
+              <TextField
+                errors={errors}
+                touched={touched}
+                width={320}
+                value={
+                  values?.breed &&
+                  values?.breed?.charAt(0)?.toUpperCase() +
+                    values?.breed?.slice(1)
+                }
                 id="breed"
                 name="breed"
-                render={() => (
-                  <div className="margin-b-10">
-                    <Select
-                      options={breedList}
-                      styles={selectStyles}
-                      placeholder="Select Breed"
-                      value={values.breed}
-                      onChange={(selected) => setFieldValue('breed', selected)}
-                    />
-                    {errors['breed'] && touched['breed'] && (
-                      <div className="label-error">{`Breed is Required.`}</div>
-                    )}
-                  </div>
-                )}
+                placeholder="Breed"
+                style={{ marginTop: 10 }}
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>Gender</label>
               <Field

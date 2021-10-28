@@ -53,8 +53,7 @@ export const orderOptions = [
 
 export const dogOptions = [
   { label: 'Active Dogs', value: 'Active Dogs' },
-  { label: 'Archive Dogs', value: 'Archive Dogs' },
-  { label: 'Dog Status', value: 'Dog Status' }
+  { label: 'Archive Dogs', value: 'Archive Dogs' }
 ]
 
 export const dogFilterOptions = [

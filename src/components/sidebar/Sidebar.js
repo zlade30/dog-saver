@@ -58,7 +58,7 @@ const Sidebar = ({ user, onLogout }) => {
       isHidden: user?.role !== 'admin'
     },
     {
-      name: user?.role === 'admin' ? 'Dogs' : 'My Dogs',
+      name: user?.role === 'admin' ? 'Registered Dogs' : 'My Dogs',
       color: '#334D67',
       isActive: false,
       path: '/dogs'
@@ -100,7 +100,7 @@ const Sidebar = ({ user, onLogout }) => {
         return <Home4LineIcon className="sidebar-menu-icon" size={20} />
       case 'Users':
         return <User3LineIcon className="sidebar-menu-icon" size={20} />
-      case 'Dogs':
+      case 'Registered Dogs':
         return <DogIcon color={menu?.color} />
       case 'Activities':
         return <BookLine className="sidebar-menu-icon" size={20} />

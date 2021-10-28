@@ -340,6 +340,12 @@ const Impound = () => {
         createActivityAction({
           data: {
             user,
+            dog: {
+              profile: formValues?.profile,
+              color: formValues?.color,
+              breed: formValues?.breed,
+              gender: formValues?.gender
+            },
             claimForm: values,
             status: 'pending',
             dateAdded: new Date(),

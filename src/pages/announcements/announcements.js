@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import AnnouncementMessage from 'components/announcement-message/AnnouncementMessage'
 import Button from 'components/buttons/Button'
 import AnnouncementFormModal from 'components/modal/AnnouncementFormModal'
@@ -13,6 +13,7 @@ import { fire } from 'firebase'
 import { toast } from 'react-toastify'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import ConfirmationModal from 'components/modal/ConfirmationModal'
+import { UserContext } from 'contexts/user.context'
 
 const Announcements = () => {
   const dispatch = useDispatch()
@@ -25,6 +26,8 @@ const Announcements = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isArchiveClick, setIsArchiveClick] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
+
+  const { user } = useContext(UserContext)
 
   const onSubmit = (values) => {
     setShowLoader(true)
@@ -220,19 +223,21 @@ const Announcements = () => {
       <div className="right-container">
         <div className="w-full justify-between">
           <h1>Announcements</h1>
-          <Button
-            onClick={() => {
-              setIsUpdate(false)
-              setShowFormModal(true)
-              setFormValues({
-                title: '',
-                content: ''
-              })
-            }}
-            width={80}
-            height={35}
-            value="Add"
-          />
+          {user?.role === 'admin' && (
+            <Button
+              onClick={() => {
+                setIsUpdate(false)
+                setShowFormModal(true)
+                setFormValues({
+                  title: '',
+                  content: ''
+                })
+              }}
+              width={80}
+              height={35}
+              value="Add"
+            />
+          )}
         </div>
         {announcements?.length ? (
           <div className="panel">
@@ -240,6 +245,7 @@ const Announcements = () => {
               <AnnouncementMessage
                 key={item.id}
                 item={item}
+                role={user?.role}
                 onArchive={() => onArchive(item)}
                 onUpdate={() => onUpdate(item)}
               />

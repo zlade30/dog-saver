@@ -25,16 +25,31 @@ import {
 import { toast } from 'react-toastify'
 import { uploadDogImageAction } from 'redux/actions/utils.action'
 import { fire } from 'firebase'
+import DogForm from './DogForm'
 
 const Dogs = () => {
   const dispatch = useDispatch()
+  const initialFormValues = {
+    owner: '',
+    ownerAddress: '',
+    name: '',
+    profile: '',
+    color: '',
+    breed: '',
+    gender: '',
+    spayed: false,
+    vaccineReceived: '',
+    vaccineDate: fire.firestore.Timestamp.now(),
+    dateAdded: fire.firestore.Timestamp.now(),
+    archive: false
+  }
   const [showLoader, setShowLoader] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
   const [showFormModal, setShowFormModal] = useState(false)
   const [isUpdate, setIsUpdate] = useState(false)
-  const [formValues, setFormValues] = useState()
+  const [formValues, setFormValues] = useState(initialFormValues)
   const [profile, setProfile] = useState(null)
   const [filterBy, setFilterBy] = useState(dogOptions[0].value)
   const [sortBy, setSortBy] = useState(userSortOptions[0].value)
@@ -151,26 +166,57 @@ const Dogs = () => {
   }
 
   const onSubmit = async (values) => {
-    let payload = values
-    if (profile) payload = { ...values, profile }
-    if (euthSched && values.status.value === 'Euthanasia')
-      payload = { ...values, euthSched }
-    console.log(payload)
-
     setShowLoader(true)
-
-    if (profile) {
+    if (!isUpdate) {
       dispatch(
         uploadDogImageAction({
-          data: { file: profile },
+          data: { file: values?.profile },
           onSuccess: (response) => {
-            if (!isUpdate) addDog(response?.data, payload)
-            else updateDog(response?.data, payload)
+            if (!isUpdate) {
+              dispatch(
+                createDogAction({
+                  data: { ...values, profile: response?.data },
+                  onSuccess: async (dog) => {
+                    setShowLoader(false)
+                    setDogList((prevList) => [
+                      { ...values, profile: response?.data, id: dog },
+                      ...prevList
+                    ])
+                    setList((prevList) => [
+                      { ...values, profile: response?.data, id: dog },
+                      ...prevList
+                    ])
+                    toast.success('Dog created successfully.', {
+                      position: 'bottom-right',
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined
+                    })
+                    setShowFormModal(false)
+                  },
+                  onFailure: () => {
+                    setShowLoader(false)
+                    toast.error('Dog creation failed.', {
+                      position: 'bottom-right',
+                      autoClose: 3000,
+                      hideProgressBar: false,
+                      closeOnClick: true,
+                      pauseOnHover: true,
+                      draggable: true,
+                      progress: undefined
+                    })
+                  }
+                })
+              )
+            }
           },
           onFailure: (error) => {
             setShowLoader(false)
             setErrorMsg(error)
-            toast.error('User creation failed.', {
+            toast.error('Dog creation failed.', {
               position: 'bottom-right',
               autoClose: 3000,
               hideProgressBar: false,
@@ -183,9 +229,144 @@ const Dogs = () => {
         })
       )
     } else {
-      if (!isUpdate) addDog(null, payload)
-      else updateDog(values?.profile || null, payload)
+      if (formValues?.profile === values?.profile) {
+        dispatch(
+          updateDogAction({
+            data: {
+              id: dogId,
+              values
+            },
+            onSuccess: () => {
+              setShowLoader(false)
+              setDogList((prevList) =>
+                prevList?.map((item) => (item?.id === dogId ? values : item))
+              )
+              setList((prevList) =>
+                prevList?.map((item) => (item?.id === dogId ? values : item))
+              )
+              toast.success('Dog updated successfully.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
+              setShowFormModal(false)
+            },
+            onFailure: () => {
+              setShowLoader(false)
+              toast.error('Dog update failed.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
+            }
+          })
+        )
+      } else {
+        dispatch(
+          uploadDogImageAction({
+            data: { file: values?.profile },
+            onSuccess: (response) => {
+              if (!isUpdate) {
+                dispatch(
+                  createDogAction({
+                    data: { ...values, profile: response?.data },
+                    onSuccess: async (dog) => {
+                      setShowLoader(false)
+                      setDogList((prevList) => [
+                        { ...values, profile: response?.data, id: dog?.data },
+                        ...prevList
+                      ])
+                      setList((prevList) => [
+                        { ...values, profile: response?.data, id: dog?.data },
+                        ...prevList
+                      ])
+                      toast.success('Dog created successfully.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                      setShowFormModal(false)
+                    },
+                    onFailure: () => {
+                      setShowLoader(false)
+                      toast.error('Dog creation failed.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                    }
+                  })
+                )
+              }
+            },
+            onFailure: (error) => {
+              setShowLoader(false)
+              setErrorMsg(error)
+              toast.error('User creation failed.', {
+                position: 'bottom-right',
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined
+              })
+            }
+          })
+        )
+      }
     }
+    // let payload = values
+    // if (profile) payload = { ...values, profile }
+    // if (euthSched && values.status.value === 'Euthanasia')
+    //   payload = { ...values, euthSched }
+    // console.log(payload)
+
+    // setShowLoader(true)
+
+    // if (profile) {
+    //   dispatch(
+    //     uploadDogImageAction({
+    //       data: { file: profile },
+    //       onSuccess: (response) => {
+    //         if (!isUpdate) addDog(response?.data, payload)
+    //         else updateDog(response?.data, payload)
+    //       },
+    //       onFailure: (error) => {
+    //         setShowLoader(false)
+    //         setErrorMsg(error)
+    //         toast.error('User creation failed.', {
+    //           position: 'bottom-right',
+    //           autoClose: 3000,
+    //           hideProgressBar: false,
+    //           closeOnClick: true,
+    //           pauseOnHover: true,
+    //           draggable: true,
+    //           progress: undefined
+    //         })
+    //       }
+    //     })
+    //   )
+    // } else {
+    //   if (!isUpdate) addDog(null, payload)
+    //   else updateDog(values?.profile || null, payload)
+    // }
   }
 
   const addDog = (url, payload) => {
@@ -285,6 +466,7 @@ const Dogs = () => {
   }
 
   const onUpdate = (dog) => {
+    console.log(dog)
     setDogId(dog?.id)
     setIsUpdate(true)
     setShowFormModal(true)
@@ -346,7 +528,7 @@ const Dogs = () => {
         content={confirmContent}
         onYes={handleYesAction}
       />
-      <DogRightModal
+      {/* <DogRightModal
         isOpen={showFormModal}
         onClose={() => setShowFormModal(false)}
         onSubmit={onSubmit}
@@ -357,14 +539,22 @@ const Dogs = () => {
         isUpdate={isUpdate}
         setProfile={setProfile}
         setEuthSched={setEuthSched}
+      /> */}
+      <DogForm
+        isOpen={showFormModal}
+        initialValues={formValues}
+        onSubmit={onSubmit}
+        setErrorMsg={setErrorMsg}
+        onClose={() => setShowFormModal(false)}
+        isUpdate={isUpdate}
       />
       <div className="right-container">
         <div className="w-full justify-between">
-          <h1>{user?.role === 'admin' ? 'Dogs' : 'My Dogs'}</h1>
+          <h1>{user?.role === 'admin' ? 'Registered Dogs' : 'My Dogs'}</h1>
           <div
             className="justify-between"
             style={{
-              width: selDogOption === dogOptions[2].value ? 1280 : 1050
+              width: 1050
             }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
@@ -375,23 +565,10 @@ const Dogs = () => {
                   options={dogOptions}
                   onChange={(selected) => {
                     setSelDogOption(selected.value)
-                    if (selected.value !== dogOptions[2].value)
-                      setFilterBy(selected.value)
+                    setFilterBy(selected.value)
                   }}
                 />
               </div>
-              {selDogOption === dogOptions[2].value ? (
-                <div style={{ width: 150, marginLeft: 10 }}>
-                  <Select
-                    styles={selectStyles}
-                    options={dogFilterOptions}
-                    placeholder="Select Status"
-                    onChange={(selected) => setFilterBy(selected.value)}
-                  />
-                </div>
-              ) : (
-                <div />
-              )}
             </div>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Sort By:</label>
@@ -430,17 +607,14 @@ const Dogs = () => {
                 setIsUpdate(false)
                 setShowFormModal(true)
                 setProfile(null)
-                if (user?.role === 'admin') setFormValues()
+                if (user?.role === 'admin') setFormValues(initialFormValues)
                 else {
                   setFormValues({
+                    ...initialFormValues,
                     owner: {
                       label: `${user?.firstName} ${user?.lastName}`,
-                      value: user?.email
-                    },
-                    name: '',
-                    breed: '',
-                    status: '',
-                    archive: false
+                      value: user
+                    }
                   })
                 }
               }}

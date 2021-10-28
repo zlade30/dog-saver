@@ -4,14 +4,12 @@ import Avatar from './Avatar'
 import PropTypes from 'prop-types'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
-import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 import RestartLineIcon from 'remixicon-react/RestartLineIcon'
 import User3LineIcon from 'remixicon-react/User3LineIcon'
 import BubbleChartLineIcon from 'remixicon-react/BubbleChartLineIcon'
-import SyringeLineIcon from 'remixicon-react/SyringeLineIcon'
-
-import moment from 'moment'
-import Select from 'components/icons/Select'
+import PaintFill from 'remixicon-react/PaintFillIcon'
+import MenLineIcon from 'remixicon-react/MenLineIcon'
+import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -28,7 +26,7 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const DogAvatarCard = ({ value, isImpound, onUpdate, onRemove, onRestore }) => {
+const DogAvatarCard = ({ value, onUpdate, onRemove, onRestore }) => {
   return (
     <div className="user-card">
       <Avatar src={value?.profile} width={70} height={70} />
@@ -43,62 +41,49 @@ const DogAvatarCard = ({ value, isImpound, onUpdate, onRemove, onRestore }) => {
         </div>
         <div className="flex">
           <div className="user-card-label">
-            <DogIcon />
-          </div>
-          <label className="user-card-value">{value?.breed?.label}</label>
-        </div>
-        <div className="flex">
-          <div className="user-card-label">
             <BubbleChartLineIcon size={18} />
           </div>
-          <label className="user-card-value">{value?.status?.label}</label>
+          <label className="user-card-value">{value?.name}</label>
         </div>
         <div className="flex">
           <div className="user-card-label">
-            <CalendarLineIcon size={18} />
+            <PaintFill size={18} />
           </div>
-          <label className="user-card-value">
-            {moment(value?.dateAdded?.toDate()).format('L')}
-          </label>
+          <label className="user-card-value">{value?.color}</label>
         </div>
-        {value?.euthSched && value?.status?.value === 'Euthanasia' ? (
-          <div className="flex">
-            <div className="user-card-label">
-              <SyringeLineIcon size={18} />
-            </div>
-            <label className="user-card-value">
-              {moment(value?.euthSched?.toDate()).format('L')}
-            </label>
+        <div className="flex">
+          <div className="user-card-label">
+            <DogIcon />
           </div>
-        ) : (
-          <div />
-        )}
+          <label className="user-card-value">{value?.breed}</label>
+        </div>
+        <div className="flex">
+          <div className="user-card-label">
+            {value?.gender?.label === 'Male' ? (
+              <MenLineIcon size={18} />
+            ) : (
+              <WomenLineIcon size={18} />
+            )}
+          </div>
+          <label className="user-card-value">{value?.gender?.label}</label>
+        </div>
       </div>
-      {!isImpound ? (
-        !value?.archive ? (
-          <div className="card-btn-panel">
-            <div onClick={onUpdate} className="card-btn-panel-l">
-              <PencilLineIcon size={20} />
-              <label className="cursor-pointer">Update</label>
-            </div>
-            <div onClick={onRemove} className="card-btn-panel-r">
-              <DeleteBinLineIcon size={18} />
-              <label className="cursor-pointer">Archive</label>
-            </div>
+      {!value?.archive ? (
+        <div className="card-btn-panel">
+          <div onClick={onUpdate} className="card-btn-panel-l">
+            <PencilLineIcon size={20} />
+            <label className="cursor-pointer">Update</label>
           </div>
-        ) : (
-          <div className="card-btn-panel items-center justify-center">
-            <div onClick={onRestore} className="card-btn-panel-m">
-              <RestartLineIcon className="margin-r-10" size={18} />
-              <label className="cursor-pointer">Restore</label>
-            </div>
+          <div onClick={onRemove} className="card-btn-panel-r">
+            <DeleteBinLineIcon size={18} />
+            <label className="cursor-pointer">Archive</label>
           </div>
-        )
+        </div>
       ) : (
         <div className="card-btn-panel items-center justify-center">
-          <div onClick={onRestore} className="card-btn-panel-m mb-10">
-            <Select size={20} />
-            <label className="cursor-pointer margin-l-10">Select</label>
+          <div onClick={onRestore} className="card-btn-panel-m">
+            <RestartLineIcon className="margin-r-10" size={18} />
+            <label className="cursor-pointer">Restore</label>
           </div>
         </div>
       )}
@@ -106,9 +91,7 @@ const DogAvatarCard = ({ value, isImpound, onUpdate, onRemove, onRestore }) => {
   )
 }
 
-DogAvatarCard.defaultProps = {
-  isImpound: false
-}
+DogAvatarCard.defaultProps = {}
 
 DogAvatarCard.propTypes = {
   value: PropTypes.object.isRequired,

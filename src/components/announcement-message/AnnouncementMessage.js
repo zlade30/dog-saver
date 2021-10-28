@@ -5,7 +5,7 @@ import moment from 'moment'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 
-const AnnouncementMessage = ({ item, onArchive, onUpdate }) => {
+const AnnouncementMessage = ({ item, onArchive, onUpdate, role }) => {
   const HornIcon = ({ color = '#334D67' }) => (
     <svg
       className="sidebar-menu-icon"
@@ -29,19 +29,23 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate }) => {
             <HornIcon />
             <label>{item?.title}</label>
           </div>
-          <div className="flex items-center">
-            <div onClick={onUpdate} className="flex items-center update">
-              <PencilLineIcon size={20} />
-              <label className="cursor-pointer">Update</label>
+          {role === 'admin' ? (
+            <div className="flex items-center">
+              <div onClick={onUpdate} className="flex items-center update">
+                <PencilLineIcon size={20} />
+                <label className="cursor-pointer">Update</label>
+              </div>
+              <div
+                onClick={onArchive}
+                className="flex items-center archive"
+                style={{ marginLeft: 12 }}>
+                <DeleteBinLineIcon size={18} />
+                <label className="cursor-pointer">Archive</label>
+              </div>
             </div>
-            <div
-              onClick={onArchive}
-              className="flex items-center archive"
-              style={{ marginLeft: 12 }}>
-              <DeleteBinLineIcon size={18} />
-              <label className="cursor-pointer">Archive</label>
-            </div>
-          </div>
+          ) : (
+            <div />
+          )}
         </div>
         <Divider width="95%" />
       </div>
@@ -62,7 +66,8 @@ AnnouncementMessage.defaultProps = {
 AnnouncementMessage.propTypes = {
   item: PropTypes.object.isRequired,
   onArchive: PropTypes.func.isRequired,
-  onUpdate: PropTypes.func.isRequired
+  onUpdate: PropTypes.func.isRequired,
+  role: PropTypes.string.isRequired
 }
 
 export default AnnouncementMessage

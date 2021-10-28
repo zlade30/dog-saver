@@ -81,9 +81,7 @@ const SurrenderDogModal = ({
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Breed:
             </label>
-            <label style={{ fontSize: 14 }}>
-              {values?.dog?.breed?.label || ''}
-            </label>
+            <label style={{ fontSize: 14 }}>{values?.dog?.breed || ''}</label>
           </div>
           <div className="flex items-center w-full">
             {values?.dog?.gender?.label === 'Male' ? (

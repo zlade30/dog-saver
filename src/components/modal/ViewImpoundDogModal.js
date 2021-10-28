@@ -74,7 +74,7 @@ const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Breed:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.breed?.label || ''}</label>
+            <label style={{ fontSize: 14 }}>{values?.breed || ''}</label>
           </div>
           <div className="flex items-center w-full">
             {values?.gender?.label === 'Male' ? (

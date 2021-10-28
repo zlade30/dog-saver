@@ -339,7 +339,7 @@ const ClaimDogModal = ({
               color: 'brown'
             }}>{`"We thrive as one."`}</label>
         </div>
-        {role === 'admin' ? (
+        {role === 'admin' && values?.status === 'pending' ? (
           <div className="modal-footer" style={{ marginRight: 20 }}>
             <div
               className="flex items-center"

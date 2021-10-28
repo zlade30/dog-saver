@@ -54,7 +54,7 @@ const DogImpoundCard = ({
           <div className="user-card-label">
             <DogIcon />
           </div>
-          <label className="user-card-value">{value?.breed?.label}</label>
+          <label className="user-card-value">{value?.breed}</label>
         </div>
         <div className="flex">
           <div className="user-card-label">

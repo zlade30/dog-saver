@@ -89,66 +89,87 @@ const RightModal = ({
                   onClose={() => setErrorMsg('')}
                 />
               )}
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Email</label>
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={values?.email}
                 id="email"
                 name="email"
                 type="email"
                 placeholder="Email"
+                style={{ marginTop: 10 }}
               />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                First Name
+              </label>
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values.firstName.charAt(0).toUpperCase() +
-                  values.firstName.slice(1)
+                  values?.firstName &&
+                  values?.firstName?.charAt(0)?.toUpperCase() +
+                    values?.firstName?.slice(1)
                 }
                 id="firstName"
                 name="firstName"
                 placeholder="First Name"
+                style={{ marginTop: 10 }}
               />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Last Name
+              </label>
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values.lastName.charAt(0).toUpperCase() +
-                  values.lastName.slice(1)
+                  values?.lastName &&
+                  values?.lastName?.charAt(0)?.toUpperCase() +
+                    values?.lastName?.slice(1)
                 }
                 id="lastName"
                 name="lastName"
                 placeholder="Last Name"
+                style={{ marginTop: 10 }}
               />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Middle Name
+              </label>
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values.middleName.charAt(0).toUpperCase() +
-                  values.middleName.slice(1)
+                  values?.middleName &&
+                  values?.middleName?.charAt(0)?.toUpperCase() +
+                    values?.middleName?.slice(1)
                 }
                 id="middleName"
                 name="middleName"
                 placeholder="Middle Name"
+                style={{ marginTop: 10 }}
               />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Phone</label>
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
+                value={values?.phone}
                 id="phone"
                 name="phone"
-                placeholder="Phone Number"
                 type="number"
-                style={{ marginBottom: 0 }}
+                placeholder="Phone"
+                style={{ marginTop: 10 }}
               />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Address</label>
               <Field
                 id="address"
                 name="address"
                 render={() => (
-                  <div className="margin-b-10">
+                  <div className="margin-b-10" style={{ marginTop: 10 }}>
                     <Select
                       options={purokList}
                       styles={selectStyles}

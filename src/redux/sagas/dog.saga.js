@@ -74,7 +74,7 @@ const returnSelectedOptions = (data) => {
   } else {
     query = firestore
       .collection('dogs')
-      .where('owner.value', '==', data?.emailOwner)
+      .where('owner.value.email', '==', data?.emailOwner)
   }
 
   switch (data.filterBy) {
