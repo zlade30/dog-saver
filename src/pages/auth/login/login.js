@@ -72,7 +72,7 @@ const Login = () => {
                             'authUser',
                             JSON.stringify(response)
                           )
-                          history.push('/dashboard')
+                          history.push('/users')
                         },
                         onFailure: (error) => {
                           setShowLoader(false)
@@ -114,6 +114,10 @@ const Login = () => {
                     onClose={() => setErrorMsg('')}
                   />
                 )}
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Email
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -123,6 +127,10 @@ const Login = () => {
                   type="email"
                   placeholder="Email"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Password
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   type="password"
                   errors={errors}

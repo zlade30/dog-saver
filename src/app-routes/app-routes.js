@@ -40,7 +40,7 @@ const AppRoutes = ({ history }) => {
             path === '/forgot-password' ||
             path === '/'
           )
-            history.push('/dashboard')
+            history.push('/users')
           localStorage.setItem('authUser', JSON.stringify(user))
         }
 
@@ -50,7 +50,7 @@ const AppRoutes = ({ history }) => {
               data: { email: currentUser?.email },
               onSuccess: (response) => {
                 setUser(response)
-                history.push('/dashboard')
+                history.push('/users')
               },
               onFailure: (error) => console.log(error)
             })

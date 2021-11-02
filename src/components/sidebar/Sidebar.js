@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Divider from 'components/divider/Divider'
 import AvatarSelection from 'components/avatar/AvatarSelection'
 import LogoutBoxRLineIcon from 'remixicon-react/LogoutBoxRLineIcon'
-import Home4LineIcon from 'remixicon-react/Home4LineIcon'
+// import Home4LineIcon from 'remixicon-react/Home4LineIcon'
 import User3LineIcon from 'remixicon-react/User3LineIcon'
 import GovernmentLineIcon from 'remixicon-react/GovernmentLineIcon'
 import BookLine from 'remixicon-react/BookLineIcon'
@@ -44,12 +44,12 @@ const Sidebar = ({ user, onLogout }) => {
   const location = useLocation()
 
   const [menus, setMenus] = useState([
-    {
-      name: 'Home',
-      color: '#334D67',
-      isActive: true,
-      path: '/dashboard'
-    },
+    // {
+    //   name: 'Home',
+    //   color: '#334D67',
+    //   isActive: true,
+    //   path: '/dashboard'
+    // },
     {
       name: 'Users',
       color: '#334D67',
@@ -96,8 +96,8 @@ const Sidebar = ({ user, onLogout }) => {
 
   const renderIcon = (menu) => {
     switch (menu?.name) {
-      case 'Home':
-        return <Home4LineIcon className="sidebar-menu-icon" size={20} />
+      // case 'Home':
+      //   return <Home4LineIcon className="sidebar-menu-icon" size={20} />
       case 'Users':
         return <User3LineIcon className="sidebar-menu-icon" size={20} />
       case 'Registered Dogs':

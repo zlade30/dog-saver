@@ -530,7 +530,7 @@ const Impound = () => {
         onSendForm={onSendForm}
       />
       <AdoptModal
-        isOpen={isOpenAdoptModal}
+        isOpen={true}
         onClose={() => setIsOpenAdoptModal(false)}
       />
       <ConfirmationModal
@@ -597,23 +597,7 @@ const Impound = () => {
               />
             </div>
           ) : (
-            <div className="flex items-center">
-              <Button
-                onClick={() => {
-                  if (!user) {
-                    setShowSurrenderModal(false)
-                    setInfoContent(
-                      'Before you can surrender a dog! Kindly login or create an account if you wish to continue.'
-                    )
-                    setIsShowInfoModal(true)
-                  } else {
-                    setShowSurrenderModal(true)
-                  }
-                }}
-                value="Surrender"
-                width={80}
-              />
-            </div>
+            <div />
           )}
         </div>
         <div

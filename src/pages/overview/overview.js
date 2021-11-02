@@ -34,9 +34,13 @@ const Overview = () => {
           <h1 className="db-subtitle">
             <strong>BARK</strong> is a dog impounding system.
           </h1>
-          <span className="overview-location">
+          <span className="overview-location" style={{ marginBottom: 0 }}>
             <MapPin />
             Damilag Manolo Fortich Bukidnon, 8703
+          </span>
+          <span style={{ marginBottom: 40, fontSize: 14, marginTop: 20 }}>
+            If you want to donate. Kindly contact this number 09553144476 for
+            more info.
           </span>
           <div className="db-box-cont">
             <div className="db-box">
@@ -70,7 +74,7 @@ const Overview = () => {
                 value="Register"
               />
             </div>
-            <div className="db-box">
+            {/* <div className="db-box">
               <div className="db-box-header">
                 <h2>Do you want to?</h2>
               </div>
@@ -85,7 +89,7 @@ const Overview = () => {
                 fontWeight="bold"
                 value="Donate"
               />
-            </div>
+            </div> */}
             <div className="db-box">
               <div className="db-box-header">
                 <h2>Do you want to?</h2>

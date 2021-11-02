@@ -71,7 +71,7 @@ const Register = () => {
                     archive: false
                   })
                 )
-                history.push('/dashboard')
+                history.push('/users')
               },
               onFailure: (error) => {
                 setShowLoader(false)
@@ -111,7 +111,7 @@ const Register = () => {
               archive: false
             })
           )
-          history.push('/dashboard')
+          history.push('/users')
         },
         onFailure: (error) => {
           console.log(error)
@@ -205,6 +205,10 @@ const Register = () => {
                     onClose={() => setErrorMsg('')}
                   />
                 )}
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Email
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -214,6 +218,10 @@ const Register = () => {
                   type="email"
                   placeholder="Email"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  First Name
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -226,6 +234,10 @@ const Register = () => {
                   name="firstName"
                   placeholder="First Name"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Last Name
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -238,6 +250,10 @@ const Register = () => {
                   name="lastName"
                   placeholder="Last Name"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Middle Name
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -250,6 +266,10 @@ const Register = () => {
                   name="middleName"
                   placeholder="Middle Name"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Phone
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
@@ -260,6 +280,10 @@ const Register = () => {
                   type="number"
                   style={{ marginBottom: 0 }}
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Address
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <Field
                   id="address"
                   name="address"
@@ -280,6 +304,10 @@ const Register = () => {
                     </div>
                   )}
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Password
+                </label>
+                <div style={{ marginTop: 4 }} />
                 <TextField
                   type="password"
                   errors={errors}

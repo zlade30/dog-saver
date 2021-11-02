@@ -554,7 +554,7 @@ const Dogs = () => {
           <div
             className="justify-between"
             style={{
-              width: 1050
+              width: user?.role === 'admin' ? 1050 : 1200
             }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
@@ -622,6 +622,25 @@ const Dogs = () => {
               height={35}
               value="Add"
             />
+            {user?.role === 'user' && (
+              <div className="flex items-center">
+                <Button
+                  onClick={() => {
+                    // if (!user) {
+                    //   setShowSurrenderModal(false)
+                    //   setInfoContent(
+                    //     'Before you can surrender a dog! Kindly login or create an account if you wish to continue.'
+                    //   )
+                    //   setIsShowInfoModal(true)
+                    // } else {
+                    //   setShowSurrenderModal(true)
+                    // }
+                  }}
+                  value="Surrender"
+                  width={80}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="user-list-panel">
