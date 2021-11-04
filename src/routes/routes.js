@@ -11,6 +11,7 @@ const ForgotPassword = lazy(() => import('pages/auth/forgot-password'))
 const AboutUs = lazy(() => import('pages/about-us'))
 const Impound = lazy(() => import('pages/impound'))
 const Activities = lazy(() => import('pages/activities'))
+const PasswordReset = lazy(() => import('pages/auth/password-reset'))
 
 const Routes = [
   {
@@ -29,6 +30,12 @@ const Routes = [
     path: '/forgot-password',
     name: 'ForgotPassword',
     component: ForgotPassword,
+    hidden: true
+  },
+  {
+    path: '/reset-password',
+    name: 'PasswordReset',
+    component: PasswordReset,
     hidden: true
   },
   {
