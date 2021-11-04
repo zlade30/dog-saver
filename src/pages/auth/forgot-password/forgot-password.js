@@ -8,6 +8,7 @@ import { auth } from 'firebase'
 import ErrorAlert from 'components/alerts/ErrorAlert'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import { toast } from 'react-toastify'
+import Overview from 'pages/overview'
 
 const ForgotPassword = () => {
   const history = useHistory()
@@ -105,7 +106,7 @@ const ForgotPassword = () => {
         </div>
       </div>
       <div className="auth-content">
-        <img src="assets/icons/auth-img.png" />
+        <Overview />
       </div>
     </div>
   )

@@ -36,6 +36,7 @@ const Routes = [
     path: '/reset-password',
     name: 'PasswordReset',
     component: PasswordReset,
+    exact: false,
     hidden: true
   },
   {

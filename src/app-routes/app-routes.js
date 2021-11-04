@@ -69,9 +69,10 @@ const AppRoutes = ({ history }) => {
       if (path === '/') history.push('/login')
       else if (path === '/about-us') history?.push('/about-us')
       else if (path === '/impound') history?.push('/impound')
-      else if (path === '/password-reset') history?.push('/password-reset')
+      else if (path === '/reset-password') console.log('hello')
       else if (path === '/forgot-password') history?.push('/forgot-password')
       else if (path === '/register') history?.push('/register')
+      else history?.push('/login')
     }
   }, [])
 
