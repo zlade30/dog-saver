@@ -26,6 +26,8 @@ import { toast } from 'react-toastify'
 import { uploadDogImageAction } from 'redux/actions/utils.action'
 import { fire } from 'firebase'
 import DogForm from './DogForm'
+import SurrenderForm from './SurrenderForm'
+import { createActivityAction } from 'redux/actions/activities.action'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -44,6 +46,7 @@ const Dogs = () => {
     archive: false
   }
   const [showLoader, setShowLoader] = useState(false)
+  const [isSurrender, setIsSurrender] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
@@ -487,6 +490,54 @@ const Dogs = () => {
     setConfirmContent(`Are you sure you want to restore ${dog?.name}?`)
   }
 
+  const onSurrender = (values) => {
+    console.log(values)
+    setShowLoader(true)
+    dispatch(
+      createActivityAction({
+        data: {
+          user,
+          dog: {
+            id: values?.id,
+            profile: values?.profile,
+            color: values?.color,
+            breed: values?.breed,
+            gender: values?.gender
+          },
+          status: 'pending',
+          dateAdded: new Date(),
+          archive: false,
+          type: 'surrender'
+        },
+        onSuccess: async () => {
+          setShowLoader(false)
+          toast.success('Activity sent successfully.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+          setIsSurrender(false)
+        },
+        onFailure: () => {
+          setShowLoader(false)
+          toast.error('Activity send failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+        }
+      })
+    )
+  }
+
   useEffect(() => {
     setShowLoader(true)
     dispatch(
@@ -528,18 +579,18 @@ const Dogs = () => {
         content={confirmContent}
         onYes={handleYesAction}
       />
-      {/* <DogRightModal
-        isOpen={showFormModal}
-        onClose={() => setShowFormModal(false)}
-        onSubmit={onSubmit}
-        errorMsg={errorMsg}
-        setErrorMsg={setErrorMsg}
-        initialValues={formValues}
-        setFormValues={setFormValues}
-        isUpdate={isUpdate}
-        setProfile={setProfile}
-        setEuthSched={setEuthSched}
-      /> */}
+      <SurrenderForm
+        isOpen={isSurrender}
+        onClose={() => setIsSurrender(false)}
+        dogList={dogList}
+        initialValues={{
+          profile: '',
+          color: '',
+          breed: '',
+          gender: ''
+        }}
+        onSubmit={onSurrender}
+      />
       <DogForm
         isOpen={showFormModal}
         initialValues={formValues}
@@ -626,15 +677,7 @@ const Dogs = () => {
               <div className="flex items-center">
                 <Button
                   onClick={() => {
-                    // if (!user) {
-                    //   setShowSurrenderModal(false)
-                    //   setInfoContent(
-                    //     'Before you can surrender a dog! Kindly login or create an account if you wish to continue.'
-                    //   )
-                    //   setIsShowInfoModal(true)
-                    // } else {
-                    //   setShowSurrenderModal(true)
-                    // }
+                    setIsSurrender(true)
                   }}
                   value="Surrender"
                   width={80}

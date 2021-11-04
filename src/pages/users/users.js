@@ -49,40 +49,76 @@ const Users = () => {
   const onSubmit = (values) => {
     setShowLoader(true)
     if (!isUpdate) {
-      const tempPass = (Math.random() + 1).toString(36).substring(2)
-
-      setPassword(tempPass)
+      setShowLoader(true)
       if (String(values?.phone)?.length === 10) {
-        dispatch(
-          createAccountAction({
-            data: {
-              email: values?.email,
-              password: tempPass
-            },
-            onSuccess: () => {
-              delete values.password
-              if (profile) {
-                onCreateUpload({
-                  ...values,
-                  phone: `0${values?.phone}`
-                })
-              } else {
-                onCreateAccount({
-                  ...values,
-                  phone: `0${values?.phone}`
-                })
+        if (values?.password === values?.confirmPassword) {
+          dispatch(
+            createAccountAction({
+              data: {
+                email: values?.email,
+                password: values?.password
+              },
+              onSuccess: () => {
+                delete values.confirmPassword
+                if (profile)
+                  onCreateUpload({
+                    ...values,
+                    phone: `0${values?.phone}`
+                  })
+                else
+                  onCreateAccount({
+                    ...values,
+                    phone: `0${values?.phone}`
+                  })
+              },
+              onFailure: (error) => {
+                setErrorMsg(error)
+                setShowLoader(false)
               }
-            },
-            onFailure: (error) => {
-              setErrorMsg(error)
-              setShowLoader(false)
-            }
-          })
-        )
+            })
+          )
+        } else {
+          setShowLoader(false)
+          setErrorMsg('Error: password should be match.')
+        }
       } else {
         setShowLoader(false)
         setErrorMsg('Error: phone number should be 11 digits.')
       }
+      // const tempPass = (Math.random() + 1).toString(36).substring(2)
+
+      // setPassword(tempPass)
+      // if (String(values?.phone)?.length === 10) {
+      //   dispatch(
+      //     createAccountAction({
+      //       data: {
+      //         email: values?.email,
+      //         password: tempPass
+      //       },
+      //       onSuccess: () => {
+      //         delete values.password
+      //         if (profile) {
+      //           onCreateUpload({
+      //             ...values,
+      //             phone: `0${values?.phone}`
+      //           })
+      //         } else {
+      //           onCreateAccount({
+      //             ...values,
+      //             phone: `0${values?.phone}`
+      //           })
+      //         }
+      //       },
+      //       onFailure: (error) => {
+      //         setErrorMsg(error)
+      //         setShowLoader(false)
+      //       }
+      //     })
+      //   )
+      // } else {
+      //   setShowLoader(false)
+      //   setErrorMsg('Error: phone number should be 11 digits.')
+      // }
     } else {
       if (profile) {
         dispatch(
@@ -588,6 +624,7 @@ const Users = () => {
                 setShowFormModal(true)
                 setProfile(null)
                 setFormValues()
+                setErrorMsg('')
               }}
               width={80}
               height={35}

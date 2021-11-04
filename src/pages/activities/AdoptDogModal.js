@@ -1,71 +1,19 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 import moment from 'moment'
-import { toast } from 'react-toastify'
 
-const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
-  const [formValues, setFormValues] = useState({
-    name: '',
-    occupation: '',
-    adoptADog: {
-      spouse: false,
-      children: false,
-      pet: false,
-      deceased: false,
-      gift: false,
-      others: { isChecked: false, value: '' }
-    },
-    isYourHome: {
-      house: false,
-      apartment: false,
-      condo: false,
-      others: { isChecked: false, value: '' }
-    },
-    doYouRent: {
-      rented: false,
-      owned: false
-    },
-    doYouFence: {
-      yes: false,
-      no: false
-    },
-    doYouVet: {
-      yes: false,
-      no: false
-    },
-    neutered: {
-      yes: false,
-      no: false
-    },
-    vaccination: {
-      yes: false,
-      no: false
-    },
-    vetExpenses: {
-      yes: false,
-      no: false
-    },
-    ifYes: {
-      yes: false,
-      no: false
-    },
-    circumstances: {
-      pregnancy: false,
-      dogBites: false,
-      dogDestroys: false,
-      behavioral: false,
-      conflict: false,
-      untrainable: false,
-      dogDisabled: false,
-      others: { isChecked: false, value: '' }
-    },
-    iCertify: false
-  })
-
+const AdoptDogModal = ({
+  isOpen,
+  onClose,
+  values,
+  onApprove,
+  onReject,
+  role
+}) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -170,11 +118,9 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             <label style={{ fontWeight: 'bold' }}>1.</label>
             <label style={{ marginLeft: 14, fontWeight: 'bold' }}>Name:</label>
             <input
-              name="occupation"
-              value={formValues?.name}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, name: evt.target.value })
-              }
+              name="name"
+              value={values?.adoptionForm?.name}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -198,10 +144,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="occupation"
-              value={formValues?.occupation}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, occupation: evt.target.value })
-              }
+              value={values?.adoptionForm?.occupation}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -225,10 +169,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="address"
-              value={formValues?.address}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, address: evt.target.value })
-              }
+              value={values?.adoptionForm?.address}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -252,11 +194,9 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="mobileNumber"
-              value={formValues?.mobileNumber}
+              value={values?.adoptionForm?.mobileNumber}
+              disabled
               type="number"
-              onChange={(evt) =>
-                setFormValues({ ...formValues, mobileNumber: evt.target.value })
-              }
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -280,10 +220,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="email"
-              value={formValues?.email}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, email: evt.target.value })
-              }
+              value={values?.adoptionForm?.email}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -307,10 +245,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="spouse"
-              value={formValues?.spouse}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, spouse: evt.target.value })
-              }
+              value={values?.adoptionForm?.spouse}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -334,10 +270,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="children"
-              value={formValues?.children}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, children: evt.target.value })
-              }
+              value={values?.adoptionForm?.children}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -361,10 +295,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="household"
-              value={formValues?.household}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, household: evt.target.value })
-              }
+              value={values?.adoptionForm?.household}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -388,10 +320,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="responsible"
-              value={formValues?.responsible}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, responsible: evt.target.value })
-              }
+              value={values?.adoptionForm?.responsible}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -416,10 +346,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="allergies"
-              value={formValues?.allergies}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, allergies: evt.target.value })
-              }
+              value={values?.adoptionForm?.allergies}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -444,10 +372,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="ill"
-              value={formValues?.ill}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, ill: evt.target.value })
-              }
+              value={values?.adoptionForm?.ill}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -478,16 +404,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.spouse}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    spouse: !formValues?.adoptADog?.spouse
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.spouse}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Companion for you/Spouse</label>
@@ -500,16 +417,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.children}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    children: !formValues?.adoptADog?.children
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.children}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Companion for children</label>
@@ -522,16 +430,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.pet}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    pet: !formValues?.adoptADog?.pet
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.pet}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Companion for pet</label>
@@ -544,16 +443,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.deceased}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    deceased: !formValues?.adoptADog?.deceased
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.deceased}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>
@@ -568,16 +458,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.gift}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    gift: !formValues?.adoptADog?.gift
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.gift}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Gift for ...</label>
@@ -590,19 +471,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.adoptADog?.others?.isChecked}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    others: {
-                      isChecked: !formValues?.adoptADog?.others?.isChecked,
-                      value: ''
-                    }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.adoptADog?.others?.isChecked}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>
@@ -610,20 +479,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="adoptOthers"
-              value={formValues?.adoptADog?.others?.value}
-              disabled={!formValues?.adoptADog?.others?.isChecked}
-              onChange={(evt) => {
-                setFormValues({
-                  ...formValues,
-                  adoptADog: {
-                    ...formValues?.adoptADog,
-                    others: {
-                      ...formValues?.adoptADog?.others,
-                      value: evt.target.value
-                    }
-                  }
-                })
-              }}
+              value={values?.adoptionForm?.adoptADog?.others?.value}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -654,18 +511,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.isYourHome?.house}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  isYourHome: {
-                    house: true,
-                    apartment: false,
-                    condo: false,
-                    others: { isChecked: false, value: '' }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.isYourHome?.house}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>House</label>
@@ -678,18 +524,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.isYourHome?.apartment}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  isYourHome: {
-                    house: false,
-                    apartment: true,
-                    condo: false,
-                    others: { isChecked: false, value: '' }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.isYourHome?.apartment}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Apartment</label>
@@ -702,18 +537,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.isYourHome?.condo}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  isYourHome: {
-                    house: false,
-                    apartment: false,
-                    condo: true,
-                    others: { isChecked: false, value: '' }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.isYourHome?.condo}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Condo</label>
@@ -726,39 +550,13 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.isYourHome?.others?.isChecked}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  isYourHome: {
-                    house: false,
-                    apartment: false,
-                    condo: false,
-                    others: {
-                      isChecked: true,
-                      value: ''
-                    }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.isYourHome?.others?.isChecked}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Others</label>
             <input
-              value={formValues?.isYourHome?.others?.value}
-              disabled={!formValues?.isYourHome?.others?.isChecked}
-              onChange={(evt) => {
-                setFormValues({
-                  ...formValues,
-                  isYourHome: {
-                    ...formValues?.isYourHome,
-                    others: {
-                      isChecked: formValues?.isYourHome?.others,
-                      value: evt.target.value
-                    }
-                  }
-                })
-              }}
+              value={values?.adoptionForm?.isYourHome?.others?.value}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -789,16 +587,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouRent?.rented}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouRent: {
-                    rented: true,
-                    owned: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouRent?.rented}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Rented</label>
@@ -811,16 +600,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouRent?.owned}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouRent: {
-                    rented: false,
-                    owned: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouRent?.owned}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Owned</label>
@@ -845,16 +625,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouFence?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouFence: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouFence?.yes}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Yes</label>
@@ -867,16 +638,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouFence?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouFence: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouFence?.no}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>No</label>
@@ -894,10 +656,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="dogSleep"
-              value={formValues?.dogSleep}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, dogSleep: evt.target.value })
-              }
+              value={values?.adoptionForm?.dogSleep}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -921,10 +681,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="leftAlone"
-              value={formValues?.leftAlone}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, leftAlone: evt.target.value })
-              }
+              value={values?.adoptionForm?.leftAlone}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -948,13 +706,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="dogExcercised"
-              value={formValues?.dogExcercised}
-              onChange={(evt) =>
-                setFormValues({
-                  ...formValues,
-                  dogExcercised: evt.target.value
-                })
-              }
+              value={values?.adoptionForm?.dogExcercised}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -978,10 +731,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="firstPet"
-              value={formValues?.firstPet}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, firstPet: evt.target.value })
-              }
+              value={values?.adoptionForm?.firstPet}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1013,10 +764,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             }}>
             <input
               name="firstPet"
-              value={formValues?.howManyDogs}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, howManyDogs: evt.target.value })
-              }
+              value={values?.adoptionForm?.howManyDogs}
+              disabled
               type="number"
               style={{
                 marginLeft: 8,
@@ -1038,10 +787,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             }}>
             <input
               name="firstPet"
-              value={formValues?.howManyCats}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, howManyCats: evt.target.value })
-              }
+              value={values?.adoptionForm?.howManyCats}
+              disabled
               type="number"
               style={{
                 marginLeft: 8,
@@ -1066,10 +813,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="listPets"
-              value={formValues?.listPets}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, listPets: evt.target.value })
-              }
+              value={values?.adoptionForm?.listPets}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1094,10 +839,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="whatHappened"
-              value={formValues?.whatHappened}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, whatHappened: evt.target.value })
-              }
+              value={values?.adoptionForm?.whatHappened}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1128,16 +871,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouVet?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouVet: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouVet?.yes}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Yes</label>
@@ -1150,16 +884,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.doYouVet?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  doYouVet: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.doYouVet?.no}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>No</label>
@@ -1184,16 +909,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.neutered?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  neutered: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.neutered?.yes}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Yes</label>
@@ -1206,16 +922,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.neutered?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  neutered: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.neutered?.no}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>No</label>
@@ -1240,16 +947,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.vaccination?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  vaccination: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.vaccination?.yes}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Yes</label>
@@ -1262,16 +960,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.vaccination?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  vaccination: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.vaccination?.no}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>No</label>
@@ -1297,16 +986,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.vetExpenses?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  vetExpenses: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.vetExpenses?.yes}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Yes</label>
@@ -1319,16 +999,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              checked={formValues?.vetExpenses?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  vetExpenses: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.vetExpenses?.no}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>No</label>
@@ -1352,19 +1023,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               display: 'flex',
               alignItems: 'center'
             }}>
-            <input
-              checked={formValues?.ifYes?.yes}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  ifYes: {
-                    yes: true,
-                    no: false
-                  }
-                })
-              }}
-              type="checkbox"
-            />
+            <input checked={values?.adoptionForm?.ifYes?.yes} type="checkbox" />
             <label style={{ marginLeft: 14 }}>Yes</label>
           </div>
           <div
@@ -1374,19 +1033,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               display: 'flex',
               alignItems: 'center'
             }}>
-            <input
-              checked={formValues?.ifYes?.no}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  ifYes: {
-                    yes: false,
-                    no: true
-                  }
-                })
-              }}
-              type="checkbox"
-            />
+            <input checked={values?.adoptionForm?.ifYes?.no} type="checkbox" />
             <label style={{ marginLeft: 14 }}>No</label>
           </div>
           <div
@@ -1402,10 +1049,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="traits"
-              value={formValues?.traits}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, traits: evt.target.value })
-              }
+              value={values?.adoptionForm?.traits}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1429,13 +1074,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="unnacceptable"
-              value={formValues?.unnacceptable}
-              onChange={(evt) =>
-                setFormValues({
-                  ...formValues,
-                  unnacceptable: evt.target.value
-                })
-              }
+              value={values?.adoptionForm?.unnacceptable}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1459,10 +1099,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="behaviors"
-              value={formValues?.behaviors}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, behaviors: evt.target.value })
-              }
+              value={values?.adoptionForm?.behaviors}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1493,16 +1131,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.pregnancy}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    pregnancy: !formValues?.circumstances?.pregnancy
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.pregnancy}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Pregnancy / Baby</label>
@@ -1515,16 +1144,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.dogBites}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    dogBites: !formValues?.circumstances?.dogBites
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.dogBites}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Dog bites people</label>
@@ -1537,16 +1157,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.dogDestroys}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    dogDestroys: !formValues?.circumstances?.dogDestroys
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.dogDestroys}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>
@@ -1561,16 +1172,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.behavioral}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    behavioral: !formValues?.circumstances?.behavioral
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.behavioral}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Behavioral problems</label>
@@ -1583,16 +1185,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.conflict}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    conflict: !formValues?.circumstances?.conflict
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.conflict}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Conflicts with other pets</label>
@@ -1605,16 +1198,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.untrainable}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    untrainable: !formValues?.circumstances?.untrainable
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.untrainable}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Dog is untrainable</label>
@@ -1627,16 +1211,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.dogDisabled}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    dogDisabled: !formValues?.circumstances?.dogDisabled
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.dogDisabled}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Dog becomes disabled</label>
@@ -1649,38 +1224,14 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               alignItems: 'center'
             }}>
             <input
-              defaultChecked={formValues?.circumstances?.others?.isChecked}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    others: {
-                      isChecked: !formValues?.circumstances?.others?.isChecked,
-                      value: ''
-                    }
-                  }
-                })
-              }}
+              checked={values?.adoptionForm?.circumstances?.others?.isChecked}
               type="checkbox"
             />
             <label style={{ marginLeft: 14 }}>Other reasons</label>
             <input
               name="otherReasons"
-              value={formValues?.circumstances?.others?.value}
-              disabled={!formValues?.circumstances?.others?.isChecked}
-              onChange={(evt) => {
-                setFormValues({
-                  ...formValues,
-                  circumstances: {
-                    ...formValues?.circumstances,
-                    others: {
-                      ...formValues?.circumstances?.others,
-                      value: evt.target.value
-                    }
-                  }
-                })
-              }}
+              value={values?.adoptionForm?.circumstances?.others?.value}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1705,10 +1256,8 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </label>
             <input
               name="giveUp"
-              value={formValues?.giveUp}
-              onChange={(evt) =>
-                setFormValues({ ...formValues, giveUp: evt.target.value })
-              }
+              value={values?.adoptionForm?.giveUp}
+              disabled
               style={{
                 marginLeft: 8,
                 border: 'none',
@@ -1725,16 +1274,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               width: '95%',
               marginTop: 40
             }}>
-            <input
-              checked={formValues?.iCertify}
-              onChange={() => {
-                setFormValues({
-                  ...formValues,
-                  iCertify: !formValues?.iCertify
-                })
-              }}
-              type="checkbox"
-            />
+            <input checked={values?.adoptionForm?.iCertify} type="checkbox" />
             <label style={{ marginLeft: 10, fontWeight: 'bold' }}>
               I certify that all of the above information is true and correct. I
               understand, that if I adopt a dog Pet from the Barangay Damilag
@@ -1786,26 +1326,50 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
             </div>
           </div>
         </div>
-        <div className="modal-footer" style={{ marginRight: 20 }}>
-          <Button
-            onClick={() => onSendForm(formValues)}
-            value="Send Form"
-            width={100}
-          />
-        </div>
+        {role === 'admin' && values?.status === 'pending' ? (
+          <div className="modal-footer" style={{ marginRight: 20 }}>
+            <div
+              className="flex items-center"
+              style={{ justifyContent: 'space-between' }}>
+              <Button
+                value="Approve"
+                onClick={onApprove}
+                style={{
+                  backgroundColor: '#42C2D3',
+                  width: 150,
+                  marginRight: 5
+                }}
+              />
+              <Button
+                value="Reject"
+                onClick={onReject}
+                style={{
+                  backgroundColor: '#ff4d4f',
+                  width: 150,
+                  marginLeft: 5
+                }}
+              />
+            </div>
+          </div>
+        ) : (
+          <div />
+        )}
       </div>
     </ReactModal>
   )
 }
 
-AdoptModal.defaultProps = {
+AdoptDogModal.defaultProps = {
   isOpen: false
 }
 
-AdoptModal.propTypes = {
+AdoptDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSendForm: PropTypes.func.isRequired
+  onApprove: PropTypes.func.isRequired,
+  onReject: PropTypes.func.isRequired,
+  values: PropTypes.object.isRequired,
+  role: PropTypes.string
 }
 
-export default AdoptModal
+export default AdoptDogModal

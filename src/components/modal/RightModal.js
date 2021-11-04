@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -8,10 +8,6 @@ import * as Yup from 'yup'
 import TextField from 'components/text-fields/TextField'
 import ErrorAlert from 'components/alerts/ErrorAlert'
 import Button from 'components/buttons/Button'
-import { useDispatch } from 'react-redux'
-import { getPuroksAction } from 'redux/actions/user.action'
-import Select from 'react-select'
-import { selectStyles } from 'utils/helpers'
 
 const RightModal = ({
   isOpen,
@@ -23,36 +19,21 @@ const RightModal = ({
   initialValues,
   isUpdate
 }) => {
-  const dispatch = useDispatch()
-  const [purokList, setPurokList] = useState([])
 
   const schema = Yup.object().shape({
     email: Yup.string().required('Required'),
+    username: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     firstName: Yup.string().required('Required'),
-    middleName: Yup.string().required('Required'),
+    middleName: Yup.string().notRequired(),
+    suffix: Yup.string().notRequired(),
     phone: Yup.string().required('Required'),
-    address: Yup.object().required('Required').nullable()
+    address: Yup.string().required('Required'),
+    password: Yup.string().required('Required'),
+    confirmPassword: isUpdate
+      ? Yup.string().notRequired()
+      : Yup.string().required('Required')
   })
-
-  useEffect(() => {
-    if (isOpen) {
-      dispatch(
-        getPuroksAction({
-          onSuccess: (payload) => {
-            const list = payload?.map((item) => ({
-              label: `${item.name}`,
-              value: item?.id
-            }))
-            setPurokList(() => list)
-          },
-          onFailure: (error) => {
-            console.log(error)
-          }
-        })
-      )
-    }
-  }, [isOpen])
 
   return (
     <ReactModal
@@ -64,7 +45,7 @@ const RightModal = ({
       <div className="flex justify-end w-full">
         <CloseLineIcon className="cursor-pointer" onClick={onClose} />
       </div>
-      <div>
+      <div style={{ height: 900, overflow: 'auto' }}>
         <div className="w-full justify-center">
           <h1>{isUpdate ? 'Update User' : 'New User'}</h1>
         </div>
@@ -73,7 +54,7 @@ const RightModal = ({
           validationSchema={schema}
           onSubmit={onSubmit}
           validator={() => ({})}>
-          {({ errors, touched, values, setFieldValue }) => (
+          {({ errors, touched, values }) => (
             <Form>
               <Field name="profile">
                 {() => (
@@ -90,100 +71,148 @@ const RightModal = ({
                 />
               )}
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>Email</label>
+              <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
-                value={values?.email}
                 id="email"
                 name="email"
                 type="email"
                 placeholder="Email"
-                style={{ marginTop: 10 }}
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Username
+              </label>
+              <div style={{ marginTop: 4 }} />
+              <TextField
+                errors={errors}
+                touched={touched}
+                width={320}
+                value={values?.username}
+                id="username"
+                name="username"
+                placeholder="Username"
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                 First Name
               </label>
+              <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values?.firstName &&
-                  values?.firstName?.charAt(0)?.toUpperCase() +
-                    values?.firstName?.slice(1)
+                  values.firstName.charAt(0).toUpperCase() +
+                  values.firstName.slice(1)
                 }
                 id="firstName"
                 name="firstName"
                 placeholder="First Name"
-                style={{ marginTop: 10 }}
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                 Last Name
               </label>
+              <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values?.lastName &&
-                  values?.lastName?.charAt(0)?.toUpperCase() +
-                    values?.lastName?.slice(1)
+                  values.lastName.charAt(0).toUpperCase() +
+                  values.lastName.slice(1)
                 }
                 id="lastName"
                 name="lastName"
                 placeholder="Last Name"
-                style={{ marginTop: 10 }}
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                 Middle Name
               </label>
+              <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values?.middleName &&
-                  values?.middleName?.charAt(0)?.toUpperCase() +
-                    values?.middleName?.slice(1)
+                  values.middleName.charAt(0).toUpperCase() +
+                  values.middleName.slice(1)
                 }
                 id="middleName"
                 name="middleName"
                 placeholder="Middle Name"
-                style={{ marginTop: 10 }}
               />
-              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Phone</label>
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Suffix
+              </label>
+              <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
-                value={values?.phone}
+                value={
+                  values.suffix.charAt(0).toUpperCase() +
+                  values.suffix.slice(1)
+                }
+                id="suffix"
+                name="suffix"
+                placeholder="Suffix"
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Phone
+              </label>
+              <div style={{ marginTop: 4 }} />
+              <TextField
+                errors={errors}
+                touched={touched}
+                width={320}
                 id="phone"
                 name="phone"
+                placeholder="Phone Number"
                 type="number"
-                placeholder="Phone"
-                style={{ marginTop: 10 }}
+                style={{ marginBottom: 4 }}
               />
-              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Address</label>
-              <Field
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Address
+              </label>
+              <div style={{ marginTop: 4 }} />
+              <TextField
+                errors={errors}
+                touched={touched}
+                width={320}
+                value={
+                  values.address.charAt(0).toUpperCase() +
+                  values.address.slice(1)
+                }
                 id="address"
                 name="address"
-                render={() => (
-                  <div className="margin-b-10" style={{ marginTop: 10 }}>
-                    <Select
-                      options={purokList}
-                      styles={selectStyles}
-                      placeholder="Select Address"
-                      value={values.address}
-                      onChange={(selected) =>
-                        setFieldValue('address', selected)
-                      }
-                    />
-                    {errors['address'] && touched['address'] && (
-                      <div className="label-error">{`Address is Required.`}</div>
-                    )}
-                  </div>
-                )}
+                placeholder="Address"
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Password
+              </label>
+              <div style={{ marginTop: 4 }} />
+              <TextField
+                type="password"
+                errors={errors}
+                touched={touched}
+                width={320}
+                id="password"
+                name="password"
+                placeholder="Password"
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Confirm Password
+              </label>
+              <div style={{ marginTop: 4 }} />
+              <TextField
+                type="password"
+                errors={errors}
+                touched={touched}
+                width={320}
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="Confirm Password"
               />
               <Button
                 id="sign-up"
@@ -206,8 +235,12 @@ RightModal.defaultProps = {
     lastName: '',
     firstName: '',
     middleName: '',
+    suffix: '',
+    username: '',
     phone: '',
     address: '',
+    password: '',
+    confirmPassword: '',
     role: 'user',
     archive: false
   },

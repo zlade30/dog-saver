@@ -33,12 +33,15 @@ const Register = () => {
 
   const schema = Yup.object().shape({
     email: Yup.string().required('Required'),
+    username: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     firstName: Yup.string().required('Required'),
-    middleName: Yup.string().required('Required'),
+    middleName: Yup.string().notRequired(),
+    suffix: Yup.string().notRequired(),
     phone: Yup.string().required('Required'),
-    address: Yup.object().required('Required').nullable(),
-    password: Yup.string().required('Required')
+    address: Yup.string().required('Required'),
+    password: Yup.string().required('Required'),
+    confirmPassword: Yup.string().required('Required')
   })
 
   const onCreateUpload = (values) => {
@@ -71,7 +74,7 @@ const Register = () => {
                     archive: false
                   })
                 )
-                history.push('/users')
+                history.push('/dogs')
               },
               onFailure: (error) => {
                 setShowLoader(false)
@@ -111,7 +114,7 @@ const Register = () => {
               archive: false
             })
           )
-          history.push('/users')
+          history.push('/dogs')
         },
         onFailure: (error) => {
           console.log(error)
@@ -142,7 +145,7 @@ const Register = () => {
   return (
     <div className="auth-container">
       {showLoader && <LoadingOverlay />}
-      <div className="auth-form">
+      <div className="auth-form" style={{ height: '500', overflow: 'auto' }}>
         <div>
           <div className="logo">
             <img className="logo-img" src="assets/icons/dog.png" />
@@ -154,40 +157,48 @@ const Register = () => {
               lastName: '',
               firstName: '',
               middleName: '',
+              suffix: '',
+              username: '',
               phone: '',
               address: '',
               password: '',
+              confirmPassword: '',
               role: 'user'
             }}
             validationSchema={schema}
             onSubmit={(values) => {
               setShowLoader(true)
               if (String(values?.phone)?.length === 10) {
-                dispatch(
-                  createAccountAction({
-                    data: {
-                      email: values?.email,
-                      password: values?.password
-                    },
-                    onSuccess: () => {
-                      delete values.password
-                      if (profile)
-                        onCreateUpload({
-                          ...values,
-                          phone: `0${values?.phone}`
-                        })
-                      else
-                        onCreateAccount({
-                          ...values,
-                          phone: `0${values?.phone}`
-                        })
-                    },
-                    onFailure: (error) => {
-                      setErrorMsg(error)
-                      setShowLoader(false)
-                    }
-                  })
-                )
+                if (values?.password === values?.confirmPassword) {
+                  dispatch(
+                    createAccountAction({
+                      data: {
+                        email: values?.email,
+                        password: values?.password
+                      },
+                      onSuccess: () => {
+                        delete values.confirmPassword
+                        if (profile)
+                          onCreateUpload({
+                            ...values,
+                            phone: `0${values?.phone}`
+                          })
+                        else
+                          onCreateAccount({
+                            ...values,
+                            phone: `0${values?.phone}`
+                          })
+                      },
+                      onFailure: (error) => {
+                        setErrorMsg(error)
+                        setShowLoader(false)
+                      }
+                    })
+                  )
+                } else {
+                  setShowLoader(false)
+                  setErrorMsg('Error: password should be match.')
+                }
               } else {
                 setShowLoader(false)
                 setErrorMsg('Error: phone number should be 11 digits.')
@@ -217,6 +228,19 @@ const Register = () => {
                   name="email"
                   type="email"
                   placeholder="Email"
+                />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Username
+                </label>
+                <div style={{ marginTop: 4 }} />
+                <TextField
+                  errors={errors}
+                  touched={touched}
+                  width={320}
+                  value={values?.username}
+                  id="username"
+                  name="username"
+                  placeholder="Username"
                 />
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                   First Name
@@ -267,6 +291,22 @@ const Register = () => {
                   placeholder="Middle Name"
                 />
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Suffix
+                </label>
+                <div style={{ marginTop: 4 }} />
+                <TextField
+                  errors={errors}
+                  touched={touched}
+                  width={320}
+                  value={
+                    values.suffix.charAt(0).toUpperCase() +
+                    values.suffix.slice(1)
+                  }
+                  id="suffix"
+                  name="suffix"
+                  placeholder="Suffix"
+                />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                   Phone
                 </label>
                 <div style={{ marginTop: 4 }} />
@@ -278,31 +318,23 @@ const Register = () => {
                   name="phone"
                   placeholder="Phone Number"
                   type="number"
-                  style={{ marginBottom: 0 }}
+                  style={{ marginBottom: 4 }}
                 />
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                   Address
                 </label>
                 <div style={{ marginTop: 4 }} />
-                <Field
+                <TextField
+                  errors={errors}
+                  touched={touched}
+                  width={320}
+                  value={
+                    values.address.charAt(0).toUpperCase() +
+                    values.address.slice(1)
+                  }
                   id="address"
                   name="address"
-                  render={() => (
-                    <div className="margin-b-10">
-                      <Select
-                        options={purokList}
-                        styles={selectStyles}
-                        placeholder="Select Address"
-                        value={values.address}
-                        onChange={(selected) =>
-                          setFieldValue('address', selected)
-                        }
-                      />
-                      {errors['address'] && touched['address'] && (
-                        <div className="label-error">{`Address is Required.`}</div>
-                      )}
-                    </div>
-                  )}
+                  placeholder="Address"
                 />
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                   Password
@@ -317,6 +349,19 @@ const Register = () => {
                   name="password"
                   placeholder="Password"
                 />
+                <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                  Confirm Password
+                </label>
+                <div style={{ marginTop: 4 }} />
+                <TextField
+                  type="password"
+                  errors={errors}
+                  touched={touched}
+                  width={320}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                />
                 <Button
                   id="sign-up"
                   type="submit"
@@ -327,7 +372,7 @@ const Register = () => {
             )}
           </Formik>
         </div>
-        <div>
+        <div style={{ marginTop: 4 }}>
           <span>
             <label>Already have an account?</label>
             <label onClick={() => history.push('/login')} className="register">

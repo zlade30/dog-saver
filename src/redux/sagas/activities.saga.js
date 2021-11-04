@@ -74,7 +74,7 @@ const handleGetActivityListQuery = (data) => {
       .collection('activities')
       .where('user.email', '==', data?.emailOwner)
   }
-  query = query.where('archive', '==', data.archive)
+  query = query.where('archive', '==', data.archive).orderBy('dateAdded', 'desc')
   return query.get()
 }
 

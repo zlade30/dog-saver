@@ -10,10 +10,11 @@ import moment from 'moment'
 import SurrenderDogModal from './SurrenderDogModal'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import { toast } from 'react-toastify'
-import { createDogAction, createDogImpoundAction } from 'redux/actions/dog.action'
+import { createDogAction, createDogImpoundAction, removeDogAction, removeDogImpoundAction } from 'redux/actions/dog.action'
 import { UserContext } from 'contexts/user.context'
 import ClaimDogModal from './ClaimDogModal'
 import { fire } from 'firebase'
+import AdoptDogModal from './AdoptDogModal'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -22,6 +23,7 @@ const Activities = () => {
   const [selectedActivity, setSelectedActivity] = useState({})
   const [showSurrenderDogModal, setShowSurrenderDogModal] = useState(false)
   const [showClaimDogModal, setShowClaimDogModal] = useState(false)
+  const [showAdoptionModal, setShowAdoptionModal] = useState(false)
 
   const { user } = useContext(UserContext)
 
@@ -44,6 +46,8 @@ const Activities = () => {
       setShowSurrenderDogModal(true)
     } else if (item?.type === 'claim') {
       setShowClaimDogModal(true)
+    } else if (item?.type === 'adoption') {
+      setShowAdoptionModal(true)
     }
   }
 
@@ -253,6 +257,18 @@ const Activities = () => {
               },
               onSuccess: () => {
                 dispatch(
+                  removeDogAction({
+                    data: {
+                      id: selectedActivity?.dog?.id,
+                      values: {
+                        archive: true
+                      }
+                    },
+                    onSuccess: () => {},
+                    onFailure: () => {}
+                  })
+                )
+                dispatch(
                   createDogImpoundAction({
                     data: {
                       ...selectedActivity?.dog,
@@ -371,6 +387,18 @@ const Activities = () => {
               },
               onSuccess: () => {
                 dispatch(
+                  removeDogImpoundAction({
+                    data: {
+                      id: selectedActivity?.dog?.id,
+                      values: {
+                        archive: true
+                      }
+                    },
+                    onSuccess: () => {},
+                    onFailure: () => {}
+                  })
+                )
+                dispatch(
                   createDogAction({
                     data: {
                       ...selectedActivity?.dog,
@@ -464,6 +492,140 @@ const Activities = () => {
               onFailure: () => {
                 setShowLoader(false)
                 setShowSurrenderDogModal(false)
+                toast.error('Activity update error.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+              }
+            })
+          )
+        }}
+      />
+      <AdoptDogModal
+        role={user?.role}
+        isOpen={showAdoptionModal}
+        onClose={() => setShowAdoptionModal(false)}
+        values={selectedActivity}
+        onApprove={() => {
+          setShowLoader(true)
+          dispatch(
+            updateActivityAction({
+              data: {
+                id: selectedActivity?.id,
+                values: { status: 'approved' }
+              },
+              onSuccess: () => {
+                dispatch(
+                  removeDogImpoundAction({
+                    data: {
+                      id: selectedActivity?.dog?.id,
+                      values: {
+                        archive: true
+                      }
+                    },
+                    onSuccess: () => {},
+                    onFailure: () => {}
+                  })
+                )
+                dispatch(
+                  createDogAction({
+                    data: {
+                      ...selectedActivity?.dog,
+                      owner: {
+                        label: `${selectedActivity?.user?.firstName} ${selectedActivity?.user?.lastName}`,
+                        value: selectedActivity?.user
+                      },
+                      archive: false,
+                      dateAdded: fire.firestore.Timestamp.now(),
+                      spayed: false
+                    },
+                    onSuccess: () => {
+                      setShowLoader(false)
+                      setShowAdoptionModal(false)
+                      setActivityList((prevList) =>
+                        prevList?.map((item) =>
+                          item?.id === selectedActivity?.id
+                            ? { ...item, status: 'approved' }
+                            : item
+                        )
+                      )
+                      toast.success('Activity updated successfully.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                    },
+                    onFailure: () => {
+                      setShowLoader(false)
+                      toast.error('Activity update failed.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                    }
+                  })
+                )
+              },
+              onFailure: () => {
+                setShowLoader(false)
+                setShowAdoptionModal(false)
+                toast.error('Activity update error.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+              }
+            })
+          )
+        }}
+        onReject={() => {
+          setShowLoader(true)
+          dispatch(
+            updateActivityAction({
+              data: {
+                id: selectedActivity?.id,
+                values: { status: 'rejected' }
+              },
+              onSuccess: () => {
+                setShowLoader(false)
+                setShowAdoptionModal(false)
+                setActivityList((prevList) =>
+                  prevList?.map((item) =>
+                    item?.id === selectedActivity?.id
+                      ? { ...item, status: 'rejected' }
+                      : item
+                  )
+                )
+                toast.success('Activity updated successfully.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+              },
+              onFailure: () => {
+                setShowLoader(false)
+                setShowAdoptionModal(false)
                 toast.error('Activity update error.', {
                   position: 'bottom-right',
                   autoClose: 3000,

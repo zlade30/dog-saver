@@ -16,7 +16,7 @@ const Login = () => {
   const dispatch = useDispatch()
 
   const schema = Yup.object().shape({
-    email: Yup.string().required('Required'),
+    username: Yup.string().required('Required'),
     password: Yup.string().required('Required')
   })
 
@@ -51,7 +51,7 @@ const Login = () => {
           </div>
           <Formik
             initialValues={{
-              email: '',
+              username: '',
               password: ''
             }}
             validationSchema={schema}
@@ -60,26 +60,41 @@ const Login = () => {
               dispatch(
                 signInAction({
                   data: values,
-                  onSuccess: () => {
-                    dispatch(
-                      getUserAction({
-                        data: { email: values?.email },
-                        onSuccess: (response) => {
-                          console.log(response)
-                          setShowLoader(false)
-                          setUser(response)
-                          localStorage.setItem(
-                            'authUser',
-                            JSON.stringify(response)
-                          )
-                          history.push('/users')
-                        },
-                        onFailure: (error) => {
-                          setShowLoader(false)
-                          setErrorMsg(error)
-                        }
-                      })
-                    )
+                  onSuccess: (response) => {
+                    if (response) {
+                      console.log(response)
+                      setShowLoader(false)
+                      setUser(response)
+                      localStorage.setItem('authUser', JSON.stringify(response))
+                      if (response?.role === 'admin') history.push('/users')
+                      else history?.push('/dogs')
+                    } else {
+                      setShowLoader(false)
+                      setErrorMsg(
+                        'Account did not exist or password is incorrect.'
+                      )
+                    }
+                    console.log(response)
+                    // dispatch(
+                    //   getUserAction({
+                    //     data: { email: values?.email },
+                    //     onSuccess: (response) => {
+                    //       console.log(response)
+                    //       setShowLoader(false)
+                    //       setUser(response)
+                    //       localStorage.setItem(
+                    //         'authUser',
+                    //         JSON.stringify(response)
+                    //       )
+                    //       if (response?.role === 'admin') history.push('/users')
+                    //       else history?.push('/dogs')
+                    //     },
+                    //     onFailure: (error) => {
+                    //       setShowLoader(false)
+                    //       setErrorMsg(error)
+                    //     }
+                    //   })
+                    // )
                   },
                   onFailure: (error) => {
                     setShowLoader(false)
@@ -115,17 +130,16 @@ const Login = () => {
                   />
                 )}
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
-                  Email
+                  Username
                 </label>
                 <div style={{ marginTop: 4 }} />
                 <TextField
                   errors={errors}
                   touched={touched}
                   width={320}
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="Email"
+                  id="username"
+                  name="username"
+                  placeholder="Username"
                 />
                 <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                   Password

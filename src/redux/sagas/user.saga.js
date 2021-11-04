@@ -127,8 +127,12 @@ function* signIn(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
 
   const response = yield call(
-    signUp,
-    auth.signInWithEmailAndPassword(data?.email, data?.password)
+    get,
+    firestore
+      .collection('users')
+      .where('username', '==', data?.username)
+      .where('password', '==', data?.password)
+      .get()
   )
 
   if (response?.isSuccess) {

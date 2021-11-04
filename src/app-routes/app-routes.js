@@ -21,58 +21,60 @@ const AppRoutes = ({ history }) => {
   const path = history?.location?.pathname
 
   useEffect(() => {
-    const listener = auth.onAuthStateChanged((authUser) => {
-      if (authUser) {
-        // console.log(JSON.parse(JSON.stringify(authUser)))
-        const currentUser = JSON.parse(JSON.stringify(authUser))
-        // console.log(currentUser?.email)
-        if (!currentUser) {
-          dispatch(
-            getUserAction({
-              data: { email: currentUser?.email },
-              onSuccess: (response) => setUser(response),
-              onFailure: (error) => console.log(error)
-            })
-          )
-          if (
-            path === '/login' ||
-            path === '/register' ||
-            path === '/forgot-password' ||
-            path === '/'
-          )
-            history.push('/users')
-          localStorage.setItem('authUser', JSON.stringify(user))
-        }
-
-        if (path === '/') {
-          dispatch(
-            getUserAction({
-              data: { email: currentUser?.email },
-              onSuccess: (response) => {
-                setUser(response)
-                history.push('/users')
-              },
-              onFailure: (error) => console.log(error)
-            })
-          )
-        }
-      } else {
-        localStorage.removeItem('authUser')
-        setUser(null)
-        if (path === '/') history.push('/login')
-        else if (path === '/about-us') history?.push('/about-us')
-        else if (path === '/impound') history?.push('/impound')
-        else history.push('/login')
+    console.log(localStorage.getItem('authUser'))
+    const authUser = JSON.parse(localStorage.getItem('authUser')) || {}
+    if (Object.keys(authUser).length > 0) {
+      // console.log(JSON.parse(JSON.stringify(authUser)))
+      const currentUser = JSON.parse(JSON.stringify(authUser))
+      // console.log(currentUser?.email)
+      if (!currentUser) {
+        dispatch(
+          getUserAction({
+            data: { email: currentUser?.email },
+            onSuccess: (response) => {
+              if (
+                path === '/login' ||
+                path === '/register' ||
+                path === '/forgot-password' ||
+                path === '/'
+              ) {
+                if (response?.role === 'admin') history.push('/users')
+                else history.push('/dogs')
+              }
+              setUser(response)
+            },
+            onFailure: (error) => console.log(error)
+          })
+        )
+        localStorage.setItem('authUser', JSON.stringify(user))
       }
-    })
 
-    return () => listener?.()
+      if (path === '/') {
+        dispatch(
+          getUserAction({
+            data: { email: currentUser?.email },
+            onSuccess: (response) => {
+              setUser(response)
+              if (response?.role === 'admin') history.push('/users')
+              else history.push('/dogs')
+            },
+            onFailure: (error) => console.log(error)
+          })
+        )
+      }
+    } else {
+      localStorage.removeItem('authUser')
+      setUser(null)
+      if (path === '/') history.push('/login')
+      else if (path === '/about-us') history?.push('/about-us')
+      else if (path === '/impound') history?.push('/impound')
+      else history.push('/login')
+    }
   }, [])
 
   const onLogout = () => {
     setShowLoader(true)
     setTimeout(() => {
-      auth.signOut()
       setUser(null)
       setShowLoader(false)
       history.push('/login')

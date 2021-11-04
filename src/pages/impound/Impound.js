@@ -341,6 +341,7 @@ const Impound = () => {
           data: {
             user,
             dog: {
+              id: formValues?.id,
               profile: formValues?.profile,
               color: formValues?.color,
               breed: formValues?.breed,
@@ -391,6 +392,54 @@ const Impound = () => {
         progress: undefined
       })
     }
+  }
+
+  const onSendAdoptForm = (values) => {
+    dispatch(
+      createActivityAction({
+        data: {
+          user,
+          dog: {
+            id: formValues?.id,
+            profile: formValues?.profile,
+            color: formValues?.color,
+            breed: formValues?.breed,
+            gender: formValues?.gender
+          },
+          adoptionForm: values,
+          status: 'pending',
+          dateAdded: new Date(),
+          archive: false,
+          type: 'adoption'
+        },
+        onSuccess: async () => {
+          setShowLoader(false)
+          toast.success('Activity sent successfully.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+          setIsOpenAdoptModal(false)
+        },
+        onFailure: () => {
+          setShowLoader(false)
+          setIsOpenAdoptModal(false)
+          toast.error('Activity send failed.', {
+            position: 'bottom-right',
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined
+          })
+        }
+      })
+    )
   }
 
   const handleYesAction = () => {
@@ -530,8 +579,9 @@ const Impound = () => {
         onSendForm={onSendForm}
       />
       <AdoptModal
-        isOpen={true}
+        isOpen={isOpenAdoptModal}
         onClose={() => setIsOpenAdoptModal(false)}
+        onSendForm={onSendAdoptForm}
       />
       <ConfirmationModal
         isOpen={showConfirmModal}
