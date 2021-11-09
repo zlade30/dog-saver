@@ -32,7 +32,12 @@ const SurrenderDogModal = ({
   onClose,
   values,
   onApprove,
-  onReject
+  onReject,
+  setShowViewDogImagesModal,
+  setDogImage1,
+  setDogImage2,
+  setDogImage3,
+  setDogImage4
 }) => {
   return (
     <ReactModal
@@ -66,7 +71,56 @@ const SurrenderDogModal = ({
             flexDirection: 'column',
             paddingTop: 40
           }}>
-          <AvatarSelection src={values?.dog?.profile} isClickable={false} />
+          <div
+            style={{
+              width: '80%',
+              height: 200,
+              borderRadius: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}
+            onClick={() => {
+              console.log(values)
+              setDogImage1(values?.dog?.profile[0])
+              setDogImage2(values?.dog?.profile[1])
+              setDogImage3(values?.dog?.profile[2])
+              setDogImage4(values?.dog?.profile[3])
+              setShowViewDogImagesModal(true)
+            }}>
+            <img
+              style={{
+                width: '100%',
+                height: 200,
+                borderRadius: 12,
+                objectFit: 'contain',
+                cursor: 'pointer'
+              }}
+              src={values?.dog?.profile[0]}
+            />
+            <div
+              style={{
+                width: '100%',
+                height: 200,
+                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 1,
+                position: 'absolute'
+              }}
+            />
+            <label
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: 'white',
+                position: 'absolute',
+                zIndex: 2
+              }}>{`+3`}</label>
+          </div>
           <div className="flex items-center w-full">
             <PaintFillIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
@@ -161,7 +215,12 @@ SurrenderDogModal.propTypes = {
   values: PropTypes.object.isRequired,
   onApprove: PropTypes.func.isRequired,
   onReject: PropTypes.func.isRequired,
-  role: PropTypes.string.isRequired
+  role: PropTypes.string.isRequired,
+  setDogImage1: PropTypes.func.isRequired,
+  setDogImage2: PropTypes.func.isRequired,
+  setDogImage3: PropTypes.func.isRequired,
+  setDogImage4: PropTypes.func.isRequired,
+  setShowViewDogImagesModal: PropTypes.func.isRequired
 }
 
 export default SurrenderDogModal

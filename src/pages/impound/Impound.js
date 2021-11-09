@@ -25,6 +25,8 @@ import Header from 'components/headers/Header'
 import InformationModal from 'components/modal/InformationModal'
 import SurrenderForm from './SurrenderForm'
 import { createActivityAction } from 'redux/actions/activities.action'
+import DogImagesModal from 'components/modal/DogImagesModal'
+import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -43,7 +45,7 @@ const DogIcon = ({ color = '#334D67' }) => (
 const Impound = () => {
   const dispatch = useDispatch()
   const initialFormValues = {
-    profile: '',
+    profile: [],
     color: '',
     breed: '',
     gender: '',
@@ -55,6 +57,12 @@ const Impound = () => {
     owner: null,
     dateAdded: fire.firestore.Timestamp.now()
   }
+  const [showViewDogImagesModal, setShowViewDogImagesModal] = useState(false)
+  const [showDogImagesModal, setShowDogImagesModal] = useState(false)
+  const [dogImage1, setDogImage1] = useState()
+  const [dogImage2, setDogImage2] = useState()
+  const [dogImage3, setDogImage3] = useState()
+  const [dogImage4, setDogImage4] = useState()
   const [showLoader, setShowLoader] = useState(false)
   const [dogImpoundList, setDogImpoundList] = useState([])
   const [showImpoundModal, setShowImpoundModal] = useState(false)
@@ -97,50 +105,28 @@ const Impound = () => {
     setShowLoader(true)
     if (!isUpdate) {
       dispatch(
-        uploadDogImageAction({
-          data: { file: values?.profile },
-          onSuccess: (response) => {
-            if (!isUpdate) {
-              dispatch(
-                createDogImpoundAction({
-                  data: { ...values, profile: response?.data },
-                  onSuccess: async (dog) => {
-                    setShowLoader(false)
-                    setDogImpoundList((prevList) => [
-                      { ...values, profile: response?.data, id: dog?.data },
-                      ...prevList
-                    ])
-                    toast.success('Dog created successfully.', {
-                      position: 'bottom-right',
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined
-                    })
-                    setShowImpoundModal(false)
-                  },
-                  onFailure: () => {
-                    setShowLoader(false)
-                    toast.error('Dog creation failed.', {
-                      position: 'bottom-right',
-                      autoClose: 3000,
-                      hideProgressBar: false,
-                      closeOnClick: true,
-                      pauseOnHover: true,
-                      draggable: true,
-                      progress: undefined
-                    })
-                  }
-                })
-              )
-            }
-          },
-          onFailure: (error) => {
+        createDogImpoundAction({
+          data: values,
+          onSuccess: async (response) => {
             setShowLoader(false)
-            setErrorMsg(error)
-            toast.error('User creation failed.', {
+            setDogImpoundList((prevList) => [
+              { ...values, id: response?.id, profile: response?.profile },
+              ...prevList
+            ])
+            toast.success('Dog created successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowImpoundModal(false)
+          },
+          onFailure: () => {
+            setShowLoader(false)
+            toast.error('Dog creation failed.', {
               position: 'bottom-right',
               autoClose: 3000,
               hideProgressBar: false,
@@ -153,101 +139,44 @@ const Impound = () => {
         })
       )
     } else {
-      if (formValues?.profile === values?.profile) {
-        dispatch(
-          updateDogImpoundAction({
-            data: {
-              id: dogId,
-              values
-            },
-            onSuccess: () => {
-              setShowLoader(false)
-              setDogImpoundList((prevList) =>
-                prevList?.map((item) => (item?.id === dogId ? values : item))
+      dispatch(
+        updateDogImpoundAction({
+          data: {
+            id: dogId,
+            values
+          },
+          onSuccess: (profiles) => {
+            setShowLoader(false)
+            setDogImpoundList((prevList) =>
+              prevList?.map((item) =>
+                item?.id === dogId ? { ...values, profile: profiles } : item
               )
-              toast.success('Dog updated successfully.', {
-                position: 'bottom-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined
-              })
-              setShowImpoundModal(false)
-            },
-            onFailure: () => {
-              setShowLoader(false)
-              toast.error('Dog update failed.', {
-                position: 'bottom-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined
-              })
-            }
-          })
-        )
-      } else {
-        dispatch(
-          uploadDogImageAction({
-            data: { file: values?.profile },
-            onSuccess: (response) => {
-              if (!isUpdate) {
-                dispatch(
-                  createDogImpoundAction({
-                    data: { ...values, profile: response?.data },
-                    onSuccess: async (dog) => {
-                      setShowLoader(false)
-                      setDogImpoundList((prevList) => [
-                        { ...values, profile: response?.data, id: dog?.data },
-                        ...prevList
-                      ])
-                      toast.success('Dog created successfully.', {
-                        position: 'bottom-right',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined
-                      })
-                      setShowImpoundModal(false)
-                    },
-                    onFailure: () => {
-                      setShowLoader(false)
-                      toast.error('Dog creation failed.', {
-                        position: 'bottom-right',
-                        autoClose: 3000,
-                        hideProgressBar: false,
-                        closeOnClick: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        progress: undefined
-                      })
-                    }
-                  })
-                )
-              }
-            },
-            onFailure: (error) => {
-              setShowLoader(false)
-              setErrorMsg(error)
-              toast.error('User creation failed.', {
-                position: 'bottom-right',
-                autoClose: 3000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined
-              })
-            }
-          })
-        )
-      }
+            )
+            toast.success('Dog updated successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+            setShowImpoundModal(false)
+          },
+          onFailure: () => {
+            setShowLoader(false)
+            toast.error('Dog update failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+      )
     }
   }
 
@@ -539,6 +468,11 @@ const Impound = () => {
         isOpen={isOpenViewImpoundModal}
         values={formValues}
         onClose={() => setIsOpenViewImpoundModal(false)}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
       />
       <OptionModal
         isOpen={isOpenOptionModal}
@@ -613,7 +547,39 @@ const Impound = () => {
         onSubmit={onSubmit}
         setErrorMsg={setErrorMsg}
         onClose={() => setShowImpoundModal(false)}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowDogImagesModal={setShowDogImagesModal}
         isUpdate={isUpdate}
+      />
+      <DogImagesModal
+        onSave={() => {
+          setFormValues({
+            ...formValues,
+            profile: [dogImage1, dogImage2, dogImage3, dogImage4]
+          })
+          setShowDogImagesModal(false)
+        }}
+        dogImage1={dogImage1}
+        dogImage2={dogImage2}
+        dogImage3={dogImage3}
+        dogImage4={dogImage4}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        isOpen={showDogImagesModal}
+        onClose={() => setShowDogImagesModal(false)}
+      />
+      <ViewDogImagesModal
+        dogImage1={dogImage1}
+        dogImage2={dogImage2}
+        dogImage3={dogImage3}
+        dogImage4={dogImage4}
+        isOpen={showViewDogImagesModal}
+        onClose={() => setShowViewDogImagesModal(false)}
       />
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>

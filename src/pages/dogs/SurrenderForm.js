@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -10,6 +10,7 @@ import ErrorAlert from 'components/alerts/ErrorAlert'
 import Button from 'components/buttons/Button'
 import { selectStyles } from 'utils/helpers'
 import Select from 'react-select'
+import ImageLineIcon from 'remixicon-react/ImageLineIcon'
 
 const SurrenderForm = ({
   isOpen,
@@ -17,16 +18,33 @@ const SurrenderForm = ({
   onSubmit,
   dogList,
   errorMsg,
-  setErrorMsg
+  setErrorMsg,
+  setShowViewDogImagesModal,
+  setDogImage1,
+  setDogImage2,
+  setDogImage3,
+  setDogImage4
 }) => {
   const [selected, setSelected] = useState({})
   const [isSubmit, setIsSubmit] = useState(false)
   const [formValues, setFormValues] = useState({
-    profile: '',
+    profile: [],
     color: '',
     breed: '',
     gender: ''
   })
+
+  useEffect(() => {
+    if (isOpen) {
+      setSelected({})
+      setFormValues({
+        profile: [],
+        color: '',
+        breed: '',
+        gender: ''
+      })
+    }
+  }, [isOpen])
 
   return (
     <ReactModal
@@ -89,19 +107,73 @@ const SurrenderForm = ({
                 id="profile"
                 name="profile"
                 render={() => (
-                  <div className="margin-b-10">
-                    <AvatarSelection
-                      src={formValues?.profile}
-                      setImg={(value) => setFieldValue('profile', value)}
-                      isClickable={false}
-                    />
-                    {errors['profile'] && touched['profile'] && (
+                  <div className="margin-b-10 cursor-pointer">
+                    {formValues?.profile?.length > 0 ? (
                       <div
-                        className="label-error"
                         style={{
                           width: '100%',
-                          textAlign: 'center'
-                        }}>{`Profile Image is Required.`}</div>
+                          height: 200,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          position: 'relative'
+                        }}
+                        onClick={() => {
+                          console.log(formValues?.profile[0])
+                          setDogImage1(formValues?.profile[0])
+                          setDogImage2(formValues?.profile[1])
+                          setDogImage3(formValues?.profile[2])
+                          setDogImage4(formValues?.profile[3])
+                          setShowViewDogImagesModal(true)
+                        }}>
+                        <img
+                          style={{
+                            width: '100%',
+                            height: 200,
+                            borderRadius: 12,
+                            objectFit: 'contain',
+                            cursor: 'pointer'
+                          }}
+                          src={formValues?.profile[0]}
+                        />
+                        <div
+                          style={{
+                            width: '100%',
+                            height: 200,
+                            borderRadius: 8,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            zIndex: 1,
+                            position: 'absolute'
+                          }}
+                        />
+                        <label
+                          style={{
+                            fontSize: 24,
+                            fontWeight: 'bold',
+                            color: 'white',
+                            position: 'absolute',
+                            zIndex: 2
+                          }}>{`+3`}</label>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}>
+                        <ImageLineIcon
+                          className="cursor-pointer"
+                          size={100}
+                        />
+                      </div>
                     )}
                   </div>
                 )}
@@ -192,7 +264,12 @@ SurrenderForm.propTypes = {
   errorMsg: PropTypes.string.isRequired,
   setErrorMsg: PropTypes.func.isRequired,
   onSurrender: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired
+  initialValues: PropTypes.object.isRequired,
+  setDogImage1: PropTypes.func.isRequired,
+  setDogImage2: PropTypes.func.isRequired,
+  setDogImage3: PropTypes.func.isRequired,
+  setDogImage4: PropTypes.func.isRequired,
+  setShowViewDogImagesModal: PropTypes.func.isRequired
 }
 
 export default SurrenderForm

@@ -32,13 +32,13 @@ const Register = () => {
   const [purokList, setPurokList] = useState([])
 
   const schema = Yup.object().shape({
-    email: Yup.string().required('Required'),
+    email: Yup.string().notRequired(),
     username: Yup.string().required('Required'),
     lastName: Yup.string().required('Required'),
     firstName: Yup.string().required('Required'),
     middleName: Yup.string().notRequired(),
     suffix: Yup.string().notRequired(),
-    phone: Yup.string().required('Required'),
+    phone: Yup.string().notRequired(),
     address: Yup.string().required('Required'),
     password: Yup.string().required('Required'),
     confirmPassword: Yup.string().required('Required')
@@ -168,8 +168,8 @@ const Register = () => {
             validationSchema={schema}
             onSubmit={(values) => {
               setShowLoader(true)
-              if (String(values?.phone)?.length === 10) {
-                if (values?.password === values?.confirmPassword) {
+              if (values?.password === values?.confirmPassword) {
+                if (values.email) {
                   dispatch(
                     createAccountAction({
                       data: {
@@ -196,12 +196,21 @@ const Register = () => {
                     })
                   )
                 } else {
-                  setShowLoader(false)
-                  setErrorMsg('Error: password should be match.')
+                  delete values.confirmPassword
+                  if (profile)
+                    onCreateUpload({
+                      ...values,
+                      phone: `0${values?.phone}`
+                    })
+                  else
+                    onCreateAccount({
+                      ...values,
+                      phone: `0${values?.phone}`
+                    })
                 }
               } else {
                 setShowLoader(false)
-                setErrorMsg('Error: phone number should be 11 digits.')
+                setErrorMsg('Error: password should be match.')
               }
             }}
             validator={() => ({})}>

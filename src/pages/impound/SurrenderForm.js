@@ -19,7 +19,12 @@ const SurrenderForm = ({
   onSubmit,
   errorMsg,
   setErrorMsg,
-  initialValues
+  initialValues,
+  setShowViewDogImagesModal,
+  setDogImage1,
+  setDogImage2,
+  setDogImage3,
+  setDogImage4
 }) => {
   const dispatch = useDispatch()
 
@@ -82,19 +87,57 @@ const SurrenderForm = ({
                 id="profile"
                 name="profile"
                 render={() => (
-                  <div className="margin-b-10">
-                    <AvatarSelection
-                      src={initialValues?.profile}
-                      setImg={(value) => setFieldValue('profile', value)}
-                    />
-                    {errors['profile'] && touched['profile'] && (
-                      <div
-                        className="label-error"
+                  <div className="margin-b-10 cursor-pointer">
+                    <div
+                      style={{
+                        width: '100%',
+                        height: 200,
+                        borderRadius: 8,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        position: 'relative'
+                      }}
+                      onClick={() => {
+                        console.log(values?.profile[0])
+                        setDogImage1(values?.profile[0])
+                        setDogImage2(values?.profile[1])
+                        setDogImage3(values?.profile[2])
+                        setDogImage4(values?.profile[3])
+                        setShowViewDogImagesModal(true)
+                      }}>
+                      <img
                         style={{
                           width: '100%',
-                          textAlign: 'center'
-                        }}>{`Profile Image is Required.`}</div>
-                    )}
+                          height: 200,
+                          borderRadius: 12,
+                          objectFit: 'contain',
+                          cursor: 'pointer'
+                        }}
+                        src={values?.profile[0]}
+                      />
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: 'rgba(0,0,0,0.5)',
+                          zIndex: 1,
+                          position: 'absolute'
+                        }}
+                      />
+                      <label
+                        style={{
+                          fontSize: 24,
+                          fontWeight: 'bold',
+                          color: 'white',
+                          position: 'absolute',
+                          zIndex: 2
+                        }}>{`+3`}</label>
+                    </div>
                   </div>
                 )}
               />
@@ -180,7 +223,12 @@ SurrenderForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   errorMsg: PropTypes.string.isRequired,
   setErrorMsg: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired
+  initialValues: PropTypes.object.isRequired,
+  setDogImage1: PropTypes.func.isRequired,
+  setDogImage2: PropTypes.func.isRequired,
+  setDogImage3: PropTypes.func.isRequired,
+  setDogImage4: PropTypes.func.isRequired,
+  setShowViewDogImagesModal: PropTypes.func.isRequired
 }
 
 export default SurrenderForm

@@ -1,4 +1,4 @@
-import { firestore } from 'firebase'
+import { firestore, storage } from 'firebase'
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import {
   deconstructSagaPayload,
@@ -139,12 +139,42 @@ function* getDogBreeds(action) {
   }
 }
 
+const upload = async (payload) => {
+  try {
+    const result = await payload
+    const url = await result.ref.getDownloadURL()
+    console.log(url)
+    return { isSuccess: true, data: url }
+  } catch (error) {
+    return { isSuccess: false, data: error }
+  }
+}
+
 function* createDog(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
-  const response = yield call(create, firestore.collection('dogs').add(data))
+
+  let profiles = []
+
+  for (let i = 0; i < data?.profile?.length; i++) {
+    let profile = data?.profile[i]
+    const ref = storage
+      .ref()
+      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+    const res = yield call(
+      upload,
+      ref.put(profile, { contentType: 'image/jpeg' })
+    )
+    profiles = [...profiles, res?.data]
+    console.log(profiles)
+  }
+
+  const response = yield call(
+    create,
+    firestore.collection('dogs').add({ ...data, profile: profiles })
+  )
   if (response?.isSuccess) {
     yield put(createDogActionSuccess(response?.data))
-    yield call(onSuccess, response?.data)
+    yield call(onSuccess, { id: response?.data, profile: profiles })
   } else {
     yield put(createDogActionFailed('Error creating dog'))
     yield call(onFailure, 'Error creating dog!')
@@ -153,13 +183,32 @@ function* createDog(action) {
 
 function* updateDog(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+
+  let profiles = []
+
+  for (let i = 0; i < data?.values?.profile?.length; i++) {
+    let profile = data?.values?.profile[i]
+    const ref = storage
+      .ref()
+      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+    let res = { data: '' }
+    if (typeof profile !== 'string') {
+      res = yield call(upload, ref.put(profile, { contentType: 'image/jpeg' }))
+    }
+    profiles = [...profiles, typeof profile === 'string' ? profile : res?.data]
+  }
+
+  console.log(profiles)
+
   const response = yield call(
     update,
-    firestore.doc(`dogs/${data?.id}`).update(data?.values)
+    firestore
+      .doc(`dogs/${data?.id}`)
+      .update({ ...data?.values, profile: profiles })
   )
   if (response?.isSuccess) {
     yield put(updateDogActionSuccess(response))
-    yield call(onSuccess, response)
+    yield call(onSuccess, profiles)
   } else {
     yield put(updateDogActionFailed('Error updating dog'))
     yield call(onFailure, 'Error updating dog!')
@@ -183,22 +232,28 @@ function* removeDog(action) {
 
 function* createDogImpound(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
-  const createDogImpoundCall = async (payload) => {
-    try {
-      const result = await payload
-      return { isSuccess: true, data: result.id }
-    } catch (error) {
-      return { isSuccess: false, data: error }
-    }
+  let profiles = []
+
+  for (let i = 0; i < data?.profile?.length; i++) {
+    let profile = data?.profile[i]
+    const ref = storage
+      .ref()
+      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+    const res = yield call(
+      upload,
+      ref.put(profile, { contentType: 'image/jpeg' })
+    )
+    profiles = [...profiles, res?.data]
+    console.log(profiles)
   }
 
   const response = yield call(
-    createDogImpoundCall,
-    firestore.collection('dog-impound').add(data)
+    create,
+    firestore.collection('dog-impound').add({ ...data, profile: profiles })
   )
   if (response) {
     yield put(createDogImpoundActionSuccess(response))
-    yield call(onSuccess, response)
+    yield call(onSuccess, { id: response?.data, profile: profiles })
   } else {
     yield put(createDogImpoundActionFailed('Error creating dog!'))
     yield call(onFailure, 'Error creating dog!')
@@ -207,22 +262,31 @@ function* createDogImpound(action) {
 
 function* updateDogImpound(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
-  const updateDogImpoundCall = async (payload) => {
-    try {
-      const result = await payload
-      return { isSuccess: true, data: result }
-    } catch (error) {
-      return { isSuccess: false, data: error }
+  let profiles = []
+
+  for (let i = 0; i < data?.values?.profile?.length; i++) {
+    let profile = data?.values?.profile[i]
+    const ref = storage
+      .ref()
+      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+    let res = { data: '' }
+    if (typeof profile !== 'string') {
+      res = yield call(upload, ref.put(profile, { contentType: 'image/jpeg' }))
     }
+    profiles = [...profiles, typeof profile === 'string' ? profile : res?.data]
   }
 
+  console.log(profiles)
+
   const response = yield call(
-    updateDogImpoundCall,
-    firestore.doc(`dog-impound/${data?.id}`).update(data?.values)
+    update,
+    firestore
+      .doc(`dog-impound/${data?.id}`)
+      .update({ ...data?.values, profile: profiles })
   )
   if (response) {
     yield put(updateDogImpoundActionSuccess(response))
-    yield call(onSuccess, response)
+    yield call(onSuccess, profiles)
   } else {
     yield put(updateDogImpoundActionFailed('Error updating dog!'))
     yield call(onFailure, 'Error updating dog!')

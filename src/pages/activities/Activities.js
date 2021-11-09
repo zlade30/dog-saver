@@ -10,11 +10,17 @@ import moment from 'moment'
 import SurrenderDogModal from './SurrenderDogModal'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import { toast } from 'react-toastify'
-import { createDogAction, createDogImpoundAction, removeDogAction, removeDogImpoundAction } from 'redux/actions/dog.action'
+import {
+  createDogAction,
+  createDogImpoundAction,
+  removeDogAction,
+  removeDogImpoundAction
+} from 'redux/actions/dog.action'
 import { UserContext } from 'contexts/user.context'
 import ClaimDogModal from './ClaimDogModal'
 import { fire } from 'firebase'
 import AdoptDogModal from './AdoptDogModal'
+import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -24,6 +30,11 @@ const Activities = () => {
   const [showSurrenderDogModal, setShowSurrenderDogModal] = useState(false)
   const [showClaimDogModal, setShowClaimDogModal] = useState(false)
   const [showAdoptionModal, setShowAdoptionModal] = useState(false)
+  const [showViewDogImagesModal, setShowViewDogImagesModal] = useState(false)
+  const [dogImage1, setDogImage1] = useState()
+  const [dogImage2, setDogImage2] = useState()
+  const [dogImage3, setDogImage3] = useState()
+  const [dogImage4, setDogImage4] = useState()
 
   const { user } = useContext(UserContext)
 
@@ -41,6 +52,7 @@ const Activities = () => {
   }
 
   const handleView = (item) => {
+    console.log(item)
     setSelectedActivity(item)
     if (item?.type === 'surrender') {
       setShowSurrenderDogModal(true)
@@ -247,6 +259,11 @@ const Activities = () => {
         isOpen={showSurrenderDogModal}
         onClose={() => setShowSurrenderDogModal(false)}
         values={selectedActivity}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
         onApprove={() => {
           setShowLoader(true)
           dispatch(
@@ -639,6 +656,14 @@ const Activities = () => {
             })
           )
         }}
+      />
+      <ViewDogImagesModal
+        dogImage1={dogImage1}
+        dogImage2={dogImage2}
+        dogImage3={dogImage3}
+        dogImage4={dogImage4}
+        isOpen={showViewDogImagesModal}
+        onClose={() => setShowViewDogImagesModal(false)}
       />
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>

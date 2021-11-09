@@ -29,7 +29,17 @@ const DogIcon = ({ color = '#334D67' }) => (
 const DogAvatarCard = ({ value, onUpdate, onRemove, onRestore }) => {
   return (
     <div className="user-card">
-      <Avatar src={value?.profile} width={70} height={70} />
+      <img
+        style={{
+          width: 180,
+          height: 90,
+          borderRadius: 12,
+          objectFit: 'contain',
+          cursor: 'pointer',
+          marginBottom: 4
+        }}
+        src={value?.profile[0]}
+      />
       <label className="user-card-name">{value?.name}</label>
       <Divider width="100%" />
       <div className="user-card-info">

@@ -5,7 +5,6 @@ import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
-import AvatarSelection from 'components/avatar/AvatarSelection'
 import PaintFillIcon from 'remixicon-react/PaintFillIcon'
 import moment from 'moment'
 import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
@@ -26,7 +25,16 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
+const ViewImpoundDogModal = ({
+  isOpen,
+  onClose,
+  values,
+  setShowViewDogImagesModal,
+  setDogImage1,
+  setDogImage2,
+  setDogImage3,
+  setDogImage4
+}) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -59,7 +67,55 @@ const ViewImpoundDogModal = ({ isOpen, onClose, values }) => {
             flexDirection: 'column',
             paddingTop: 40
           }}>
-          <AvatarSelection src={values?.profile} isClickable={false} />
+          <div
+            style={{
+              width: '80%',
+              height: 200,
+              borderRadius: 8,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              position: 'relative'
+            }}
+            onClick={() => {
+              setDogImage1(values?.profile[0])
+              setDogImage2(values?.profile[1])
+              setDogImage3(values?.profile[2])
+              setDogImage4(values?.profile[3])
+              setShowViewDogImagesModal(true)
+            }}>
+            <img
+              style={{
+                width: '100%',
+                height: 200,
+                borderRadius: 12,
+                objectFit: 'contain',
+                cursor: 'pointer'
+              }}
+              src={values?.profile[0]}
+            />
+            <div
+              style={{
+                width: '100%',
+                height: 200,
+                borderRadius: 8,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                backgroundColor: 'rgba(0,0,0,0.5)',
+                zIndex: 1,
+                position: 'absolute'
+              }}
+            />
+            <label
+              style={{
+                fontSize: 24,
+                fontWeight: 'bold',
+                color: 'white',
+                position: 'absolute',
+                zIndex: 2
+              }}>{`+3`}</label>
+          </div>
           <div className="flex items-center w-full">
             <PaintFillIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
@@ -155,7 +211,12 @@ ViewImpoundDogModal.defaultProps = {
 ViewImpoundDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  values: PropTypes.object.isRequired
+  values: PropTypes.object.isRequired,
+  setDogImage1: PropTypes.func.isRequired,
+  setDogImage2: PropTypes.func.isRequired,
+  setDogImage3: PropTypes.func.isRequired,
+  setDogImage4: PropTypes.func.isRequired,
+  setShowViewDogImagesModal: PropTypes.func.isRequired
 }
 
 export default ViewImpoundDogModal

@@ -1,13 +1,11 @@
 import Divider from 'components/divider/Divider'
 import React from 'react'
-import Avatar from './Avatar'
 import PropTypes from 'prop-types'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 import PaintFill from 'remixicon-react/PaintFillIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
-import SyringeLineIcon from 'remixicon-react/SyringeLineIcon'
 
 import moment from 'moment'
 import Select from 'components/icons/Select'
@@ -40,7 +38,17 @@ const DogImpoundCard = ({
 }) => {
   return (
     <div className="user-card">
-      <Avatar src={value?.profile} width={70} height={70} />
+      <img
+        style={{
+          width: 180,
+          height: 90,
+          borderRadius: 12,
+          objectFit: 'contain',
+          cursor: 'pointer',
+          marginBottom: 4
+        }}
+        src={value?.profile[0]}
+      />
       <label className="user-card-name">{value?.name}</label>
       <Divider width="100%" />
       <div className="user-card-info">
@@ -70,9 +78,7 @@ const DogImpoundCard = ({
           <div className="user-card-label">
             <MapPinLineIcon size={18} />
           </div>
-          <label className="user-card-value">
-            {value?.locationCaught?.label}
-          </label>
+          <label className="user-card-value">{value?.locationCaught}</label>
         </div>
         <div className="flex">
           <div className="user-card-label">

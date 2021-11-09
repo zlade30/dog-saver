@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import ImageAddLineIcon from 'remixicon-react/ImageAddLineIcon'
 import AvatarSelection from 'components/avatar/AvatarSelection'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
@@ -30,7 +31,12 @@ const DogForm = ({
   errorMsg,
   setErrorMsg,
   initialValues,
-  isUpdate
+  isUpdate,
+  setShowDogImagesModal,
+  setDogImage1,
+  setDogImage2,
+  setDogImage3,
+  setDogImage4
 }) => {
   const dispatch = useDispatch()
 
@@ -42,7 +48,7 @@ const DogForm = ({
   const schema = Yup.object().shape({
     owner: Yup.object().required('Required').nullable(),
     ownerAddress: Yup.string(),
-    profile: Yup.mixed().required('Required').nullable(),
+    profile: Yup.array().required('Required').nullable(),
     name: Yup.string().required('Required'),
     color: Yup.string().required('Required'),
     breed: Yup.string().required('Required'),
@@ -98,7 +104,9 @@ const DogForm = ({
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
-          onSubmit={onSubmit}
+          onSubmit={(values) =>
+            onSubmit({ ...values, profile: initialValues?.profile })
+          }
           validator={() => ({})}>
           {({ errors, touched, setFieldValue, values }) => (
             <Form>
@@ -112,18 +120,92 @@ const DogForm = ({
                 id="profile"
                 name="profile"
                 render={() => (
-                  <div className="margin-b-10">
-                    <AvatarSelection
-                      src={initialValues?.profile}
-                      setImg={(value) => setFieldValue('profile', value)}
-                    />
-                    {errors['profile'] && touched['profile'] && (
+                  <div className="margin-b-10 cursor-pointer">
+                    {initialValues?.profile?.length > 0 ? (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          position: 'relative'
+                        }}
+                        onClick={() => {
+                          console.log(initialValues?.profile[0])
+                          setDogImage1(initialValues?.profile[0])
+                          setDogImage2(initialValues?.profile[1])
+                          setDogImage3(initialValues?.profile[2])
+                          setDogImage4(initialValues?.profile[3])
+                          setShowDogImagesModal(true)
+                        }}>
+                        <img
+                          style={{
+                            width: '100%',
+                            height: 200,
+                            borderRadius: 12,
+                            objectFit: 'contain',
+                            cursor: 'pointer'
+                          }}
+                          src={
+                            typeof initialValues?.profile[0] !== 'string'
+                              ? URL.createObjectURL(initialValues?.profile[0])
+                              : initialValues?.profile[0]
+                          }
+                        />
+                        <div
+                          style={{
+                            width: '100%',
+                            height: 200,
+                            borderRadius: 8,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: 'rgba(0,0,0,0.5)',
+                            zIndex: 1,
+                            position: 'absolute'
+                          }}
+                        />
+                        <label
+                          style={{
+                            fontSize: 24,
+                            fontWeight: 'bold',
+                            color: 'white',
+                            position: 'absolute',
+                            zIndex: 2
+                          }}>{`+3`}</label>
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 200,
+                          borderRadius: 8,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center'
+                        }}
+                        onClick={() => {
+                          setDogImage1()
+                          setDogImage2()
+                          setDogImage3()
+                          setDogImage4()
+                          setShowDogImagesModal(true)
+                        }}>
+                        <ImageAddLineIcon
+                          className="cursor-pointer"
+                          size={100}
+                        />
+                      </div>
+                    )}
+                    {touched['profile'] && initialValues?.profile?.length <= 0 && (
                       <div
                         className="label-error"
                         style={{
                           width: '100%',
                           textAlign: 'center'
-                        }}>{`Profile Image is Required.`}</div>
+                        }}>{`Profile Images are Required.`}</div>
                     )}
                   </div>
                 )}
@@ -357,7 +439,12 @@ DogForm.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   errorMsg: PropTypes.string.isRequired,
   setErrorMsg: PropTypes.func.isRequired,
-  initialValues: PropTypes.object.isRequired
+  initialValues: PropTypes.object.isRequired,
+  setShowDogImagesModal: PropTypes.func.isRequired,
+  setDogImage1: PropTypes.func.isRequired,
+  setDogImage2: PropTypes.func.isRequired,
+  setDogImage3: PropTypes.func.isRequired,
+  setDogImage4: PropTypes.func.isRequired
 }
 
 export default DogForm
