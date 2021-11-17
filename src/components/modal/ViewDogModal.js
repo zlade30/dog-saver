@@ -6,10 +6,9 @@ import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import PaintFillIcon from 'remixicon-react/PaintFillIcon'
-import UserLineIcon from 'remixicon-react/UserLineIcon'
-import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
-import Button from 'components/buttons/Button'
-import Chat1LineIcon from 'remixicon-react/Chat1LineIcon'
+import moment from 'moment'
+import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -26,13 +25,10 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const SurrenderDogModal = ({
-  role,
+const ViewDogModal = ({
   isOpen,
   onClose,
   values,
-  onApprove,
-  onReject,
   setShowViewDogImagesModal,
   setDogImage1,
   setDogImage2,
@@ -82,11 +78,10 @@ const SurrenderDogModal = ({
               position: 'relative'
             }}
             onClick={() => {
-              console.log(values)
-              setDogImage1(values?.dog?.profile[0])
-              setDogImage2(values?.dog?.profile[1])
-              setDogImage3(values?.dog?.profile[2])
-              setDogImage4(values?.dog?.profile[3])
+              setDogImage1(values?.profile[0])
+              setDogImage2(values?.profile[1])
+              setDogImage3(values?.profile[2])
+              setDogImage4(values?.profile[3])
               setShowViewDogImagesModal(true)
             }}>
             <img
@@ -97,7 +92,7 @@ const SurrenderDogModal = ({
                 objectFit: 'contain',
                 cursor: 'pointer'
               }}
-              src={values?.dog?.profile[0]}
+              src={values?.profile[0]}
             />
             <div
               style={{
@@ -127,7 +122,7 @@ const SurrenderDogModal = ({
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Color:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.dog?.color || ''}</label>
+            <label style={{ fontSize: 14 }}>{values?.color || ''}</label>
           </div>
           <div className="flex items-center w-full">
             <DogIcon />
@@ -135,10 +130,10 @@ const SurrenderDogModal = ({
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Breed:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.dog?.breed || ''}</label>
+            <label style={{ fontSize: 14 }}>{values?.breed || ''}</label>
           </div>
           <div className="flex items-center w-full">
-            {values?.dog?.gender?.label === 'Male' ? (
+            {values?.gender?.label === 'Male' ? (
               <MenLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             ) : (
               <WomenLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
@@ -148,82 +143,75 @@ const SurrenderDogModal = ({
               Gender:
             </label>
             <label style={{ fontSize: 14 }}>
-              {values?.dog?.gender?.label || ''}
+              {values?.gender?.label || ''}
             </label>
           </div>
-          <div className="flex items-center w-full">
-            <UserLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+          {/* <div className="flex items-center w-full">
+            <MapPinLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Owner Name:
+              Location Caught:
             </label>
             <label style={{ fontSize: 14 }}>
-              {`${values?.user?.firstName} ${values?.user?.lastName}` || ''}
+              {values?.locationCaught?.label}
+            </label>
+          </div> */}
+          {/* <div className="flex items-center w-full">
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
+            <label
+              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+              Date Caught:
+            </label>
+            <label style={{ fontSize: 14 }}>
+              {moment(values?.dateCaught?.toDate()).format('ll')}
             </label>
           </div>
           <div className="flex items-center w-full">
-            <PhoneLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Owner Contact:
+              Euthanize Schedule:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.user?.phone || ''}</label>
-          </div>
+            <label style={{ fontSize: 14 }}>
+              Until {moment(values?.euthSched?.toDate()).format('ll')}
+            </label>
+          </div> */}
           <div className="flex items-center w-full">
-            <Chat1LineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Owner Reason:
+              Date Added:
             </label>
-            <label style={{ fontSize: 14 }}>{values?.reason || ''}</label>
+            <label style={{ fontSize: 14 }}>
+              {moment(values?.dateAdded?.toDate()).format('ll')}
+            </label>
           </div>
-          {values?.status === 'pending' && role === 'admin' ? (
-            <div
-              className="flex items-center"
-              style={{ justifyContent: 'space-between', marginTop: 20 }}>
-              <Button
-                value="Approve"
-                onClick={onApprove}
-                style={{
-                  backgroundColor: '#42C2D3',
-                  width: 150,
-                  marginRight: 5
-                }}
-              />
-              <Button
-                value="Reject"
-                onClick={onReject}
-                style={{
-                  backgroundColor: '#ff4d4f',
-                  width: 150,
-                  marginLeft: 5
-                }}
-              />
-            </div>
-          ) : (
-            <div />
-          )}
         </div>
       </div>
     </ReactModal>
   )
 }
 
-SurrenderDogModal.defaultProps = {
+ViewDogModal.defaultProps = {
   isOpen: false,
   values: {
     profile: ''
-  },
-  role: 'admin'
+  }
 }
 
-SurrenderDogModal.propTypes = {
+ViewDogModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   values: PropTypes.object.isRequired,
-  onApprove: PropTypes.func.isRequired,
-  onReject: PropTypes.func.isRequired,
-  role: PropTypes.string.isRequired,
   setDogImage1: PropTypes.func.isRequired,
   setDogImage2: PropTypes.func.isRequired,
   setDogImage3: PropTypes.func.isRequired,
@@ -231,4 +219,4 @@ SurrenderDogModal.propTypes = {
   setShowViewDogImagesModal: PropTypes.func.isRequired
 }
 
-export default SurrenderDogModal
+export default ViewDogModal

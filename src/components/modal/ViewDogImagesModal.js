@@ -18,7 +18,7 @@ const ViewDogImagesModal = ({
       onRequestClose={onClose}
       ariaHideApp={false}
       shouldCloseOnOverlayClick
-      className="claim-modal"
+      className="dog-info-modal"
       overlayClassName="overlay">
       <div>
         <div className="header-modal">
@@ -41,46 +41,82 @@ const ViewDogImagesModal = ({
           <div
             className="flex items-center justify-between"
             style={{ marginTop: 14 }}>
-            <img
+            <div
               style={{
-                width: 500,
-                height: 300,
-                borderRadius: 12,
-                objectFit: 'contain'
-              }}
-              src={dogImage1}
-            />
-            <img
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <img
+                style={{
+                  width: 500,
+                  height: 300,
+                  borderRadius: 12,
+                  objectFit: 'contain'
+                }}
+                src={dogImage1}
+              />
+              <h1>Front</h1>
+            </div>
+            <div
               style={{
-                width: 500,
-                height: 300,
-                borderRadius: 12,
-                objectFit: 'contain',
-              }}
-              src={dogImage2}
-            />
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <img
+                style={{
+                  width: 500,
+                  height: 300,
+                  borderRadius: 12,
+                  objectFit: 'contain'
+                }}
+                src={dogImage2}
+              />
+              <h1>Back</h1>
+            </div>
           </div>
           <div
             className="flex items-center justify-between"
             style={{ marginTop: 14 }}>
-            <img
+            <div
               style={{
-                width: 500,
-                height: 300,
-                borderRadius: 12,
-                objectFit: 'contain'
-              }}
-              src={dogImage3}
-            />
-            <img
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <img
+                style={{
+                  width: 500,
+                  height: 300,
+                  borderRadius: 12,
+                  objectFit: 'contain'
+                }}
+                src={dogImage3}
+              />
+              <h1>Right View</h1>
+            </div>
+            <div
               style={{
-                width: 500,
-                height: 300,
-                borderRadius: 12,
-                objectFit: 'contain'
-              }}
-              src={dogImage4}
-            />
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <img
+                style={{
+                  width: 500,
+                  height: 300,
+                  borderRadius: 12,
+                  objectFit: 'contain'
+                }}
+                src={dogImage4}
+              />
+              <h1>Left View</h1>
+            </div>
           </div>
         </div>
       </div>

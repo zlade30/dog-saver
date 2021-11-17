@@ -26,22 +26,27 @@ const SurrenderForm = ({
   setDogImage4
 }) => {
   const [selected, setSelected] = useState({})
+  const [reason, setReason] = useState('')
   const [isSubmit, setIsSubmit] = useState(false)
   const [formValues, setFormValues] = useState({
     profile: [],
     color: '',
     breed: '',
-    gender: ''
+    gender: '',
+    reason: ''
   })
 
   useEffect(() => {
     if (isOpen) {
       setSelected({})
+      setReason('')
+      setIsSubmit(false)
       setFormValues({
         profile: [],
         color: '',
         breed: '',
-        gender: ''
+        gender: '',
+        reason: ''
       })
     }
   }, [isOpen])
@@ -169,10 +174,7 @@ const SurrenderForm = ({
                           alignItems: 'center',
                           justifyContent: 'center'
                         }}>
-                        <ImageLineIcon
-                          className="cursor-pointer"
-                          size={100}
-                        />
+                        <ImageLineIcon className="cursor-pointer" size={100} />
                       </div>
                     )}
                   </div>
@@ -226,13 +228,46 @@ const SurrenderForm = ({
                 placeholder="Gender"
                 style={{ marginTop: 10 }}
               />
+              <Field
+                id="reason"
+                name="reason"
+                render={() => (
+                  <div>
+                    <textarea
+                      value={reason.charAt(0).toUpperCase() + reason.slice(1)}
+                      style={{ width: 320, marginBottom: 0 }}
+                      className="text-field"
+                      placeholder="Reason"
+                      rows="10"
+                      cols="10"
+                      wrap="soft"
+                      onChange={(evt) => {
+                        setFieldValue('reason', evt.target.value)
+                        setFormValues({
+                          ...formValues,
+                          reason: evt.target.value
+                        })
+                        setReason(evt.target.value)
+                      }}
+                    />
+                    {errors['reason'] && touched['reason'] && (
+                      <div className="label-error">{`Reason is Required.`}</div>
+                    )}
+                  </div>
+                )}
+              />
+              {reason.length <= 0 && isSubmit ? (
+                <div className="label-error">{`Reason is Required.`}</div>
+              ) : (
+                <div />
+              )}
               <Button
                 id="sign-up"
                 type="submit"
                 width={320}
                 onClick={() => {
                   setIsSubmit(true)
-                  if (Object?.keys(selected).length > 0) {
+                  if (Object?.keys(selected).length > 0 && reason.length > 0) {
                     onSubmit(formValues)
                   }
                 }}
@@ -252,7 +287,8 @@ SurrenderForm.defaultProps = {
     profile: '',
     color: '',
     breed: '',
-    gender: ''
+    gender: '',
+    reason: ''
   }
 }
 

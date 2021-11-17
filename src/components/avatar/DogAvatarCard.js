@@ -1,6 +1,5 @@
 import Divider from 'components/divider/Divider'
 import React from 'react'
-import Avatar from './Avatar'
 import PropTypes from 'prop-types'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
@@ -10,6 +9,8 @@ import BubbleChartLineIcon from 'remixicon-react/BubbleChartLineIcon'
 import PaintFill from 'remixicon-react/PaintFillIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
+import ImageLineIcon from 'remixicon-react/ImageLineIcon'
+import EyeLineIcon from 'remixicon-react/EyeLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -26,20 +27,46 @@ const DogIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const DogAvatarCard = ({ value, onUpdate, onRemove, onRestore }) => {
+const DogAvatarCard = ({
+  value,
+  onUpdate,
+  onRemove,
+  onRestore,
+  onView,
+  onClickImage
+}) => {
   return (
     <div className="user-card">
-      <img
-        style={{
-          width: 180,
-          height: 90,
-          borderRadius: 12,
-          objectFit: 'contain',
-          cursor: 'pointer',
-          marginBottom: 4
-        }}
-        src={value?.profile[0]}
-      />
+      {value?.profile[0] ? (
+        <img
+          onClick={onClickImage}
+          style={{
+            width: 180,
+            height: 90,
+            borderRadius: 12,
+            objectFit: 'contain',
+            cursor: 'pointer',
+            marginBottom: 4
+          }}
+          src={value?.profile[0]}
+        />
+      ) : (
+        <div
+          onClick={onClickImage}
+          style={{
+            width: 180,
+            height: 90,
+            borderRadius: 12,
+            marginBottom: 4,
+            border: '1px solid black',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer'
+          }}>
+          <ImageLineIcon />
+        </div>
+      )}
       <label className="user-card-name">{value?.name}</label>
       <Divider width="100%" />
       <div className="user-card-info">
@@ -82,11 +109,12 @@ const DogAvatarCard = ({ value, onUpdate, onRemove, onRestore }) => {
         <div className="card-btn-panel">
           <div onClick={onUpdate} className="card-btn-panel-l">
             <PencilLineIcon size={20} />
-            <label className="cursor-pointer">Update</label>
           </div>
           <div onClick={onRemove} className="card-btn-panel-r">
             <DeleteBinLineIcon size={18} />
-            <label className="cursor-pointer">Archive</label>
+          </div>
+          <div onClick={onView} className="card-btn-panel-r">
+            <EyeLineIcon size={18} color="#334D67" />
           </div>
         </div>
       ) : (
@@ -107,6 +135,8 @@ DogAvatarCard.propTypes = {
   value: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
+  onClickImage: PropTypes.func,
   onRestore: PropTypes.func,
   isImpound: PropTypes.bool
 }

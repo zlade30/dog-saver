@@ -235,7 +235,7 @@ const ClaimDogModal = ({
                   justifyContent: 'space-between',
                   marginTop: 40
                 }}>
-                <div
+                {/* <div
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -254,26 +254,7 @@ const ClaimDogModal = ({
                   }}>
                   <div>__________________________</div>
                   <div style={{ fontSize: 12 }}>TAG-IYA SA IRO/IRING</div>
-                </div>
-              </div>
-              <div
-                style={{
-                  width: '95%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  marginTop: 40
-                }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column'
-                  }}>
-                  <div>__________________________</div>
-                  <div style={{ fontSize: 12 }}>OFFICER OF THE DAY</div>
-                </div>
+                </div> */}
               </div>
               <div
                 style={{
@@ -301,7 +282,7 @@ const ClaimDogModal = ({
                   <div style={{ fontSize: 12 }}>PUNONG BARANGAY</div>
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   width: '95%',
                   display: 'flex',
@@ -319,7 +300,7 @@ const ClaimDogModal = ({
                   <label>not valid</label>
                   <label>without dry seal</label>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div

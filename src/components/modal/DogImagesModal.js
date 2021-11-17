@@ -33,7 +33,7 @@ const DogImagesModal = ({
       onRequestClose={onClose}
       ariaHideApp={false}
       shouldCloseOnOverlayClick
-      className="claim-modal"
+      className="dog-info-modal"
       overlayClassName="overlay">
       <div>
         <div className="header-modal">
@@ -57,38 +57,74 @@ const DogImagesModal = ({
           <div
             className="flex items-center justify-between"
             style={{ marginTop: 14 }}>
-            <DogProfile
-              setImg={setDogImage1}
-              src={dogImage1}
-              name="key1"
-              width={500}
-              height={300}
-            />
-            <DogProfile
-              setImg={setDogImage2}
-              src={dogImage2}
-              name="key2"
-              width={500}
-              height={300}
-            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <DogProfile
+                setImg={setDogImage1}
+                src={dogImage1}
+                name="key1"
+                width={500}
+                height={300}
+              />
+              <h1>Front</h1>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <DogProfile
+                setImg={setDogImage2}
+                src={dogImage2}
+                name="key2"
+                width={500}
+                height={300}
+              />
+              <h1>Back</h1>
+            </div>
           </div>
           <div
             className="flex items-center justify-between"
             style={{ marginTop: 14 }}>
-            <DogProfile
-              setImg={setDogImage3}
-              src={dogImage3}
-              name="key3"
-              width={500}
-              height={300}
-            />
-            <DogProfile
-              setImg={setDogImage4}
-              src={dogImage4}
-              name="key4"
-              width={500}
-              height={300}
-            />
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <DogProfile
+                setImg={setDogImage3}
+                src={dogImage3}
+                name="key3"
+                width={500}
+                height={300}
+              />
+              <h1>Right View</h1>
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <DogProfile
+                setImg={setDogImage4}
+                src={dogImage4}
+                name="key4"
+                width={500}
+                height={300}
+              />
+              <h1>Left View</h1>
+            </div>
           </div>
         </div>
         <div className="modal-footer">

@@ -29,6 +29,8 @@ import { createActivityAction } from 'redux/actions/activities.action'
 import DogImagesModal from 'components/modal/DogImagesModal'
 import InformationModal from 'components/modal/InformationModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
+import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
+import ViewDogModal from 'components/modal/ViewDogModal'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -54,6 +56,7 @@ const Dogs = () => {
   const [dogImage4, setDogImage4] = useState()
   const [showLoader, setShowLoader] = useState(false)
   const [isSurrender, setIsSurrender] = useState(false)
+  const [isOpenViewImpoundModal, setIsOpenViewImpoundModal] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
@@ -416,6 +419,12 @@ const Dogs = () => {
     setConfirmContent(`Are you sure you want to restore ${dog?.name}?`)
   }
 
+  const onView = (dog) => {
+    setDogId(dog?.id)
+    setFormValues(dog)
+    setIsOpenViewImpoundModal(true)
+  }
+
   const onSurrender = (values) => {
     console.log(values)
     setShowLoader(true)
@@ -430,6 +439,7 @@ const Dogs = () => {
             breed: values?.breed,
             gender: values?.gender
           },
+          reason: values.reason,
           status: 'pending',
           dateAdded: new Date(),
           archive: false,
@@ -513,7 +523,8 @@ const Dogs = () => {
           profile: '',
           color: '',
           breed: '',
-          gender: ''
+          gender: '',
+          reason: ''
         }}
         onSubmit={onSurrender}
         setDogImage1={setDogImage1}
@@ -553,6 +564,16 @@ const Dogs = () => {
         setDogImage4={setDogImage4}
         isOpen={showDogImagesModal}
         onClose={() => setShowDogImagesModal(false)}
+      />
+      <ViewDogModal
+        isOpen={isOpenViewImpoundModal}
+        values={formValues}
+        onClose={() => setIsOpenViewImpoundModal(false)}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
       />
       <ViewDogImagesModal
         dogImage1={dogImage1}
@@ -656,9 +677,17 @@ const Dogs = () => {
                 <DogAvatarCard
                   key={user?.id}
                   value={user}
+                  onClickImage={() => {
+                    setDogImage1(user.profile[0])
+                    setDogImage2(user.profile[1])
+                    setDogImage3(user.profile[2])
+                    setDogImage4(user.profile[3])
+                    setShowViewDogImagesModal(true)
+                  }}
                   onUpdate={() => onUpdate(user)}
                   onRemove={() => onRemove(user)}
                   onRestore={() => onRestore(user)}
+                  onView={() => onView(user)}
                 />
               ))}
             </div>

@@ -3,7 +3,16 @@ import PropTypes from 'prop-types'
 
 const Button = ({ value, width, height, fontWeight, ...rest }) => {
   return (
-    <button style={{ width, height, fontWeight }} {...rest} className="button">
+    <button
+      style={{
+        width,
+        height,
+        fontWeight,
+        backgroundColor: rest.disabled ? 'gray' : '',
+        cursor: rest.disabled ? 'default' : 'pointer'
+      }}
+      {...rest}
+      className="button">
       {value}
     </button>
   )

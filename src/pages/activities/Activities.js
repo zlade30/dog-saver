@@ -21,6 +21,7 @@ import ClaimDogModal from './ClaimDogModal'
 import { fire } from 'firebase'
 import AdoptDogModal from './AdoptDogModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
+import ReasonModal from './ReasonModal'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -31,6 +32,8 @@ const Activities = () => {
   const [showClaimDogModal, setShowClaimDogModal] = useState(false)
   const [showAdoptionModal, setShowAdoptionModal] = useState(false)
   const [showViewDogImagesModal, setShowViewDogImagesModal] = useState(false)
+  const [showReasonModal, setShowReasonModal] = useState(false)
+  const [reason, setReason] = useState('')
   const [dogImage1, setDogImage1] = useState()
   const [dogImage2, setDogImage2] = useState()
   const [dogImage3, setDogImage3] = useState()
@@ -54,12 +57,18 @@ const Activities = () => {
   const handleView = (item) => {
     console.log(item)
     setSelectedActivity(item)
-    if (item?.type === 'surrender') {
-      setShowSurrenderDogModal(true)
-    } else if (item?.type === 'claim') {
-      setShowClaimDogModal(true)
-    } else if (item?.type === 'adoption') {
-      setShowAdoptionModal(true)
+
+    if (item?.status === 'rejected' && user?.role === 'user') {
+      setShowReasonModal(true)
+      setReason(item?.rejectReason)
+    } else {
+      if (item?.type === 'surrender') {
+        setShowSurrenderDogModal(true)
+      } else if (item?.type === 'claim') {
+        setShowClaimDogModal(true)
+      } else if (item?.type === 'adoption') {
+        setShowAdoptionModal(true)
+      }
     }
   }
 
@@ -345,48 +354,7 @@ const Activities = () => {
           )
         }}
         onReject={() => {
-          setShowLoader(true)
-          dispatch(
-            updateActivityAction({
-              data: {
-                id: selectedActivity?.id,
-                values: { status: 'rejected' }
-              },
-              onSuccess: () => {
-                setShowLoader(false)
-                setShowSurrenderDogModal(false)
-                setActivityList((prevList) =>
-                  prevList?.map((item) =>
-                    item?.id === selectedActivity?.id
-                      ? { ...item, status: 'rejected' }
-                      : item
-                  )
-                )
-                toast.success('Activity updated successfully.', {
-                  position: 'bottom-right',
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined
-                })
-              },
-              onFailure: () => {
-                setShowLoader(false)
-                setShowSurrenderDogModal(false)
-                toast.error('Activity update error.', {
-                  position: 'bottom-right',
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined
-                })
-              }
-            })
-          )
+          setShowReasonModal(true)
         }}
       />
       <ClaimDogModal
@@ -479,48 +447,7 @@ const Activities = () => {
           )
         }}
         onReject={() => {
-          setShowLoader(true)
-          dispatch(
-            updateActivityAction({
-              data: {
-                id: selectedActivity?.id,
-                values: { status: 'rejected' }
-              },
-              onSuccess: () => {
-                setShowLoader(false)
-                setShowSurrenderDogModal(false)
-                setActivityList((prevList) =>
-                  prevList?.map((item) =>
-                    item?.id === selectedActivity?.id
-                      ? { ...item, status: 'rejected' }
-                      : item
-                  )
-                )
-                toast.success('Activity updated successfully.', {
-                  position: 'bottom-right',
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined
-                })
-              },
-              onFailure: () => {
-                setShowLoader(false)
-                setShowSurrenderDogModal(false)
-                toast.error('Activity update error.', {
-                  position: 'bottom-right',
-                  autoClose: 3000,
-                  hideProgressBar: false,
-                  closeOnClick: true,
-                  pauseOnHover: true,
-                  draggable: true,
-                  progress: undefined
-                })
-              }
-            })
-          )
+          setShowReasonModal(true)
         }}
       />
       <AdoptDogModal
@@ -613,16 +540,27 @@ const Activities = () => {
           )
         }}
         onReject={() => {
+          setShowReasonModal(true)
+        }}
+      />
+      <ReasonModal
+        isOpen={showReasonModal}
+        reason={reason}
+        onClose={() => setShowReasonModal(false)}
+        onReject={(rejectReason) => {
           setShowLoader(true)
           dispatch(
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'rejected' }
+                values: { status: 'rejected', rejectReason }
               },
               onSuccess: () => {
                 setShowLoader(false)
+                setShowSurrenderDogModal(false)
+                setShowClaimDogModal(false)
                 setShowAdoptionModal(false)
+                setShowReasonModal(false)
                 setActivityList((prevList) =>
                   prevList?.map((item) =>
                     item?.id === selectedActivity?.id
@@ -642,7 +580,7 @@ const Activities = () => {
               },
               onFailure: () => {
                 setShowLoader(false)
-                setShowAdoptionModal(false)
+                setShowSurrenderDogModal(false)
                 toast.error('Activity update error.', {
                   position: 'bottom-right',
                   autoClose: 3000,

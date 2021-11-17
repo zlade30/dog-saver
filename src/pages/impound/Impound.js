@@ -27,6 +27,7 @@ import SurrenderForm from './SurrenderForm'
 import { createActivityAction } from 'redux/actions/activities.action'
 import DogImagesModal from 'components/modal/DogImagesModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
+import moment from 'moment'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -433,6 +434,41 @@ const Impound = () => {
     setIsOpenOptionModal(true)
   }
 
+  const onView = (dog) => {
+    setDogId(dog?.id)
+    setFormValues(dog)
+    setIsOpenViewImpoundModal(true)
+  }
+
+  const checkClaimDisable = () => {
+    const dateScheduled = formValues?.euthSched?.toDate()
+    const currentDate = moment(new Date()).format('ll')
+    const claimLastSched = moment(
+      moment(dateScheduled).add(4, 'days').toDate()
+    ).format('ll')
+
+    if (currentDate > claimLastSched) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  const checkAdoptDisable = () => {
+    const dateScheduled = formValues?.euthSched?.toDate()
+    const currentDate = moment(new Date()).format('ll')
+    const claimSched = moment(dateScheduled).add(4, 'days')
+    const adoptLastSched = moment(
+      moment(claimSched).add(7, 'days').toDate()
+    ).format('ll')
+
+    if (currentDate > adoptLastSched) {
+      return true
+    } else {
+      return false
+    }
+  }
+
   useEffect(() => {
     setShowLoader(true)
     dispatch(
@@ -476,6 +512,8 @@ const Impound = () => {
       />
       <OptionModal
         isOpen={isOpenOptionModal}
+        isClaimDisable={checkClaimDisable()}
+        isAdoptDisable={checkAdoptDisable()}
         onClaim={() => {
           if (!user) {
             setIsOpenOptionModal(false)
@@ -629,10 +667,18 @@ const Impound = () => {
                   key={item.id}
                   value={item}
                   isAdmin={user?.role === 'admin'}
+                  onClickImage={() => {
+                    setDogImage1(item.profile[0])
+                    setDogImage2(item.profile[1])
+                    setDogImage3(item.profile[2])
+                    setDogImage4(item.profile[3])
+                    setShowViewDogImagesModal(true)
+                  }}
                   onUpdate={() => onUpdate(item)}
                   onRemove={() => onRemove(item)}
                   onRestore={() => onRestore(item)}
                   onSelect={() => onSelect(item)}
+                  onView={() => onView(item)}
                 />
               ))}
             </div>

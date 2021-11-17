@@ -35,6 +35,51 @@ const ViewImpoundDogModal = ({
   setDogImage3,
   setDogImage4
 }) => {
+  const renderAvailableLabel = (date) => {
+    const dateScheduled = date
+    const currentDate = moment(new Date()).format('ll')
+    const claimSched = moment(dateScheduled).add(4, 'days')
+    const claimLastSched = moment(
+      moment(dateScheduled).add(4, 'days').toDate()
+    ).format('ll')
+    const adoptLastSched = moment(
+      moment(claimSched).add(7, 'days').toDate()
+    ).format('ll')
+
+    if (currentDate > claimLastSched) {
+      if (currentDate > adoptLastSched) {
+        return ''
+      } else {
+        return 'Available:'
+      }
+    } else {
+      return 'Available:'
+    }
+  }
+
+  const renderAvailableValue = (date) => {
+    // {moment(values?.euthSched?.toDate()).format('ll')}
+    const dateScheduled = date
+    const currentDate = moment(new Date()).format('ll')
+    const claimSched = moment(dateScheduled).add(4, 'days')
+    const claimLastSched = moment(
+      moment(dateScheduled).add(4, 'days').toDate()
+    ).format('ll')
+    const adoptLastSched = moment(
+      moment(claimSched).add(7, 'days').toDate()
+    ).format('ll')
+
+    if (currentDate > claimLastSched) {
+      if (currentDate > adoptLastSched) {
+        return ''
+      } else {
+        return `Adopt until ${adoptLastSched}`
+      }
+    } else {
+      return `Claim until ${claimLastSched}`
+    }
+  }
+
   return (
     <ReactModal
       isOpen={isOpen}
@@ -152,9 +197,7 @@ const ViewImpoundDogModal = ({
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
               Location Caught:
             </label>
-            <label style={{ fontSize: 14 }}>
-              {values?.locationCaught?.label}
-            </label>
+            <label style={{ fontSize: 14 }}>{values?.locationCaught}</label>
           </div>
           <div className="flex items-center w-full">
             <CalendarLineIcon
@@ -169,19 +212,23 @@ const ViewImpoundDogModal = ({
               {moment(values?.dateCaught?.toDate()).format('ll')}
             </label>
           </div>
-          <div className="flex items-center w-full">
-            <CalendarLineIcon
-              style={{ margin: 10, marginLeft: 20 }}
-              size={20}
-            />
-            <label
-              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
-              Euthanize Schedule:
-            </label>
-            <label style={{ fontSize: 14 }}>
-              Until {moment(values?.euthSched?.toDate()).format('ll')}
-            </label>
-          </div>
+          {renderAvailableLabel(values?.euthSched?.toDate()) ? (
+            <div className="flex items-center w-full">
+              <CalendarLineIcon
+                style={{ margin: 10, marginLeft: 20 }}
+                size={20}
+              />
+              <label
+                style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+                {renderAvailableLabel(values?.euthSched?.toDate())}
+              </label>
+              <label style={{ fontSize: 14 }}>
+                {renderAvailableValue(values?.euthSched?.toDate())}
+              </label>
+            </div>
+          ) : (
+            <div />
+          )}
           <div className="flex items-center w-full">
             <CalendarLineIcon
               style={{ margin: 10, marginLeft: 20 }}

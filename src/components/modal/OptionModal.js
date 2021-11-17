@@ -5,7 +5,15 @@ import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import ErrorWarningLineIcon from 'remixicon-react/ErrorWarningLineIcon'
 import Button from 'components/buttons/Button'
 
-const OptionModal = ({ isOpen, onClose, onClaim, onAdopt, onView }) => {
+const OptionModal = ({
+  isOpen,
+  onClose,
+  onClaim,
+  onAdopt,
+  onView,
+  isClaimDisable,
+  isAdoptDisable
+}) => {
   return (
     <ReactModal
       isOpen={isOpen}
@@ -32,8 +40,18 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt, onView }) => {
           />
         </div>
         <div className="modal-option-body w-100">
-          <Button onClick={onClaim} value="Claim" width={200} />
-          <Button onClick={onAdopt} value="Adopt" width={200} />
+          <Button
+            disabled={isClaimDisable}
+            onClick={onClaim}
+            value="Claim"
+            width={200}
+          />
+          <Button
+            disabled={isAdoptDisable}
+            onClick={onAdopt}
+            value="Adopt"
+            width={200}
+          />
           <Button onClick={onView} value="View" width={200} />
         </div>
       </div>
@@ -42,7 +60,9 @@ const OptionModal = ({ isOpen, onClose, onClaim, onAdopt, onView }) => {
 }
 
 OptionModal.defaultProps = {
-  isOpen: false
+  isOpen: false,
+  isClaimDisable: false,
+  isAdoptDisable: false
 }
 
 OptionModal.propTypes = {
@@ -50,7 +70,9 @@ OptionModal.propTypes = {
   onClose: PropTypes.func.isRequired,
   onClaim: PropTypes.func.isRequired,
   onAdopt: PropTypes.func.isRequired,
-  onView: PropTypes.func.isRequired
+  onView: PropTypes.func.isRequired,
+  isClaimDisable: PropTypes.bool,
+  isAdoptDisable: PropTypes.bool
 }
 
 export default OptionModal

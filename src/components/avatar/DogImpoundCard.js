@@ -12,6 +12,7 @@ import Select from 'components/icons/Select'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
 import RestartLineIcon from 'remixicon-react/RestartLineIcon'
+import EyeLineIcon from 'remixicon-react/EyeLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -34,11 +35,14 @@ const DogImpoundCard = ({
   isAdmin,
   onUpdate,
   onRemove,
-  onRestore
+  onView,
+  onRestore,
+  onClickImage
 }) => {
   return (
     <div className="user-card">
       <img
+        onClick={onClickImage}
         style={{
           width: 180,
           height: 90,
@@ -94,11 +98,12 @@ const DogImpoundCard = ({
           <div className="card-btn-panel">
             <div onClick={onUpdate} className="card-btn-panel-l">
               <PencilLineIcon size={20} />
-              <label className="cursor-pointer">Update</label>
             </div>
             <div onClick={onRemove} className="card-btn-panel-r">
               <DeleteBinLineIcon size={18} />
-              <label className="cursor-pointer">Archive</label>
+            </div>
+            <div onClick={onView} className="card-btn-panel-r">
+              <EyeLineIcon size={18} color="#334D67" />
             </div>
           </div>
         ) : (
@@ -131,6 +136,8 @@ DogImpoundCard.propTypes = {
   onRemove: PropTypes.func,
   onSelect: PropTypes.func,
   onRestore: PropTypes.func,
+  onClickImage: PropTypes.func,
+  onView: PropTypes.func,
   value: PropTypes.object.isRequired
 }
 

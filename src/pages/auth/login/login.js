@@ -7,7 +7,7 @@ import ErrorAlert from 'components/alerts/ErrorAlert'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
-import { getUserAction, signInAction } from 'redux/actions/user.action'
+import { signInAction } from 'redux/actions/user.action'
 import { UserContext } from 'contexts/user.context'
 import Overview from 'pages/overview'
 
@@ -66,7 +66,7 @@ const Login = () => {
                       setShowLoader(false)
                       setUser(response)
                       localStorage.setItem('authUser', JSON.stringify(response))
-                      if (response?.role === 'admin') history.push('/users')
+                      if (response?.role === 'admin') history.push('/dashboard')
                       else history?.push('/dogs')
                     } else {
                       setShowLoader(false)

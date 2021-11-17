@@ -239,29 +239,9 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   marginTop: 40
-                }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column'
-                  }}>
-                  <div>__________________________</div>
-                  <div style={{ fontSize: 12 }}>BAHW REPRESENTATIVE</div>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column'
-                  }}>
-                  <div>__________________________</div>
-                  <div style={{ fontSize: 12 }}>TAG-IYA SA IRO/IRING</div>
-                </div>
-              </div>
-              <div
+                }}
+              />
+              {/* <div
                 style={{
                   width: '95%',
                   display: 'flex',
@@ -279,7 +259,7 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   <div>__________________________</div>
                   <div style={{ fontSize: 12 }}>OFFICER OF THE DAY</div>
                 </div>
-              </div>
+              </div> */}
               <div
                 style={{
                   width: '95%',
@@ -306,7 +286,7 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   <div style={{ fontSize: 12 }}>PUNONG BARANGAY</div>
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   width: '95%',
                   display: 'flex',
@@ -324,7 +304,7 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   <label>not valid</label>
                   <label>without dry seal</label>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div

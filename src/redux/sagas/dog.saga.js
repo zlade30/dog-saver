@@ -157,14 +157,18 @@ function* createDog(action) {
 
   for (let i = 0; i < data?.profile?.length; i++) {
     let profile = data?.profile[i]
-    const ref = storage
-      .ref()
-      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
-    const res = yield call(
-      upload,
-      ref.put(profile, { contentType: 'image/jpeg' })
-    )
-    profiles = [...profiles, res?.data]
+    if (typeof profile === 'string') {
+      profiles = [...profiles, profile]
+    } else {
+      const ref = storage
+        .ref()
+        .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+      const res = yield call(
+        upload,
+        ref.put(profile, { contentType: 'image/jpeg' })
+      )
+      profiles = [...profiles, res?.data]
+    }
     console.log(profiles)
   }
 
@@ -236,14 +240,18 @@ function* createDogImpound(action) {
 
   for (let i = 0; i < data?.profile?.length; i++) {
     let profile = data?.profile[i]
-    const ref = storage
-      .ref()
-      .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
-    const res = yield call(
-      upload,
-      ref.put(profile, { contentType: 'image/jpeg' })
-    )
-    profiles = [...profiles, res?.data]
+    if (typeof profile === 'string') {
+      profiles = [...profiles, profile]
+    } else {
+      const ref = storage
+        .ref()
+        .child(`dogs/${(Math.random() + 1).toString(36).substring(2)}.jpeg`)
+      const res = yield call(
+        upload,
+        ref.put(profile, { contentType: 'image/jpeg' })
+      )
+      profiles = [...profiles, res?.data]
+    }
     console.log(profiles)
   }
 

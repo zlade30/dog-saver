@@ -38,9 +38,9 @@ const Overview = () => {
             <MapPin />
             Damilag Manolo Fortich Bukidnon, 8703
           </span>
-          <span style={{ marginBottom: 40, fontSize: 14, marginTop: 20 }}>
-            If you want to donate. Kindly contact this number 09553144476 for
-            more info.
+          <span style={{ marginBottom: 40, fontSize: 18, marginTop: 20 }}>
+            If you want to donate a food or cash. Kindly contact this number
+            09553144476 for more info.
           </span>
           <div className="db-box-cont">
             <div className="db-box">
