@@ -12,7 +12,13 @@ import {
   getDogsAction
 } from 'redux/actions/dog.action'
 import BookLineIcon from 'remixicon-react/BookLineIcon'
-import { dogOptions, orderOptions, userSortOptions } from 'utils/helpers'
+import {
+  dogOptions,
+  orderOptions,
+  selectStyles,
+  userSortOptions
+} from 'utils/helpers'
+import Select from 'react-select'
 
 const Dashboard = () => {
   const dispatch = useDispatch()
@@ -26,6 +32,10 @@ const Dashboard = () => {
   const [vaccinatedDogs, setVaccinatedDogs] = useState(0)
   const [activityList, setActivityList] = useState([])
   const { user } = useContext(UserContext)
+  const [dogRecentOption, setDogRecentOption] = useState({
+    label: 'Weekly',
+    value: 'week'
+  })
 
   const handleStatusColor = (status) => {
     switch (status) {
@@ -201,9 +211,23 @@ const Dashboard = () => {
         onSuccess: (payload) => {
           console.log(payload)
           setVaccinatedDogs(
-            payload?.filter((item) => item.vaccineReceived).length
+            payload
+              ?.filter((item) => item.vaccineReceived)
+              ?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
           )
-          setRegisteredDogs(payload?.length)
+          setRegisteredDogs(
+            payload?.filter((item) =>
+              moment(item?.dateAdded?.toDate()).isSame(
+                new Date(),
+                dogRecentOption.value
+              )
+            ).length
+          )
         },
         onFailure: () => {}
       })
@@ -215,7 +239,15 @@ const Dashboard = () => {
           archive: false
         },
         onSuccess: (list) => {
-          setImpoundDogs(list?.data?.length)
+          const payload = list?.data
+          setImpoundDogs(
+            payload?.filter((item) =>
+              moment(item?.dateAdded?.toDate()).isSame(
+                new Date(),
+                dogRecentOption.value
+              )
+            ).length
+          )
         },
         onFailure: () => {}
       })
@@ -230,31 +262,65 @@ const Dashboard = () => {
         onSuccess: (response) => {
           setActivityList(response?.data?.slice(0, 3))
           setClaimedDogs(
-            response?.data?.filter(
-              (item) => item.type === 'claim' && item.status === 'approved'
-            ).length
+            response?.data
+              ?.filter(
+                (item) => item.type === 'claim' && item.status === 'approved'
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
           )
           setSurrenderedDogs(
-            response?.data?.filter(
-              (item) => item.type === 'surrender' && item.status === 'approved'
-            ).length
+            response?.data
+              ?.filter(
+                (item) =>
+                  item.type === 'surrender' && item.status === 'approved'
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
           )
           setAdoptDogs(
-            response?.data?.filter(
-              (item) => item.type === 'adoption' && item.status === 'approved'
-            ).length
+            response?.data
+              ?.filter(
+                (item) => item.type === 'adoption' && item.status === 'approved'
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
           )
         },
         onFailure: () => {}
       })
     )
-  }, [])
+  }, [dogRecentOption])
 
   return (
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900 }}>
           <h1>Dog Recent Updates</h1>
+          <div style={{ width: 200, marginBottom: 20 }}>
+            <Select
+              options={[
+                { label: 'Daily', value: 'day' },
+                { label: 'Weekly', value: 'week' },
+                { label: 'Monthly', value: 'month' }
+              ]}
+              styles={selectStyles}
+              value={dogRecentOption}
+              onChange={(selected) => setDogRecentOption(selected)}
+            />
+          </div>
           <div className="flex w-full justify-between">
             <div
               style={{
