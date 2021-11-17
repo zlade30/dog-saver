@@ -19,6 +19,7 @@ import Select from 'react-select'
 import { selectStyles } from 'utils/helpers'
 import { fire } from 'firebase'
 import Overview from 'pages/overview'
+import PrivacyPolicyModal from 'components/modal/PrivacyPolicyModal'
 
 const Register = () => {
   const history = useHistory()
@@ -30,6 +31,9 @@ const Register = () => {
   const [profile, setProfile] = useState()
   const [showLoader, setShowLoader] = useState(false)
   const [purokList, setPurokList] = useState([])
+
+  const [checkPP, setCheckPP] = useState(false)
+  const [showPP, setShowPP] = useState(false)
 
   const schema = Yup.object().shape({
     email: Yup.string().notRequired(),
@@ -145,6 +149,7 @@ const Register = () => {
   return (
     <div className="auth-container">
       {showLoader && <LoadingOverlay />}
+      <PrivacyPolicyModal isOpen={showPP} onClose={() => setShowPP(false)} />
       <div className="auth-form" style={{ height: '500', overflow: 'auto' }}>
         <div>
           <div className="logo">
@@ -167,54 +172,58 @@ const Register = () => {
             }}
             validationSchema={schema}
             onSubmit={(values) => {
-              setShowLoader(true)
-              if (values?.password === values?.confirmPassword) {
-                if (values.email) {
-                  dispatch(
-                    createAccountAction({
-                      data: {
-                        email: values?.email,
-                        password: values?.password
-                      },
-                      onSuccess: () => {
-                        delete values.confirmPassword
-                        if (profile)
-                          onCreateUpload({
-                            ...values,
-                            phone: `0${values?.phone}`
-                          })
-                        else
-                          onCreateAccount({
-                            ...values,
-                            phone: `0${values?.phone}`
-                          })
-                      },
-                      onFailure: (error) => {
-                        setErrorMsg(error)
-                        setShowLoader(false)
-                      }
-                    })
-                  )
+              if (checkPP) {
+                setShowLoader(true)
+                if (values?.password === values?.confirmPassword) {
+                  if (values.email) {
+                    dispatch(
+                      createAccountAction({
+                        data: {
+                          email: values?.email,
+                          password: values?.password
+                        },
+                        onSuccess: () => {
+                          delete values.confirmPassword
+                          if (profile)
+                            onCreateUpload({
+                              ...values,
+                              phone: `0${values?.phone}`
+                            })
+                          else
+                            onCreateAccount({
+                              ...values,
+                              phone: `0${values?.phone}`
+                            })
+                        },
+                        onFailure: (error) => {
+                          setErrorMsg(error)
+                          setShowLoader(false)
+                        }
+                      })
+                    )
+                  } else {
+                    delete values.confirmPassword
+                    if (profile)
+                      onCreateUpload({
+                        ...values,
+                        phone: `0${values?.phone}`
+                      })
+                    else
+                      onCreateAccount({
+                        ...values,
+                        phone: `0${values?.phone}`
+                      })
+                  }
                 } else {
-                  delete values.confirmPassword
-                  if (profile)
-                    onCreateUpload({
-                      ...values,
-                      phone: `0${values?.phone}`
-                    })
-                  else
-                    onCreateAccount({
-                      ...values,
-                      phone: `0${values?.phone}`
-                    })
+                  setShowLoader(false)
+                  setErrorMsg('Error: password should be match.')
                 }
               } else {
-                setShowLoader(false)
-                setErrorMsg('Error: password should be match.')
+                setErrorMsg('Error: Privacy policy must be check.')
               }
             }}
             validator={() => ({})}>
-            {({ errors, touched, values, setFieldValue }) => (
+            {({ errors, touched, values }) => (
               <Form>
                 <Field name="profile">
                   {() => <AvatarSelection setImg={setProfile} />}
@@ -371,6 +380,24 @@ const Register = () => {
                   name="confirmPassword"
                   placeholder="Confirm Password"
                 />
+                <div className="flex items-center">
+                  <input
+                    checked={checkPP}
+                    type="checkbox"
+                    onChange={() => {
+                      setCheckPP(!checkPP)
+                      setShowPP(!checkPP)
+                    }}
+                  />
+                  <label
+                    onClick={() => {
+                      setCheckPP(!checkPP)
+                      setShowPP(!checkPP)
+                    }}
+                    className="register">
+                    Privacy Policy
+                  </label>
+                </div>
                 <Button
                   id="sign-up"
                   type="submit"

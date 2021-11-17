@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
-import AvatarSelection from 'components/avatar/AvatarSelection'
 import { Field, Form, Formik } from 'formik'
-import * as Yup from 'yup'
 import TextField from 'components/text-fields/TextField'
 import ErrorAlert from 'components/alerts/ErrorAlert'
 import Button from 'components/buttons/Button'
@@ -23,7 +21,10 @@ const SurrenderForm = ({
   setDogImage1,
   setDogImage2,
   setDogImage3,
-  setDogImage4
+  setDogImage4,
+  checkPP,
+  setCheckPP,
+  setShowPP
 }) => {
   const [selected, setSelected] = useState({})
   const [reason, setReason] = useState('')
@@ -48,6 +49,7 @@ const SurrenderForm = ({
         gender: '',
         reason: ''
       })
+      setErrorMsg('')
     }
   }, [isOpen])
 
@@ -61,7 +63,7 @@ const SurrenderForm = ({
       <div className="flex justify-end w-full">
         <CloseLineIcon className="cursor-pointer" onClick={onClose} />
       </div>
-      <div>
+      <div style={{ height: 900, overflow: 'auto' }}>
         <div className="w-full justify-center">
           <h1>Surrender Dog</h1>
         </div>
@@ -70,7 +72,7 @@ const SurrenderForm = ({
             surrender: ''
           }}
           validator={() => ({})}>
-          {({ errors, touched, setFieldValue, values }) => (
+          {({ errors, touched, setFieldValue }) => (
             <Form>
               {errorMsg && (
                 <ErrorAlert
@@ -261,14 +263,39 @@ const SurrenderForm = ({
               ) : (
                 <div />
               )}
+              <div className="flex items-center">
+                <input
+                  checked={checkPP}
+                  type="checkbox"
+                  onChange={() => {
+                    setCheckPP(!checkPP)
+                    setShowPP(!checkPP)
+                  }}
+                />
+                <label
+                  onClick={() => {
+                    setCheckPP(!checkPP)
+                    setShowPP(!checkPP)
+                  }}
+                  className="register">
+                  Privacy Policy
+                </label>
+              </div>
               <Button
                 id="sign-up"
                 type="submit"
                 width={320}
                 onClick={() => {
                   setIsSubmit(true)
-                  if (Object?.keys(selected).length > 0 && reason.length > 0) {
-                    onSubmit(formValues)
+                  if (checkPP) {
+                    if (
+                      Object?.keys(selected).length > 0 &&
+                      reason.length > 0
+                    ) {
+                      onSubmit(formValues)
+                    }
+                  } else {
+                    setErrorMsg('Error: Privacy policy must be check.')
                   }
                 }}
                 value="Surrender Dog"
@@ -305,7 +332,10 @@ SurrenderForm.propTypes = {
   setDogImage2: PropTypes.func.isRequired,
   setDogImage3: PropTypes.func.isRequired,
   setDogImage4: PropTypes.func.isRequired,
-  setShowViewDogImagesModal: PropTypes.func.isRequired
+  setShowViewDogImagesModal: PropTypes.func.isRequired,
+  checkPP: PropTypes.bool,
+  setCheckPP: PropTypes.func,
+  setShowPP: PropTypes.func
 }
 
 export default SurrenderForm

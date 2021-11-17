@@ -31,6 +31,7 @@ import InformationModal from 'components/modal/InformationModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
 import ViewDogModal from 'components/modal/ViewDogModal'
+import PrivacyPolicyModal from 'components/modal/PrivacyPolicyModal'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -72,6 +73,8 @@ const Dogs = () => {
   const [dogId, setDogId] = useState('')
   const [isArchiveClick, setIsArchiveClick] = useState(false)
   const [selDogOption, setSelDogOption] = useState(dogOptions[0])
+  const [checkPP, setCheckPP] = useState(false)
+  const [showPP, setShowPP] = useState(false)
 
   const { user } = useContext(UserContext)
 
@@ -532,6 +535,11 @@ const Dogs = () => {
         setDogImage3={setDogImage3}
         setDogImage4={setDogImage4}
         setShowViewDogImagesModal={setShowViewDogImagesModal}
+        checkPP={checkPP}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        setShowPP={setShowPP}
+        setCheckPP={setCheckPP}
       />
       <DogForm
         isOpen={showFormModal}
@@ -545,6 +553,10 @@ const Dogs = () => {
         setDogImage3={setDogImage3}
         setDogImage4={setDogImage4}
         setShowDogImagesModal={setShowDogImagesModal}
+        checkPP={checkPP}
+        errorMsg={errorMsg}
+        setShowPP={setShowPP}
+        setCheckPP={setCheckPP}
       />
       <DogImagesModal
         onSave={() => {
@@ -583,6 +595,7 @@ const Dogs = () => {
         isOpen={showViewDogImagesModal}
         onClose={() => setShowViewDogImagesModal(false)}
       />
+      <PrivacyPolicyModal isOpen={showPP} onClose={() => setShowPP(false)} />
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>{user?.role === 'admin' ? 'Registered Dogs' : 'My Dogs'}</h1>

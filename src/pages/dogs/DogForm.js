@@ -4,7 +4,6 @@ import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 import ImageAddLineIcon from 'remixicon-react/ImageAddLineIcon'
-import AvatarSelection from 'components/avatar/AvatarSelection'
 import { Field, Form, Formik } from 'formik'
 import * as Yup from 'yup'
 import TextField from 'components/text-fields/TextField'
@@ -36,7 +35,10 @@ const DogForm = ({
   setDogImage1,
   setDogImage2,
   setDogImage3,
-  setDogImage4
+  setDogImage4,
+  checkPP,
+  setCheckPP,
+  setShowPP
 }) => {
   const dispatch = useDispatch()
 
@@ -61,6 +63,7 @@ const DogForm = ({
   useEffect(() => {
     if (isOpen) {
       setStartVaccineDate(initialValues?.vaccineDate?.toDate())
+      setErrorMsg('')
 
       if (user?.role === 'admin') {
         dispatch(
@@ -104,9 +107,13 @@ const DogForm = ({
         <Formik
           initialValues={initialValues}
           validationSchema={schema}
-          onSubmit={(values) =>
-            onSubmit({ ...values, profile: initialValues?.profile })
-          }
+          onSubmit={(values) => {
+            if (checkPP || isUpdate) {
+              onSubmit({ ...values, profile: initialValues?.profile })
+            } else {
+              setErrorMsg('Error: Privacy policy must be check.')
+            }
+          }}
           validator={() => ({})}>
           {({ errors, touched, setFieldValue, values }) => (
             <Form>
@@ -401,6 +408,28 @@ const DogForm = ({
                   )}
                 />
               </div>
+              {!isUpdate ? (
+                <div className="flex items-center">
+                  <input
+                    checked={checkPP}
+                    type="checkbox"
+                    onChange={() => {
+                      setCheckPP(!checkPP)
+                      setShowPP(!checkPP)
+                    }}
+                  />
+                  <label
+                    onClick={() => {
+                      setCheckPP(!checkPP)
+                      setShowPP(!checkPP)
+                    }}
+                    className="register">
+                    Privacy Policy
+                  </label>
+                </div>
+              ) : (
+                <div />
+              )}
               <Button
                 id="sign-up"
                 type="submit"
@@ -444,7 +473,10 @@ DogForm.propTypes = {
   setDogImage1: PropTypes.func.isRequired,
   setDogImage2: PropTypes.func.isRequired,
   setDogImage3: PropTypes.func.isRequired,
-  setDogImage4: PropTypes.func.isRequired
+  setDogImage4: PropTypes.func.isRequired,
+  checkPP: PropTypes.bool,
+  setCheckPP: PropTypes.func,
+  setShowPP: PropTypes.func
 }
 
 export default DogForm
