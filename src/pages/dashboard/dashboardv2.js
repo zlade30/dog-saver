@@ -233,25 +233,27 @@ const Dashboard = () => {
       })
     )
 
-    dispatch(
-      getDogImpoundListAction({
-        data: {
-          archive: false
-        },
-        onSuccess: (list) => {
-          const payload = list?.data
-          setImpoundDogs(
-            payload?.filter((item) =>
-              moment(item?.dateAdded?.toDate()).isSame(
-                new Date(),
-                dogRecentOption.value
-              )
-            ).length
-          )
-        },
-        onFailure: () => {}
-      })
-    )
+    if (user?.role === 'admin') {
+      dispatch(
+        getDogImpoundListAction({
+          data: {
+            archive: false
+          },
+          onSuccess: (list) => {
+            const payload = list?.data
+            setImpoundDogs(
+              payload?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+            )
+          },
+          onFailure: () => {}
+        })
+      )
+    }
 
     dispatch(
       getActivityListAction({
@@ -264,7 +266,12 @@ const Dashboard = () => {
           setClaimedDogs(
             response?.data
               ?.filter(
-                (item) => item.type === 'claim' && item.status === 'approved'
+                (item) =>
+                  item.type === 'claim' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isSame(
@@ -277,7 +284,11 @@ const Dashboard = () => {
             response?.data
               ?.filter(
                 (item) =>
-                  item.type === 'surrender' && item.status === 'approved'
+                  item.type === 'surrender' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isSame(
@@ -289,7 +300,12 @@ const Dashboard = () => {
           setAdoptDogs(
             response?.data
               ?.filter(
-                (item) => item.type === 'adoption' && item.status === 'approved'
+                (item) =>
+                  item.type === 'adoption' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isSame(
@@ -334,18 +350,20 @@ const Dashboard = () => {
               <h5 style={{ padding: 0, margin: 0 }}>Registered Dogs</h5>
               <h1 style={{ color: '#42c2d3' }}>{registeredDogs}</h1>
             </div>
-            <div
-              style={{
-                width: 200,
-                minHeight: 100,
-                backgroundColor: 'white',
-                borderRadius: 12,
-                padding: 20,
-                marginRight: 10
-              }}>
-              <h5 style={{ padding: 0, margin: 0 }}>Impound Dogs</h5>
-              <h1 style={{ color: '#42c2d3' }}>{impoundDogs}</h1>
-            </div>
+            {user?.role === 'admin' && (
+              <div
+                style={{
+                  width: 200,
+                  minHeight: 100,
+                  backgroundColor: 'white',
+                  borderRadius: 12,
+                  padding: 20,
+                  marginRight: 10
+                }}>
+                <h5 style={{ padding: 0, margin: 0 }}>Impound Dogs</h5>
+                <h1 style={{ color: '#42c2d3' }}>{impoundDogs}</h1>
+              </div>
+            )}
             <div
               style={{
                 width: 200,
@@ -411,20 +429,26 @@ const Dashboard = () => {
                 <Activity key={item.id} item={item} />
               ))
             ) : (
-              <div className="empty-panel">
+              <div
+                className="empty-panel"
+                style={{ height: 200, paddingTop: 40 }}>
                 <BookLineIcon size={100} />
                 <label className="empty-panel-label">Data is empty</label>
               </div>
             )}
-            <div
-              className="w-full items-center justify-center"
-              style={{ marginTop: 30 }}>
-              <label
-                onClick={() => history.push('/activities')}
-                style={{ color: '#42c2d3', cursor: 'pointer' }}>
-                View All
-              </label>
-            </div>
+            {activityList?.length ? (
+              <div
+                className="w-full items-center justify-center"
+                style={{ marginTop: 30 }}>
+                <label
+                  onClick={() => history.push('/activities')}
+                  style={{ color: '#42c2d3', cursor: 'pointer' }}>
+                  View All
+                </label>
+              </div>
+            ) : (
+              <div />
+            )}
           </div>
         </div>
       </div>

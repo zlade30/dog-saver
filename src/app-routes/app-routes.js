@@ -38,8 +38,7 @@ const AppRoutes = ({ history }) => {
                 path === '/password-reset' ||
                 path === '/'
               ) {
-                if (response?.role === 'admin') history.push('/dashboard')
-                else history.push('/dogs')
+                history.push('/dashboard')
               }
               setUser(response)
             },
@@ -55,8 +54,7 @@ const AppRoutes = ({ history }) => {
             data: { email: currentUser?.email },
             onSuccess: (response) => {
               setUser(response)
-              if (response?.role === 'admin') history.push('/dashboard')
-              else history.push('/dogs')
+              history.push('/dashboard')
             },
             onFailure: (error) => console.log(error)
           })

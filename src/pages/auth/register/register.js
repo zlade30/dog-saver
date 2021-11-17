@@ -78,7 +78,7 @@ const Register = () => {
                     archive: false
                   })
                 )
-                history.push('/dogs')
+                history.push('/dashboard')
               },
               onFailure: (error) => {
                 setShowLoader(false)
@@ -118,7 +118,7 @@ const Register = () => {
               archive: false
             })
           )
-          history.push('/dogs')
+          history.push('/dashboard')
         },
         onFailure: (error) => {
           console.log(error)

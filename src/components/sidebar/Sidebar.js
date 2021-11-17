@@ -48,8 +48,7 @@ const Sidebar = ({ user, onLogout }) => {
       name: 'Overview',
       color: '#334D67',
       isActive: false,
-      path: '/dashboard',
-      isHidden: user?.role !== 'admin'
+      path: '/dashboard'
     },
     {
       name: 'Users',

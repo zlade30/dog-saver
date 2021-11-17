@@ -66,8 +66,7 @@ const Login = () => {
                       setShowLoader(false)
                       setUser(response)
                       localStorage.setItem('authUser', JSON.stringify(response))
-                      if (response?.role === 'admin') history.push('/dashboard')
-                      else history?.push('/dogs')
+                      history.push('/dashboard')
                     } else {
                       setShowLoader(false)
                       setErrorMsg(
