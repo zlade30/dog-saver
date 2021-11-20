@@ -11,8 +11,7 @@ import {
   adminUpdateUserAction,
   createAccountAction,
   createUserAction,
-  getUserListAction,
-  sendCredentialAction
+  getUserListAction
 } from 'redux/actions/user.action'
 import { uploadUserImageAction } from 'redux/actions/utils.action'
 import { fire } from 'firebase'
@@ -26,13 +25,14 @@ import {
 import UserLineIcon from 'remixicon-react/UserLineIcon'
 import { toast } from 'react-toastify'
 import Select from 'react-select'
+import ViewUserModal from 'components/modal/ViewUserModal'
 
 const Users = () => {
   const dispatch = useDispatch()
   const [showLoader, setShowLoader] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [profile, setProfile] = useState()
-  const [password, setPassword] = useState('')
+  const [showUserInfo, setIsShowUserInfo] = useState(false)
   const [showFormModal, setShowFormModal] = useState(false)
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
@@ -434,6 +434,12 @@ const Users = () => {
     setFormValues(user)
   }
 
+  const onView = (user) => {
+    setUserId(user?.id)
+    setFormValues(user)
+    setIsShowUserInfo(true)
+  }
+
   const handleYesAction = () => {
     if (isArchiveClick) {
       setShowLoader(true)
@@ -573,6 +579,11 @@ const Users = () => {
         initialValues={formValues}
         isUpdate={isUpdate}
       />
+      <ViewUserModal
+        isOpen={showUserInfo}
+        values={formValues}
+        onClose={() => setIsShowUserInfo(false)}
+      />
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Users</h1>
@@ -642,6 +653,7 @@ const Users = () => {
                   onUpdate={() => onUpdate(user)}
                   onRemove={() => onRemove(user)}
                   onRestore={() => onRestore(user)}
+                  onView={() => onView(user)}
                 />
               ))}
             </div>

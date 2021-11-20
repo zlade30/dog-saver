@@ -10,11 +10,13 @@ import MailLineIcon from 'remixicon-react/MailLineIcon'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 import RestartLineIcon from 'remixicon-react/RestartLineIcon'
 import moment from 'moment'
+import EyeLineIcon from 'remixicon-react/EyeLineIcon'
 
 const UserAvatarCard = ({
   value,
   onUpdate,
   onRemove,
+  onView,
   onRestore,
   isShowAction
 }) => {
@@ -75,11 +77,12 @@ const UserAvatarCard = ({
           <div className="card-btn-panel">
             <div onClick={onUpdate} className="card-btn-panel-l">
               <PencilLineIcon size={20} />
-              <label className="cursor-pointer">Update</label>
             </div>
             <div onClick={onRemove} className="card-btn-panel-r">
               <DeleteBinLineIcon size={18} />
-              <label className="cursor-pointer">Archive</label>
+            </div>
+            <div onClick={onView} className="card-btn-panel-r">
+              <EyeLineIcon size={18} color="#334D67" />
             </div>
           </div>
         ) : (
@@ -105,6 +108,7 @@ UserAvatarCard.propTypes = {
   value: PropTypes.object.isRequired,
   onRemove: PropTypes.func.isRequired,
   onUpdate: PropTypes.func.isRequired,
+  onView: PropTypes.func.isRequired,
   onRestore: PropTypes.func,
   isShowAction: PropTypes.bool
 }

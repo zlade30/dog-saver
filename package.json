@@ -55,6 +55,9 @@
   "dependencies": {
     "@babel/runtime": "^7.15.3",
     "antd": "^4.16.12",
+    "chart.js": "^3.6.0",
+    "chartjs-adapter-moment": "^1.0.0",
+    "chartjs-plugin-annotation": "^1.1.0",
     "emailjs-com": "^3.2.0",
     "firebase": "^9.0.2",
     "formik": "^2.2.9",
@@ -62,6 +65,7 @@
     "moment": "^2.29.1",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
+    "react-chartjs-2": "^3.3.0",
     "react-datepicker": "^4.2.1",
     "react-dom": "^16.14.0",
     "react-loader-spinner": "^4.0.0",

@@ -7,6 +7,9 @@ import { useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min'
 import { getActivityListAction } from 'redux/actions/activities.action'
 import { getAnnouncementsAction } from 'redux/actions/announcement.action'
+import SwipeableViews from 'react-swipeable-views'
+import { autoPlay } from 'react-swipeable-views-utils'
+import ArrowLeftIcon from 'remixicon-react/ArrowLeftLineIcon'
 import {
   getDogImpoundListAction,
   getDogsAction
@@ -19,11 +22,13 @@ import {
   userSortOptions
 } from 'utils/helpers'
 import Select from 'react-select'
+import { Bar } from 'react-chartjs-2'
+const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
   const dispatch = useDispatch()
   const history = useHistory()
-  const [announcement, setAnnouncement] = useState({})
+  const [announcements, setAnnouncement] = useState([])
   const [registeredDogs, setRegisteredDogs] = useState(0)
   const [impoundDogs, setImpoundDogs] = useState(0)
   const [claimedDogs, setClaimedDogs] = useState(0)
@@ -36,6 +41,36 @@ const Dashboard = () => {
     label: 'Weekly',
     value: 'week'
   })
+
+  const [index, setIndex] = useState(0)
+
+  const handleChangeIndex = (index) => {
+    setIndex(index)
+  }
+
+  const options = {
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        barThickness: 73
+      }
+    },
+    scaleShowGridLines: false,
+    interaction: {
+      intersect: false
+    },
+    barPercentage: 0.6,
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  }
+
+  const [chartData, setChartData] = useState([0, 0, 0, 0, 0, 0])
+  const [totalDogs, setTotalDogs] = useState(0)
 
   const handleStatusColor = (status) => {
     switch (status) {
@@ -195,7 +230,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(
       getAnnouncementsAction({
-        onSuccess: (payload) => setAnnouncement(payload[0]),
+        onSuccess: (payload) => setAnnouncement(payload.slice(0, 5)),
         onFailed: (error) => console.error(error)
       })
     )
@@ -320,6 +355,32 @@ const Dashboard = () => {
     )
   }, [dogRecentOption])
 
+  useEffect(() => {
+    setChartData([
+      registeredDogs,
+      impoundDogs,
+      surrenderedDogs,
+      claimedDogs,
+      adoptDogs,
+      vaccinatedDogs
+    ])
+    setTotalDogs(
+      registeredDogs +
+        impoundDogs +
+        surrenderedDogs +
+        claimedDogs +
+        adoptDogs +
+        vaccinatedDogs
+    )
+  }, [
+    registeredDogs,
+    impoundDogs,
+    surrenderedDogs,
+    claimedDogs,
+    adoptDogs,
+    vaccinatedDogs
+  ])
+
   return (
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
@@ -337,7 +398,7 @@ const Dashboard = () => {
               onChange={(selected) => setDogRecentOption(selected)}
             />
           </div>
-          <div className="flex w-full justify-between">
+          {/* <div className="flex w-full justify-between">
             <div
               style={{
                 width: 200,
@@ -412,9 +473,102 @@ const Dashboard = () => {
               <h5 style={{ padding: 0, margin: 0 }}>Vaccinated Dogs</h5>
               <h1 style={{ color: '#42c2d3' }}>{vaccinatedDogs}</h1>
             </div>
+          </div> */}
+          <div className="w-full item-center justify-center">
+            <div
+              style={{
+                width: '50%',
+                backgroundColor: 'white',
+                padding: 20,
+                borderRadius: 12
+              }}>
+              <Bar
+                data={{
+                  labels: [
+                    'Registered Dogs',
+                    'Impound Dogs',
+                    'Surrendered Dogs',
+                    'Claimed Dogs',
+                    'Adopt Dogs',
+                    'Vaccinated Dogs'
+                  ],
+                  datasets: [
+                    {
+                      data: chartData,
+                      borderWidth: 1,
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ]
+                    }
+                  ]
+                }}
+                options={options}
+              />
+            </div>
+            <div
+              style={{
+                width: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <h1>Total</h1>
+              <label
+                style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
+                {totalDogs}
+              </label>
+            </div>
           </div>
           <h1>Recent Announcement</h1>
-          <AnnouncementMessage item={announcement} role="user" />
+          <div className="swipeable">
+            {index !== 0 && (
+              <ArrowLeftIcon
+                onClick={() => setIndex(index - 1)}
+                className="swipeable-arrow-l cursor-pointer"
+              />
+            )}
+            <AutoPlaySwipeableViews
+              style={{ width: '80%' }}
+              interval={5000}
+              index={index}
+              onChangeIndex={handleChangeIndex}>
+              {announcements.map((item) => (
+                <AnnouncementMessage key={item} item={item} role="user" />
+              ))}
+            </AutoPlaySwipeableViews>
+            {index !== announcements?.length - 1 && (
+              <ArrowLeftIcon
+                onClick={() => setIndex(index + 1)}
+                className="swipeable-arrow-r cursor-pointer"
+              />
+            )}
+            <div className="swipeable-dots-cont">
+              {announcements.map((item, i) => (
+                <div
+                  key={item}
+                  onClick={() => setIndex(i)}
+                  className="swipeable-dots"
+                  style={{ backgroundColor: i === index ? 'white' : '' }}
+                />
+              ))}
+            </div>
+          </div>
           <h1>Recent Activities</h1>
           <div
             style={{
@@ -450,6 +604,7 @@ const Dashboard = () => {
               <div />
             )}
           </div>
+          <div style={{ marginTop: 20, paddingTop: 20 }} />
         </div>
       </div>
     </div>

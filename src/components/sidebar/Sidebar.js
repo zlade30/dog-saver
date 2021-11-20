@@ -6,6 +6,7 @@ import LogoutBoxRLineIcon from 'remixicon-react/LogoutBoxRLineIcon'
 import DashboardLineIcon from 'remixicon-react/DashboardLineIcon'
 import User3LineIcon from 'remixicon-react/User3LineIcon'
 import GovernmentLineIcon from 'remixicon-react/GovernmentLineIcon'
+import HomeLineIcon from 'remixicon-react/HomeLineIcon'
 import BookLine from 'remixicon-react/BookLineIcon'
 import { useHistory, useLocation } from 'react-router'
 
@@ -45,7 +46,7 @@ const Sidebar = ({ user, onLogout }) => {
 
   const [menus, setMenus] = useState([
     {
-      name: 'Overview',
+      name: user?.role === 'admin' ? 'Overview' : 'Home',
       color: '#334D67',
       isActive: false,
       path: '/dashboard'
@@ -98,6 +99,8 @@ const Sidebar = ({ user, onLogout }) => {
     switch (menu?.name) {
       case 'Overview':
         return <DashboardLineIcon className="sidebar-menu-icon" size={20} />
+      case 'Home':
+        return <HomeLineIcon className="sidebar-menu-icon" size={20} />
       case 'Users':
         return <User3LineIcon className="sidebar-menu-icon" size={20} />
       case 'Registered Dogs':
