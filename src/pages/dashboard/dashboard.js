@@ -30,7 +30,7 @@ const Dashboard = () => {
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900 }}>
-          <h1>Recent Announcement</h1>
+          {/* <h1>Recent Announcement</h1>
           <div className="swipeable">
             {index !== 0 && (
               <ArrowLeftIcon
@@ -63,97 +63,184 @@ const Dashboard = () => {
                 />
               ))}
             </div>
+          </div> */}
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between'
+            }}>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                textAlign: 'justify',
+                marginTop: 40,
+                backgroundColor: 'white',
+                padding: '20px 40px',
+                borderRadius: 12,
+                height: 400,
+                width: '45%',
+                lineHeight: 2
+              }}>
+              <label
+                style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
+                What should I do if I see an injured stray animal?
+              </label>
+              <label style={{ fontSize: 14 }}>
+                YOU are their best chance of survival. Calling PAWS does not
+                guarantee that the animal will be rescued due to limited space
+                at the shelter and not enough volunteers. Our vet can assist in
+                emergency cases if the reporting citizen is willing to transport
+                and foster the animal.
+              </label>
+            </div>
+            <img
+              src="assets/icons/injured.jpg"
+              width="43%"
+              height="400px"
+              style={{
+                marginTop: 40,
+                padding: '20px 40px',
+                borderRadius: 12
+              }}
+            />
           </div>
           <div
             style={{
+              width: '100%',
               display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'justify',
-              marginTop: 40,
-              backgroundColor: 'white',
-              padding: 20,
-              borderRadius: 12
+              flexDirection: 'row-reverse',
+              justifyContent: 'space-between'
             }}>
-            <label
-              style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
-              What should I do if I see an injured stray animal?
-            </label>
-            <label style={{ fontSize: 14 }}>
-              YOU are their best chance of survival. Calling PAWS does not
-              guarantee that the animal will be rescued due to limited space at
-              the shelter and not enough volunteers. Our vet can assist in
-              emergency cases if the reporting citizen is willing to transport
-              and foster the animal.
-            </label>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                textAlign: 'justify',
+                marginTop: 40,
+                backgroundColor: 'white',
+                padding: '20px 40px',
+                borderRadius: 12,
+                height: 400,
+                width: '45%',
+                lineHeight: 2
+              }}>
+              <label
+                style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
+                What can I do about stray dogs in my neighborhood?
+              </label>
+              <label style={{ fontSize: 14 }}>
+                Dogs multiply very quickly when they are not spayed/neutered
+                (kapon). They will multiply even more if there is food source
+                within a community (holding capacity). Both of them can be
+                addressed with proper TNR or Trap, Neuter, Return.
+              </label>
+            </div>
+            <img
+              src="assets/icons/stray.jpg"
+              width="43%"
+              height="400px"
+              style={{
+                marginTop: 40,
+                padding: '20px 40px',
+                borderRadius: 12
+              }}
+            />
           </div>
           <div
             style={{
+              width: '100%',
               display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'justify',
-              marginTop: 10,
-              backgroundColor: 'white',
-              padding: 20,
-              borderRadius: 12
+              flexDirection: 'row',
+              justifyContent: 'space-between'
             }}>
-            <label
-              style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
-              What can I do about stray dogs in my neighborhood?
-            </label>
-            <label style={{ fontSize: 14 }}>
-              Dogs multiply very quickly when they are not spayed/neutered
-              (kapon). They will multiply even more if there is food source
-              within a community (holding capacity). Both of them can be
-              addressed with proper TNR or Trap, Neuter, Return.
-            </label>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                textAlign: 'justify',
+                marginTop: 40,
+                backgroundColor: 'white',
+                padding: '20px 40px',
+                borderRadius: 12,
+                height: 400,
+                width: '45%',
+                lineHeight: 2
+              }}>
+              <label
+                style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
+                Should I feed the stray animals in my area?
+              </label>
+              <label style={{ fontSize: 14 }}>
+                Feeding stray animals in your area may cause a surge in stray
+                population within your community due to a rise in holding
+                capacity. Holding capacity is the source of food that attracts
+                animals to a particular area. We highly encourage you to
+                consider organizing a Trap Neuter Return (TNR) program with your
+                local government, as well as animal welfare organizations, to
+                control the stray animal population before engaging in managed
+                feeding. Managed feeding entails a designated feeder adhering to
+                a fixed feeding schedule, providing just the right amount of
+                food. Excess food may attract other strays from neighboring
+                communities.
+              </label>
+            </div>
+            <img
+              src="assets/icons/feed.jpg"
+              width="43%"
+              height="400px"
+              style={{
+                marginTop: 40,
+                padding: '20px 40px',
+                borderRadius: 12
+              }}
+            />
           </div>
           <div
             style={{
+              width: '100%',
               display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'justify',
-              marginTop: 10,
-              backgroundColor: 'white',
-              padding: 20,
-              borderRadius: 12
+              flexDirection: 'row-reverse',
+              justifyContent: 'space-between',
+              paddingBottom: 40
             }}>
-            <label
-              style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
-              Should I feed the stray animals in my area?
-            </label>
-            <label style={{ fontSize: 14 }}>
-              Feeding stray animals in your area may cause a surge in stray
-              population within your community due to a rise in holding
-              capacity. Holding capacity is the source of food that attracts
-              animals to a particular area. We highly encourage you to consider
-              organizing a Trap Neuter Return (TNR) program with your local
-              government, as well as animal welfare organizations, to control
-              the stray animal population before engaging in managed feeding.
-              Managed feeding entails a designated feeder adhering to a fixed
-              feeding schedule, providing just the right amount of food. Excess
-              food may attract other strays from neighboring communities.
-            </label>
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              textAlign: 'justify',
-              marginTop: 10,
-              backgroundColor: 'white',
-              padding: 20,
-              borderRadius: 12
-            }}>
-            <label
-              style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
-              Can you help find a home for my pet?
-            </label>
-            <label style={{ fontSize: 14 }}>
-              Responsible pet ownership is a lifetime commitment, which is why
-              we don’t take in abandoned pets. We can assist in rehoming your
-              pet by advertising within our networks, NOT by admitting your pet
-              at the shelter, and ONLY if conditions and qualifications are met.
-            </label>
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                textAlign: 'justify',
+                marginTop: 40,
+                backgroundColor: 'white',
+                padding: '20px 40px',
+                borderRadius: 12,
+                height: 400,
+                width: '45%',
+                lineHeight: 2
+              }}>
+              <label
+                style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
+                Can you help find a home for my pet?
+              </label>
+              <label style={{ fontSize: 14 }}>
+                Responsible pet ownership is a lifetime commitment, which is why
+                we don’t take in abandoned pets. We can assist in rehoming your
+                pet by advertising within our networks, NOT by admitting your
+                pet at the shelter, and ONLY if conditions and qualifications
+                are met.
+              </label>
+            </div>
+            <img
+              src="assets/icons/doghouse.jpg"
+              width="43%"
+              height="400px"
+              style={{
+                marginTop: 40,
+                padding: '20px 40px',
+                borderRadius: 12
+              }}
+            />
           </div>
         </div>
       </div>

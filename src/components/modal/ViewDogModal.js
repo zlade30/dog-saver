@@ -7,7 +7,6 @@ import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import PaintFillIcon from 'remixicon-react/PaintFillIcon'
 import moment from 'moment'
-import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
@@ -144,6 +143,21 @@ const ViewDogModal = ({
             </label>
             <label style={{ fontSize: 14 }}>
               {values?.gender?.label || ''}
+            </label>
+          </div>
+          <div className="flex items-center w-full">
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
+            <label
+              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+              Birthday:
+            </label>
+            <label style={{ fontSize: 14 }}>
+              {values?.birthday
+                ? moment(values?.birthday?.toDate()).format('ll')
+                : ''}
             </label>
           </div>
           {/* <div className="flex items-center w-full">

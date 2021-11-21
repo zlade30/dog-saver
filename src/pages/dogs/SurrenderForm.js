@@ -9,6 +9,7 @@ import Button from 'components/buttons/Button'
 import { selectStyles } from 'utils/helpers'
 import Select from 'react-select'
 import ImageLineIcon from 'remixicon-react/ImageLineIcon'
+import moment from 'moment'
 
 const SurrenderForm = ({
   isOpen,
@@ -34,6 +35,7 @@ const SurrenderForm = ({
     color: '',
     breed: '',
     gender: '',
+    birthday: '',
     reason: ''
   })
 
@@ -47,6 +49,7 @@ const SurrenderForm = ({
         color: '',
         breed: '',
         gender: '',
+        birthday: '',
         reason: ''
       })
       setErrorMsg('')
@@ -228,6 +231,24 @@ const SurrenderForm = ({
                 id="gender"
                 name="gender"
                 placeholder="Gender"
+                style={{ marginTop: 10 }}
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Birthday
+              </label>
+              <TextField
+                disabled
+                errors={errors}
+                touched={touched}
+                width={320}
+                value={
+                  formValues?.birthday
+                    ? moment(formValues?.birthday?.toDate()).format('ll')
+                    : ''
+                }
+                id="birthday"
+                name="birthday"
+                placeholder="Birthday"
                 style={{ marginTop: 10 }}
               />
               <Field

@@ -10,6 +10,8 @@ import UserLineIcon from 'remixicon-react/UserLineIcon'
 import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
 import Button from 'components/buttons/Button'
 import Chat1LineIcon from 'remixicon-react/Chat1LineIcon'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import moment from 'moment'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -159,6 +161,21 @@ const SurrenderDogModal = ({
             </label>
             <label style={{ fontSize: 14 }}>
               {`${values?.user?.firstName} ${values?.user?.lastName}` || ''}
+            </label>
+          </div>
+          <div className="flex items-center w-full">
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
+            <label
+              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+              Birthday:
+            </label>
+            <label style={{ fontSize: 14 }}>
+              {values?.dog?.birthday
+                ? moment(values?.dog?.birthday?.toDate()).format('ll')
+                : ''}
             </label>
           </div>
           <div className="flex items-center w-full">

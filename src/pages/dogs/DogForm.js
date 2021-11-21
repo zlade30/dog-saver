@@ -57,7 +57,8 @@ const DogForm = ({
     gender: Yup.object().required('Required').nullable(),
     spayed: Yup.boolean().required('Required'),
     vaccineReceived: Yup.string('').notRequired(),
-    vaccineDate: Yup.string('').notRequired()
+    vaccineDate: Yup.string('').notRequired(),
+    birthday: Yup.string().required('Required')
   })
 
   useEffect(() => {
@@ -316,6 +317,45 @@ const DogForm = ({
                 )}
               />
               <label style={{ fontWeight: 'bold', fontSize: 14 }}>
+                Birthday
+              </label>
+              <Field
+                id="birthday"
+                name="birthday"
+                render={() => (
+                  <div
+                    className="margin-b-10 relative"
+                    style={{ marginTop: 10 }}>
+                    <CalendarLineIcon
+                      size={18}
+                      style={{
+                        position: 'absolute',
+                        right: 0,
+                        zIndex: 10,
+                        marginTop: 10,
+                        marginRight: 10
+                      }}
+                    />
+                    <ReactDatePicker
+                      className="text-field w-320"
+                      selected={values?.birthday?.toDate()}
+                      dateFormat="MM/dd/yyyy"
+                      onChange={(date) => {
+                        setFieldValue(
+                          'birthday',
+                          fire.firestore.Timestamp.fromDate(date)
+                        )
+                      }}
+                      onChangeRaw={(evt) => evt.preventDefault()}
+                      placeholderText="Select Birthday"
+                    />
+                    {errors['birthday'] && touched['birthday'] && (
+                      <div className="label-error">{`Birthday is required.`}</div>
+                    )}
+                  </div>
+                )}
+              />
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
                 Vaccine Received
               </label>
               <TextField
@@ -456,6 +496,7 @@ DogForm.defaultProps = {
     gender: '',
     spayed: false,
     vaccineReceived: '',
+    birthday: new Date(),
     vaccineDate: new Date()
   },
   isUpdate: false

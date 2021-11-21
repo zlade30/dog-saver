@@ -192,6 +192,21 @@ const ViewImpoundDogModal = ({
             </label>
           </div>
           <div className="flex items-center w-full">
+            <CalendarLineIcon
+              style={{ margin: 10, marginLeft: 20 }}
+              size={20}
+            />
+            <label
+              style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+              Birthday:
+            </label>
+            <label style={{ fontSize: 14 }}>
+              {values?.birthday
+                ? moment(values?.birthday?.toDate()).format('ll')
+                : ''}
+            </label>
+          </div>
+          <div className="flex items-center w-full">
             <MapPinLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
             <label
               style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>

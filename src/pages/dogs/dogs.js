@@ -42,6 +42,7 @@ const Dogs = () => {
     name: '',
     profile: [],
     color: '',
+    birthday: null,
     breed: '',
     gender: '',
     spayed: false,
@@ -444,7 +445,8 @@ const Dogs = () => {
             profile: surrenderValue?.profile,
             color: surrenderValue?.color,
             breed: surrenderValue?.breed,
-            gender: surrenderValue?.gender
+            gender: surrenderValue?.gender,
+            birthday: surrenderValue?.birthday
           },
           reason: surrenderValue.reason,
           surrender: values,
@@ -531,6 +533,7 @@ const Dogs = () => {
           profile: '',
           color: '',
           breed: '',
+          birthday: '',
           gender: '',
           reason: ''
         }}

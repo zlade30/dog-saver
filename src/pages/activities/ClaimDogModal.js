@@ -13,6 +13,7 @@ import UserLineIcon from 'remixicon-react/UserLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import PaintFillIcon from 'remixicon-react/PaintFillIcon'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 
 const ClaimDogModal = ({
   isOpen,
@@ -464,6 +465,17 @@ const ClaimDogModal = ({
           Owner Contact:
         </label>
         <label style={{ fontSize: 14 }}>{values?.user?.phone || ''}</label>
+      </div>
+      <div className="flex items-center w-full">
+        <CalendarLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+        <label style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+          Birthday:
+        </label>
+        <label style={{ fontSize: 14 }}>
+          {values?.dog?.birthday
+            ? moment(values?.dog?.birthday?.toDate()).format('ll')
+            : ''}
+        </label>
       </div>
       {role === 'admin' && values?.status === 'pending' ? (
         <div className="modal-footer" style={{ marginRight: 20 }}>

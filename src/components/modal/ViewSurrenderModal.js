@@ -13,6 +13,7 @@ import UserLineIcon from 'remixicon-react/UserLineIcon'
 import PhoneLineIcon from 'remixicon-react/PhoneLineIcon'
 import Chat1LineIcon from 'remixicon-react/Chat1LineIcon'
 import Button from 'components/buttons/Button'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -467,6 +468,17 @@ const ViewSurrenderModal = ({
           Owner Contact:
         </label>
         <label style={{ fontSize: 14 }}>{values?.user?.phone || ''}</label>
+      </div>
+      <div className="flex items-center w-full">
+        <CalendarLineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
+        <label style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+          Birthday:
+        </label>
+        <label style={{ fontSize: 14 }}>
+          {values?.dog?.birthday
+            ? moment(values?.dog?.birthday?.toDate()).format('ll')
+            : ''}
+        </label>
       </div>
       <div className="flex items-center w-full">
         <Chat1LineIcon style={{ margin: 10, marginLeft: 20 }} size={20} />
