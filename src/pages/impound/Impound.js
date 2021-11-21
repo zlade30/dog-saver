@@ -512,8 +512,8 @@ const Impound = () => {
       />
       <OptionModal
         isOpen={isOpenOptionModal}
-        isClaimDisable={checkClaimDisable()}
-        isAdoptDisable={checkAdoptDisable()}
+        // isClaimDisable={checkClaimDisable()}
+        // isAdoptDisable={checkAdoptDisable()}
         onClaim={() => {
           if (!user) {
             setIsOpenOptionModal(false)

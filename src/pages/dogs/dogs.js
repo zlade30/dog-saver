@@ -32,6 +32,7 @@ import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
 import ViewDogModal from 'components/modal/ViewDogModal'
 import PrivacyPolicyModal from 'components/modal/PrivacyPolicyModal'
+import SurrenderModal from 'components/modal/SurrenderModal'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -75,6 +76,8 @@ const Dogs = () => {
   const [selDogOption, setSelDogOption] = useState(dogOptions[0])
   const [checkPP, setCheckPP] = useState(false)
   const [showPP, setShowPP] = useState(false)
+  const [surrenderValue, setSurrenderValue] = useState()
+  const [surrenderModal, setSurrenderModal] = useState(false)
 
   const { user } = useContext(UserContext)
 
@@ -430,19 +433,21 @@ const Dogs = () => {
 
   const onSurrender = (values) => {
     console.log(values)
+    console.log(surrenderValue)
     setShowLoader(true)
     dispatch(
       createActivityAction({
         data: {
           user,
           dog: {
-            id: values?.id,
-            profile: values?.profile,
-            color: values?.color,
-            breed: values?.breed,
-            gender: values?.gender
+            id: surrenderValue?.id,
+            profile: surrenderValue?.profile,
+            color: surrenderValue?.color,
+            breed: surrenderValue?.breed,
+            gender: surrenderValue?.gender
           },
-          reason: values.reason,
+          reason: surrenderValue.reason,
+          surrender: values,
           status: 'pending',
           dateAdded: new Date(),
           archive: false,
@@ -459,7 +464,7 @@ const Dogs = () => {
             draggable: true,
             progress: undefined
           })
-          setIsSurrender(false)
+          setSurrenderModal(false)
         },
         onFailure: () => {
           setShowLoader(false)
@@ -529,7 +534,11 @@ const Dogs = () => {
           gender: '',
           reason: ''
         }}
-        onSubmit={onSurrender}
+        onSubmit={(values) => {
+          setSurrenderValue(values)
+          setSurrenderModal(true)
+          setIsSurrender(false)
+        }}
         setDogImage1={setDogImage1}
         setDogImage2={setDogImage2}
         setDogImage3={setDogImage3}
@@ -594,6 +603,11 @@ const Dogs = () => {
         dogImage4={dogImage4}
         isOpen={showViewDogImagesModal}
         onClose={() => setShowViewDogImagesModal(false)}
+      />
+      <SurrenderModal
+        isOpen={surrenderModal}
+        onClose={() => setSurrenderModal(false)}
+        onSendForm={onSurrender}
       />
       <PrivacyPolicyModal isOpen={showPP} onClose={() => setShowPP(false)} />
       <div className="right-container">

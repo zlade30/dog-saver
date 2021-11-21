@@ -69,7 +69,10 @@ const Dashboard = () => {
               display: 'flex',
               flexDirection: 'column',
               textAlign: 'justify',
-              marginTop: 40
+              marginTop: 40,
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 12
             }}>
             <label
               style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
@@ -88,7 +91,10 @@ const Dashboard = () => {
               display: 'flex',
               flexDirection: 'column',
               textAlign: 'justify',
-              marginTop: 10
+              marginTop: 10,
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 12
             }}>
             <label
               style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
@@ -106,7 +112,10 @@ const Dashboard = () => {
               display: 'flex',
               flexDirection: 'column',
               textAlign: 'justify',
-              marginTop: 10
+              marginTop: 10,
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 12
             }}>
             <label
               style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>
@@ -130,7 +139,10 @@ const Dashboard = () => {
               display: 'flex',
               flexDirection: 'column',
               textAlign: 'justify',
-              marginTop: 10
+              marginTop: 10,
+              backgroundColor: 'white',
+              padding: 20,
+              borderRadius: 12
             }}>
             <label
               style={{ fontWeight: 'bold', fontSize: 20, marginBottom: 5 }}>

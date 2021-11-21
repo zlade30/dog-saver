@@ -398,7 +398,7 @@ const Dashboard = () => {
               onChange={(selected) => setDogRecentOption(selected)}
             />
           </div>
-          {/* <div className="flex w-full justify-between">
+          <div className="flex w-full justify-between">
             <div
               style={{
                 width: 200,
@@ -473,8 +473,8 @@ const Dashboard = () => {
               <h5 style={{ padding: 0, margin: 0 }}>Vaccinated Dogs</h5>
               <h1 style={{ color: '#42c2d3' }}>{vaccinatedDogs}</h1>
             </div>
-          </div> */}
-          <div className="w-full item-center justify-center">
+          </div>
+          <div className="w-full item-center justify-center" style={{ marginTop: 20 }}>
             <div
               style={{
                 width: '50%',
@@ -535,7 +535,7 @@ const Dashboard = () => {
               </label>
             </div>
           </div>
-          <h1>Recent Announcement</h1>
+          {/* <h1>Recent Announcement</h1>
           <div className="swipeable">
             {index !== 0 && (
               <ArrowLeftIcon
@@ -568,7 +568,7 @@ const Dashboard = () => {
                 />
               ))}
             </div>
-          </div>
+          </div> */}
           <h1>Recent Activities</h1>
           <div
             style={{

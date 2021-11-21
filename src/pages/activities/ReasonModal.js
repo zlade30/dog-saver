@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import ReactModal from 'react-modal'
 import CloseLineIcon from 'remixicon-react/CloseLineIcon'
@@ -8,6 +8,13 @@ import Button from 'components/buttons/Button'
 const ReasonModal = ({ isOpen, onClose, reason, onReject }) => {
   const [rejectReason, setRejectReason] = useState('')
   const [isSubmit, setIsSubmit] = useState(false)
+
+  useEffect(() => {
+    if (isOpen) {
+      setRejectReason('')
+      setIsSubmit(false)
+    }
+  }, isOpen)
 
   return (
     <ReactModal
@@ -100,6 +107,21 @@ const ReasonModal = ({ isOpen, onClose, reason, onReject }) => {
               Reason:
             </label>
             <label style={{ fontSize: 14 }}>{reason}</label>
+            <div style={{ marginBottom: 10, width: '95%' }}>
+              <label
+                style={{
+                  marginTop: 10,
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                  position: 'absolute',
+                  bottom: 0,
+                  textAlign: 'center',
+                  marginBottom: 12,
+                  marginRight: 20
+                }}>
+                For more info please contact 09553144476 or visit dog impounding
+              </label>
+            </div>
           </div>
         )}
       </div>

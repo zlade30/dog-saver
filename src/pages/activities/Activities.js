@@ -22,6 +22,7 @@ import { fire } from 'firebase'
 import AdoptDogModal from './AdoptDogModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 import ReasonModal from './ReasonModal'
+import ViewSurrenderModal from 'components/modal/ViewSurrenderModal'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -33,6 +34,7 @@ const Activities = () => {
   const [showAdoptionModal, setShowAdoptionModal] = useState(false)
   const [showViewDogImagesModal, setShowViewDogImagesModal] = useState(false)
   const [showReasonModal, setShowReasonModal] = useState(false)
+  const [showSurrenderModal, setShowSurrenderModal] = useState(false)
   const [reason, setReason] = useState('')
   const [dogImage1, setDogImage1] = useState()
   const [dogImage2, setDogImage2] = useState()
@@ -63,7 +65,7 @@ const Activities = () => {
       setReason(item?.rejectReason)
     } else {
       if (item?.type === 'surrender') {
-        setShowSurrenderDogModal(true)
+        setShowSurrenderModal(true)
       } else if (item?.type === 'claim') {
         setShowClaimDogModal(true)
       } else if (item?.type === 'adoption') {
@@ -362,6 +364,11 @@ const Activities = () => {
         isOpen={showClaimDogModal}
         onClose={() => setShowClaimDogModal(false)}
         values={selectedActivity}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
         onApprove={() => {
           setShowLoader(true)
           dispatch(
@@ -455,6 +462,11 @@ const Activities = () => {
         isOpen={showAdoptionModal}
         onClose={() => setShowAdoptionModal(false)}
         values={selectedActivity}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
         onApprove={() => {
           setShowLoader(true)
           dispatch(
@@ -543,6 +555,109 @@ const Activities = () => {
           setShowReasonModal(true)
         }}
       />
+      <ViewSurrenderModal
+        role={user?.role}
+        isOpen={showSurrenderModal}
+        values={selectedActivity}
+        onClose={() => setShowSurrenderModal(false)}
+        setDogImage1={setDogImage1}
+        setDogImage2={setDogImage2}
+        setDogImage3={setDogImage3}
+        setDogImage4={setDogImage4}
+        setShowViewDogImagesModal={setShowViewDogImagesModal}
+        onApprove={() => {
+          setShowLoader(true)
+          dispatch(
+            updateActivityAction({
+              data: {
+                id: selectedActivity?.id,
+                values: { status: 'approved' }
+              },
+              onSuccess: () => {
+                dispatch(
+                  removeDogAction({
+                    data: {
+                      id: selectedActivity?.dog?.id,
+                      values: {
+                        archive: true
+                      }
+                    },
+                    onSuccess: () => {},
+                    onFailure: () => {}
+                  })
+                )
+                dispatch(
+                  createDogImpoundAction({
+                    data: {
+                      ...selectedActivity?.dog,
+                      archive: false,
+                      dateAdded: new Date()
+                    },
+                    onSuccess: () => {
+                      setShowLoader(false)
+                      setShowSurrenderDogModal(false)
+                      setShowSurrenderModal(false)
+                      setActivityList((prevList) =>
+                        prevList?.map((item) =>
+                          item?.id === selectedActivity?.id
+                            ? { ...item, status: 'approved' }
+                            : item
+                        )
+                      )
+                      toast.success('Activity updated successfully.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                    },
+                    onFailure: () => {
+                      setShowLoader(false)
+                      setShowSurrenderDogModal(false)
+                      toast.error('Activity update error.', {
+                        position: 'bottom-right',
+                        autoClose: 3000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined
+                      })
+                    }
+                  })
+                )
+              },
+              onFailure: () => {
+                setShowLoader(false)
+                setShowSurrenderDogModal(false)
+                toast.error('Activity update error.', {
+                  position: 'bottom-right',
+                  autoClose: 3000,
+                  hideProgressBar: false,
+                  closeOnClick: true,
+                  pauseOnHover: true,
+                  draggable: true,
+                  progress: undefined
+                })
+              }
+            })
+          )
+        }}
+        onReject={() => {
+          setShowReasonModal(true)
+        }}
+      />
+      <ViewDogImagesModal
+        dogImage1={dogImage1}
+        dogImage2={dogImage2}
+        dogImage3={dogImage3}
+        dogImage4={dogImage4}
+        isOpen={showViewDogImagesModal}
+        onClose={() => setShowViewDogImagesModal(false)}
+      />
       <ReasonModal
         isOpen={showReasonModal}
         reason={reason}
@@ -561,6 +676,8 @@ const Activities = () => {
                 setShowClaimDogModal(false)
                 setShowAdoptionModal(false)
                 setShowReasonModal(false)
+                setShowSurrenderModal(false)
+                setShowViewDogImagesModal(false)
                 setActivityList((prevList) =>
                   prevList?.map((item) =>
                     item?.id === selectedActivity?.id
@@ -594,14 +711,6 @@ const Activities = () => {
             })
           )
         }}
-      />
-      <ViewDogImagesModal
-        dogImage1={dogImage1}
-        dogImage2={dogImage2}
-        dogImage3={dogImage3}
-        dogImage4={dogImage4}
-        isOpen={showViewDogImagesModal}
-        onClose={() => setShowViewDogImagesModal(false)}
       />
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>
