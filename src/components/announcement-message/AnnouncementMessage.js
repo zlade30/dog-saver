@@ -22,12 +22,12 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role }) => {
   )
 
   return (
-    <div className="announcement-message mb-10">
+    <div className="announcement-message mb-10" style={{ paddingTop: 0 }}>
       <div className="ancmnt-msg-header">
         <div className="ancmnt-msg-header-icon">
           <div className="flex items-center">
             <HornIcon />
-            <label>{item?.title}</label>
+            <h1>{item?.title}</h1>
           </div>
           {role === 'admin' ? (
             <div className="flex items-center">
