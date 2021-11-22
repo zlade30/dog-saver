@@ -30,40 +30,61 @@ const Dashboard = () => {
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900 }}>
-          {/* <h1>Recent Announcement</h1>
-          <div className="swipeable">
-            {index !== 0 && (
-              <ArrowLeftIcon
-                onClick={() => setIndex(index - 1)}
-                className="swipeable-arrow-l cursor-pointer"
-              />
-            )}
-            <AutoPlaySwipeableViews
-              style={{ width: '80%' }}
-              interval={5000}
-              index={index}
-              onChangeIndex={handleChangeIndex}>
-              {announcements.map((item) => (
-                <AnnouncementMessage key={item} item={item} role="user" />
-              ))}
-            </AutoPlaySwipeableViews>
-            {index !== announcements?.length - 1 && (
-              <ArrowLeftIcon
-                onClick={() => setIndex(index + 1)}
-                className="swipeable-arrow-r cursor-pointer"
-              />
-            )}
-            <div className="swipeable-dots-cont">
-              {announcements.map((item, i) => (
-                <div
-                  key={item}
-                  onClick={() => setIndex(i)}
-                  className="swipeable-dots"
-                  style={{ backgroundColor: i === index ? 'white' : '' }}
-                />
-              ))}
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row-reverse',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+            <div>
+              <h1>Recent Announcement</h1>
+              <div className="swipeable" style={{ width: '92%' }}>
+                {index !== 0 && (
+                  <ArrowLeftIcon
+                    onClick={() => setIndex(index - 1)}
+                    className="swipeable-arrow-l cursor-pointer"
+                  />
+                )}
+                <AutoPlaySwipeableViews
+                  style={{ width: '80%' }}
+                  interval={5000}
+                  index={index}
+                  onChangeIndex={handleChangeIndex}>
+                  {announcements.map((item) => (
+                    <AnnouncementMessage key={item} item={item} role="user" />
+                  ))}
+                </AutoPlaySwipeableViews>
+                {index !== announcements?.length - 1 && (
+                  <ArrowLeftIcon
+                    onClick={() => setIndex(index + 1)}
+                    className="swipeable-arrow-r cursor-pointer"
+                  />
+                )}
+                <div className="swipeable-dots-cont">
+                  {announcements.map((item, i) => (
+                    <div
+                      key={item}
+                      onClick={() => setIndex(i)}
+                      className="swipeable-dots"
+                      style={{ backgroundColor: i === index ? 'white' : '' }}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-          </div> */}
+            <img
+              src="assets/icons/ann-img.png"
+              width="50%"
+              height="400px"
+              style={{
+                marginTop: 40,
+                padding: '20px 40px',
+                borderRadius: 12
+              }}
+            />
+          </div>
           <div
             style={{
               width: '100%',
