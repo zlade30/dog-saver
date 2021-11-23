@@ -234,10 +234,27 @@ const ViewImpoundDogModal = ({
                 size={20}
               />
               <label
-                style={{ fontWeight: 'bold', fontSize: 14, marginRight: 20 }}>
+                style={{
+                  fontWeight: 'bold',
+                  fontSize: 14,
+                  marginRight: 20,
+                  color:
+                    renderAvailableLabel(values?.euthSched?.toDate()) ===
+                    'Unavailable:'
+                      ? 'red'
+                      : ''
+                }}>
                 {renderAvailableLabel(values?.euthSched?.toDate())}
               </label>
-              <label style={{ fontSize: 14 }}>
+              <label
+                style={{
+                  fontSize: 14,
+                  color:
+                    renderAvailableLabel(values?.euthSched?.toDate()) ===
+                    'Unavailable:'
+                      ? 'red'
+                      : ''
+                }}>
                 {renderAvailableValue(values?.euthSched?.toDate())}
               </label>
             </div>
