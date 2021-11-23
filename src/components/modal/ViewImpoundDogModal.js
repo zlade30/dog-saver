@@ -48,7 +48,7 @@ const ViewImpoundDogModal = ({
 
     if (currentDate > claimLastSched) {
       if (currentDate > adoptLastSched) {
-        return ''
+        return 'Unavailable:'
       } else {
         return 'Available:'
       }
@@ -71,7 +71,7 @@ const ViewImpoundDogModal = ({
 
     if (currentDate > claimLastSched) {
       if (currentDate > adoptLastSched) {
-        return ''
+        return 'Overdue'
       } else {
         return `Adopt until ${adoptLastSched}`
       }
