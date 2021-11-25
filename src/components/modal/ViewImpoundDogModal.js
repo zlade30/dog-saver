@@ -37,14 +37,10 @@ const ViewImpoundDogModal = ({
 }) => {
   const renderAvailableLabel = (date) => {
     const dateScheduled = date
-    const currentDate = moment(new Date()).format('ll')
+    const currentDate = moment(new Date()).toDate()
     const claimSched = moment(dateScheduled).add(4, 'days')
-    const claimLastSched = moment(
-      moment(dateScheduled).add(4, 'days').toDate()
-    ).format('ll')
-    const adoptLastSched = moment(
-      moment(claimSched).add(7, 'days').toDate()
-    ).format('ll')
+    const claimLastSched = moment(moment(dateScheduled).add(4, 'days').toDate())
+    const adoptLastSched = moment(moment(claimSched).add(7, 'days').toDate())
 
     if (currentDate > claimLastSched) {
       if (currentDate > adoptLastSched) {
@@ -60,23 +56,19 @@ const ViewImpoundDogModal = ({
   const renderAvailableValue = (date) => {
     // {moment(values?.euthSched?.toDate()).format('ll')}
     const dateScheduled = date
-    const currentDate = moment(new Date()).format('ll')
+    const currentDate = moment(new Date()).toDate()
     const claimSched = moment(dateScheduled).add(4, 'days')
-    const claimLastSched = moment(
-      moment(dateScheduled).add(4, 'days').toDate()
-    ).format('ll')
-    const adoptLastSched = moment(
-      moment(claimSched).add(7, 'days').toDate()
-    ).format('ll')
+    const claimLastSched = moment(moment(dateScheduled).add(4, 'days').toDate())
+    const adoptLastSched = moment(moment(claimSched).add(7, 'days').toDate())
 
     if (currentDate > claimLastSched) {
       if (currentDate > adoptLastSched) {
         return 'Overdue'
       } else {
-        return `Adopt until ${adoptLastSched}`
+        return `Adopt until ${adoptLastSched.format('ll')}`
       }
     } else {
-      return `Claim until ${claimLastSched}`
+      return `Claim until ${claimLastSched.format('ll')}`
     }
   }
 
