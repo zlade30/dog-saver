@@ -659,10 +659,14 @@ const Dogs = () => {
               onChange={(evt) => {
                 evt.persist()
                 setDogList(() =>
-                  list.filter((product) =>
-                    `${product.name}`
-                      .toLowerCase()
-                      .includes(evt?.target?.value?.toLowerCase())
+                  list.filter(
+                    (product) =>
+                      `${product.name}`
+                        .toLowerCase()
+                        .includes(evt?.target?.value?.toLowerCase()) ||
+                      `${product.owner.label}`
+                        .toLowerCase()
+                        .includes(evt?.target?.value?.toLowerCase())
                   )
                 )
               }}

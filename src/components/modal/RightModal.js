@@ -19,7 +19,6 @@ const RightModal = ({
   initialValues,
   isUpdate
 }) => {
-
   const schema = Yup.object().shape({
     email: Yup.string().required('Required'),
     username: Yup.string().required('Required'),
@@ -103,8 +102,8 @@ const RightModal = ({
                 touched={touched}
                 width={320}
                 value={
-                  values.firstName.charAt(0).toUpperCase() +
-                  values.firstName.slice(1)
+                  values?.firstName?.charAt(0)?.toUpperCase() +
+                  values?.firstName?.slice(1)
                 }
                 id="firstName"
                 name="firstName"
@@ -119,8 +118,8 @@ const RightModal = ({
                 touched={touched}
                 width={320}
                 value={
-                  values.lastName.charAt(0).toUpperCase() +
-                  values.lastName.slice(1)
+                  values?.lastName?.charAt(0)?.toUpperCase() +
+                  values?.lastName?.slice(1)
                 }
                 id="lastName"
                 name="lastName"
@@ -135,32 +134,28 @@ const RightModal = ({
                 touched={touched}
                 width={320}
                 value={
-                  values.middleName.charAt(0).toUpperCase() +
-                  values.middleName.slice(1)
+                  values?.middleName?.charAt(0)?.toUpperCase() +
+                    values?.middleName?.slice(1) || ''
                 }
                 id="middleName"
                 name="middleName"
                 placeholder="Middle Name"
               />
-              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
-                Suffix
-              </label>
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Suffix</label>
               <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
                 touched={touched}
                 width={320}
                 value={
-                  values.suffix.charAt(0).toUpperCase() +
-                  values.suffix.slice(1)
+                  values?.suffix?.charAt(0)?.toUpperCase() +
+                    values?.suffix?.slice(1) || ''
                 }
                 id="suffix"
                 name="suffix"
                 placeholder="Suffix"
               />
-              <label style={{ fontWeight: 'bold', fontSize: 14 }}>
-                Phone
-              </label>
+              <label style={{ fontWeight: 'bold', fontSize: 14 }}>Phone</label>
               <div style={{ marginTop: 4 }} />
               <TextField
                 errors={errors}
@@ -181,8 +176,8 @@ const RightModal = ({
                 touched={touched}
                 width={320}
                 value={
-                  values.address.charAt(0).toUpperCase() +
-                  values.address.slice(1)
+                  values?.address?.charAt(0)?.toUpperCase() +
+                    values?.address?.slice(1) || ''
                 }
                 id="address"
                 name="address"

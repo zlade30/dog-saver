@@ -87,7 +87,7 @@ const AppRoutes = ({ history }) => {
     <div className="flex">
       {showLoader && <LoadingOverlay />}
       {routes?.length && !isPublic && savedUser && (
-        <Sidebar onLogout={onLogout} user={user} />
+        <Sidebar onLogout={onLogout} user={user} setUser={setUser} />
       )}
       {routes?.length && isPublic ? (
         routes.map((route) => (

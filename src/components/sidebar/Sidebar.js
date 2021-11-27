@@ -9,6 +9,13 @@ import GovernmentLineIcon from 'remixicon-react/GovernmentLineIcon'
 import HomeLineIcon from 'remixicon-react/HomeLineIcon'
 import BookLine from 'remixicon-react/BookLineIcon'
 import { useHistory, useLocation } from 'react-router'
+import PencilLineIcon from 'remixicon-react/PencilLineIcon'
+import RightModal from 'components/modal/RightModal'
+import { adminUpdateUserAction } from 'redux/actions/user.action'
+import { useDispatch } from 'react-redux'
+import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
+import { toast } from 'react-toastify'
+import { uploadUserImageAction } from 'redux/actions/utils.action'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -40,10 +47,17 @@ const HornIcon = ({ color = '#334D67' }) => (
   </svg>
 )
 
-const Sidebar = ({ user, onLogout }) => {
+const Sidebar = ({ user, onLogout, setUser }) => {
   const history = useHistory()
   const location = useLocation()
+  const dispatch = useDispatch()
 
+  const [formValues, setFormValues] = useState()
+  const [errorMsg, setErrorMsg] = useState('')
+  const [profile, setProfile] = useState()
+  const [showFormModal, setShowFormModal] = useState(false)
+  const [userId, setUserId] = useState()
+  const [showLoader, setShowLoader] = useState(false)
   const [menus, setMenus] = useState([
     {
       name: user?.role === 'admin' ? 'Overview' : 'Home',
@@ -95,6 +109,137 @@ const Sidebar = ({ user, onLogout }) => {
     history.push(menu?.path)
   }
 
+  const onSubmit = (values) => {
+    setShowLoader(true)
+    if (profile) {
+      dispatch(
+        uploadUserImageAction({
+          data: { file: profile },
+          onSuccess: (response) => {
+            dispatch(
+              adminUpdateUserAction({
+                data: {
+                  id: userId,
+                  values: {
+                    ...values,
+                    profile: response?.data,
+                    phone: `${
+                      values?.phone[0] !== 0
+                        ? `0${values?.phone}`
+                        : `${values?.phone}`
+                    }`
+                  }
+                },
+                onSuccess: () => {
+                  setShowLoader(false)
+                  setShowFormModal(false)
+                  setUser({
+                    ...values,
+                    profile: response?.data,
+                    phone: `${
+                      values?.phone[0] !== 0
+                        ? `0${values?.phone}`
+                        : `${values?.phone}`
+                    }`
+                  })
+                  toast.success('User updated successfully.', {
+                    position: 'bottom-right',
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined
+                  })
+                },
+                onFailure: (error) => {
+                  setErrorMsg(error)
+                  setShowLoader(false)
+                }
+              })
+            )
+          },
+          onFailure: (error) => {
+            setShowLoader(false)
+            setErrorMsg(error)
+            toast.error('User update failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+      )
+    } else {
+      dispatch(
+        adminUpdateUserAction({
+          data: {
+            id: userId,
+            values: {
+              ...values,
+              phone: `${
+                values?.phone[0] !== 0
+                  ? `0${values?.phone}`
+                  : `${values?.phone}`
+              }`
+            }
+          },
+          onSuccess: () => {
+            setShowLoader(false)
+            setShowFormModal(false)
+            setUser({
+              ...values,
+              phone: `${
+                values?.phone[0] !== 0
+                  ? `0${values?.phone}`
+                  : `${values?.phone}`
+              }`
+            })
+            toast.success('User updated successfully.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          },
+          onFailure: (error) => {
+            setErrorMsg(error)
+            setShowLoader(false)
+            toast.error('User update failed.', {
+              position: 'bottom-right',
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined
+            })
+          }
+        })
+      )
+    }
+  }
+
+  const onUpdate = () => {
+    setUserId(user?.id)
+    setShowFormModal(true)
+    setFormValues({
+      ...user,
+      middleName: user?.middleName || '',
+      suffix: user?.suffix || '',
+      phone: user?.phone || '',
+      address: user?.address || '',
+      confirmPassword: ''
+    })
+  }
+
   const renderIcon = (menu) => {
     switch (menu?.name) {
       case 'Overview':
@@ -119,6 +264,17 @@ const Sidebar = ({ user, onLogout }) => {
 
   return (
     <div className="sidebar">
+      {showLoader && <LoadingOverlay />}
+      <RightModal
+        isOpen={showFormModal}
+        onClose={() => setShowFormModal(false)}
+        onSubmit={onSubmit}
+        errorMsg={errorMsg}
+        setErrorMsg={setErrorMsg}
+        setProfile={setProfile}
+        initialValues={formValues}
+        isUpdate={true}
+      />
       <div className="logo margin-b-20">
         <img className="logo-img" src="assets/icons/dog.png" />
         BARK
@@ -132,10 +288,24 @@ const Sidebar = ({ user, onLogout }) => {
           isClickable={false}
         />
         <div className="user-info">
-          <label className="bold">
-            {`${user?.firstName || ''} 
-              ${user?.lastName || ''}`}
-          </label>
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between'
+            }}>
+            <label className="bold">
+              {`${user?.firstName || ''} 
+                ${user?.lastName || ''}`}
+            </label>
+            <PencilLineIcon
+              style={{ cursor: 'pointer' }}
+              onClick={onUpdate}
+              size={20}
+              color="#42C2D3"
+            />
+          </div>
           <label>
             {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
           </label>
@@ -170,12 +340,14 @@ const Sidebar = ({ user, onLogout }) => {
 
 Sidebar.defaultProps = {
   user: {},
-  onLogout: () => {}
+  onLogout: () => {},
+  setUser: () => {}
 }
 
 Sidebar.propTypes = {
   user: PropTypes.object,
-  onLogout: PropTypes.func.isRequired
+  onLogout: PropTypes.func.isRequired,
+  setUser: PropTypes.func
 }
 
 export default Sidebar
