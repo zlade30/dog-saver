@@ -1278,7 +1278,7 @@ const AdoptDogModal = ({
             penalized under RA 8485.
           </label>
         </div>
-        <div
+        {/* <div
           style={{
             marginTop: 60,
             width: '95%',
@@ -1316,7 +1316,7 @@ const AdoptDogModal = ({
               <label style={{ fontWeight: 'bold' }}>Date Signed</label>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {role === 'admin' && values?.status === 'pending' ? (
         <div className="modal-footer" style={{ marginRight: 20 }}>

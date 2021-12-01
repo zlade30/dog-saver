@@ -448,7 +448,8 @@ const Users = () => {
           data: {
             id: userId,
             values: {
-              archive: true
+              archive: true,
+              dateAdded: fire.firestore.Timestamp.now()
             }
           },
           onSuccess: () => {

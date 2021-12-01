@@ -108,9 +108,11 @@ const signUp = async (payload) => {
 const returnSelectedOptions = (data) => {
   let query = firestore.collection('users').where('role', '==', 'user')
 
-  if (data.filterBy === userFilterOptions[0].value)
-    query = query.where('archive', '==', false)
-  else query = query.where('archive', '==', true)
+  if (data.filterBy) {
+    if (data.filterBy === userFilterOptions[0].value)
+      query = query.where('archive', '==', false)
+    else query = query.where('archive', '==', true)
+  }
 
   if (data.sortBy === userSortOptions[0].value)
     query = query.orderBy('dateAdded', data.order)

@@ -1746,7 +1746,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
               penalized under RA 8485.
             </label>
           </div>
-          <div
+          {/* <div
             style={{
               marginTop: 60,
               width: '95%',
@@ -1784,7 +1784,7 @@ const AdoptModal = ({ isOpen, onClose, onSendForm }) => {
                 <label style={{ fontWeight: 'bold' }}>Date Signed</label>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="modal-footer" style={{ marginRight: 20 }}>
           <Button

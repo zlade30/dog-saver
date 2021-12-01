@@ -243,7 +243,7 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
                   marginTop: 40
                 }}
               />
-              <div style={{ width: '95%' }}>
+              {/* <div style={{ width: '95%' }}>
                 <label>Signed:</label>
               </div>
               <div
@@ -323,7 +323,7 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
                   <div>__________________________</div>
                   <div style={{ fontSize: 12 }}>Witness</div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div

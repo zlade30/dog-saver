@@ -19,10 +19,12 @@ import {
   dogOptions,
   orderOptions,
   selectStyles,
+  userFilterOptions,
   userSortOptions
 } from 'utils/helpers'
 import Select from 'react-select'
 import { Bar } from 'react-chartjs-2'
+import { getUserListAction } from 'redux/actions/user.action'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
@@ -35,9 +37,15 @@ const Dashboard = () => {
   const [surrenderedDogs, setSurrenderedDogs] = useState(0)
   const [adoptDogs, setAdoptDogs] = useState(0)
   const [vaccinatedDogs, setVaccinatedDogs] = useState(0)
+  const [activeUsers, setActiveUsers] = useState(0)
+  const [archiveUsers, setArchiveUsers] = useState(0)
   const [activityList, setActivityList] = useState([])
   const { user } = useContext(UserContext)
   const [dogRecentOption, setDogRecentOption] = useState({
+    label: 'Weekly',
+    value: 'week'
+  })
+  const [userRecentOption, setUserRecentOption] = useState({
     label: 'Weekly',
     value: 'week'
   })
@@ -71,6 +79,9 @@ const Dashboard = () => {
 
   const [chartData, setChartData] = useState([0, 0, 0, 0, 0, 0])
   const [totalDogs, setTotalDogs] = useState(0)
+
+  const [userChartData, setUserChartData] = useState([0, 0])
+  const [totalUsers, setTotalUsers] = useState(0)
 
   const handleStatusColor = (status) => {
     switch (status) {
@@ -236,6 +247,40 @@ const Dashboard = () => {
     )
 
     dispatch(
+      getUserListAction({
+        data: {
+          filterBy: '',
+          sortBy: userSortOptions[0].value,
+          order: orderOptions[0].value,
+          searchKey: ''
+        },
+        onSuccess: (payload) => {
+          setActiveUsers(
+            payload
+              ?.filter((item) => !item.archive)
+              ?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  userRecentOption.value
+                )
+              ).length
+          )
+          setArchiveUsers(
+            payload
+              ?.filter((item) => item.archive)
+              ?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  userRecentOption.value
+                )
+              ).length
+          )
+        },
+        onFailure: () => {}
+      })
+    )
+
+    dispatch(
       getDogsAction({
         data: {
           emailOwner: user?.email,
@@ -381,6 +426,11 @@ const Dashboard = () => {
     vaccinatedDogs
   ])
 
+  useEffect(() => {
+    setUserChartData([activeUsers, archiveUsers])
+    setTotalUsers(activeUsers + archiveUsers)
+  }, [activeUsers, archiveUsers])
+
   return (
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
@@ -474,7 +524,9 @@ const Dashboard = () => {
               <h1 style={{ color: '#42c2d3' }}>{vaccinatedDogs}</h1>
             </div>
           </div>
-          <div className="w-full item-center justify-center" style={{ marginTop: 20 }}>
+          <div
+            className="w-full item-center justify-center"
+            style={{ marginTop: 20 }}>
             <div
               style={{
                 width: '50%',
@@ -532,6 +584,90 @@ const Dashboard = () => {
               <label
                 style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
                 {totalDogs}
+              </label>
+            </div>
+          </div>
+          <h1>User Recent Updates</h1>
+          <div style={{ width: 200, marginBottom: 20 }}>
+            <Select
+              options={[
+                { label: 'Daily', value: 'day' },
+                { label: 'Weekly', value: 'week' },
+                { label: 'Monthly', value: 'month' }
+              ]}
+              styles={selectStyles}
+              value={userRecentOption}
+              onChange={(selected) => setUserRecentOption(selected)}
+            />
+          </div>
+          <div className="flex w-full items-center">
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 15
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Active Users</h5>
+              <h1 style={{ color: '#42c2d3' }}>{activeUsers}</h1>
+            </div>
+            {user?.role === 'admin' && (
+              <div
+                style={{
+                  width: 200,
+                  minHeight: 100,
+                  backgroundColor: 'white',
+                  borderRadius: 12,
+                  padding: 20,
+                  marginRight: 10
+                }}>
+                <h5 style={{ padding: 0, margin: 0 }}>Archive Users</h5>
+                <h1 style={{ color: '#42c2d3' }}>{archiveUsers}</h1>
+              </div>
+            )}
+          </div>
+          <div
+            className="w-full item-center justify-center"
+            style={{ marginTop: 20 }}>
+            <div
+              style={{
+                width: '50%',
+                backgroundColor: 'white',
+                padding: 20,
+                borderRadius: 12
+              }}>
+              <Bar
+                data={{
+                  labels: ['Active Users', 'Archive Users'],
+                  datasets: [
+                    {
+                      data: userChartData,
+                      borderWidth: 1,
+                      backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                      ],
+                      borderColor: ['rgb(255, 99, 132)', 'rgb(255, 159, 64)']
+                    }
+                  ]
+                }}
+                options={options}
+              />
+            </div>
+            <div
+              style={{
+                width: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <h1>Total</h1>
+              <label
+                style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
+                {totalUsers}
               </label>
             </div>
           </div>
