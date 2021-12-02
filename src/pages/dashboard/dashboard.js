@@ -1,17 +1,64 @@
 /* eslint-disable react/prop-types */
 import AnnouncementMessage from 'components/announcement-message/AnnouncementMessage'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { getAnnouncementsAction } from 'redux/actions/announcement.action'
 import SwipeableViews from 'react-swipeable-views'
 import { autoPlay } from 'react-swipeable-views-utils'
 import ArrowLeftIcon from 'remixicon-react/ArrowLeftLineIcon'
+import {
+  getDogImpoundListAction,
+  getDogsAction
+} from 'redux/actions/dog.action'
+import { dogOptions, orderOptions, selectStyles, userSortOptions } from 'utils/helpers'
+import moment from 'moment'
+import { getActivityListAction } from 'redux/actions/activities.action'
+import Select from 'react-select'
+import { Bar } from 'react-chartjs-2'
+import { UserContext } from 'contexts/user.context'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
   const dispatch = useDispatch()
   const [announcements, setAnnouncement] = useState([])
   const [index, setIndex] = useState(0)
+  const [registeredDogs, setRegisteredDogs] = useState(0)
+  const [impoundDogs, setImpoundDogs] = useState(0)
+  const [claimedDogs, setClaimedDogs] = useState(0)
+  const [surrenderedDogs, setSurrenderedDogs] = useState(0)
+  const [adoptDogs, setAdoptDogs] = useState(0)
+  const [vaccinatedDogs, setVaccinatedDogs] = useState(0)
+
+  const { user } = useContext(UserContext)
+
+  const [dogRecentOption, setDogRecentOption] = useState({
+    label: 'Weekly',
+    value: 'week'
+  })
+
+  const options = {
+    scales: {
+      x: {
+        grid: {
+          display: false
+        },
+        barThickness: 73
+      }
+    },
+    scaleShowGridLines: false,
+    interaction: {
+      intersect: false
+    },
+    barPercentage: 0.6,
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  }
+
+  const [chartData, setChartData] = useState([0, 0, 0, 0, 0, 0])
+  const [totalDogs, setTotalDogs] = useState(0)
 
   const handleChangeIndex = (index) => {
     setIndex(index)
@@ -26,6 +73,152 @@ const Dashboard = () => {
     )
   }, [])
 
+  useEffect(() => {
+    dispatch(
+      getDogsAction({
+        data: {
+          emailOwner: user?.email,
+          filterBy: dogOptions[0].value,
+          sortBy: userSortOptions[0].value,
+          order: orderOptions[0].value
+        },
+        onSuccess: (payload) => {
+          console.log(payload)
+          setVaccinatedDogs(
+            payload
+              ?.filter((item) => item.vaccineReceived)
+              ?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+          )
+          setRegisteredDogs(
+            payload?.filter((item) =>
+              moment(item?.dateAdded?.toDate()).isSame(
+                new Date(),
+                dogRecentOption.value
+              )
+            ).length
+          )
+        },
+        onFailure: () => {}
+      })
+    )
+
+    if (user?.role === 'admin') {
+      dispatch(
+        getDogImpoundListAction({
+          data: {
+            archive: false
+          },
+          onSuccess: (list) => {
+            const payload = list?.data
+            setImpoundDogs(
+              payload?.filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+            )
+          },
+          onFailure: () => {}
+        })
+      )
+    }
+
+    dispatch(
+      getActivityListAction({
+        data: {
+          archive: false,
+          emailOwner: user?.email
+        },
+        onSuccess: (response) => {
+          setClaimedDogs(
+            response?.data
+              ?.filter(
+                (item) =>
+                  item.type === 'claim' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+          )
+          setSurrenderedDogs(
+            response?.data
+              ?.filter(
+                (item) =>
+                  item.type === 'surrender' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+          )
+          setAdoptDogs(
+            response?.data
+              ?.filter(
+                (item) =>
+                  item.type === 'adoption' &&
+                  item.status === 'approved' &&
+                  (user?.role === 'admin'
+                    ? true
+                    : user.email === item.user.email)
+              )
+              .filter((item) =>
+                moment(item?.dateAdded?.toDate()).isSame(
+                  new Date(),
+                  dogRecentOption.value
+                )
+              ).length
+          )
+        },
+        onFailure: () => {}
+      })
+    )
+  }, [dogRecentOption])
+
+  useEffect(() => {
+    setChartData([
+      registeredDogs,
+      impoundDogs,
+      surrenderedDogs,
+      claimedDogs,
+      adoptDogs,
+      vaccinatedDogs
+    ])
+    setTotalDogs(
+      registeredDogs +
+        impoundDogs +
+        surrenderedDogs +
+        claimedDogs +
+        adoptDogs +
+        vaccinatedDogs
+    )
+  }, [
+    registeredDogs,
+    impoundDogs,
+    surrenderedDogs,
+    claimedDogs,
+    adoptDogs,
+    vaccinatedDogs
+  ])
+
   return (
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
@@ -36,11 +229,11 @@ const Dashboard = () => {
               display: 'flex',
               flexDirection: 'row-reverse',
               justifyContent: 'space-between',
-              alignItems: 'center'
+              alignItems: 'center',
+              marginTop: 20
             }}>
             <div>
-              <h1>Recent Announcement</h1>
-              <div className="swipeable" style={{ width: '92%' }}>
+              <div className="swipeable" style={{ width: '100%' }}>
                 {index !== 0 && (
                   <ArrowLeftIcon
                     onClick={() => setIndex(index - 1)}
@@ -48,7 +241,7 @@ const Dashboard = () => {
                   />
                 )}
                 <AutoPlaySwipeableViews
-                  style={{ width: '80%' }}
+                  style={{ width: '90%' }}
                   interval={5000}
                   index={index}
                   onChangeIndex={handleChangeIndex}>
@@ -74,16 +267,155 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-            <img
-              src="assets/icons/ann-img.png"
-              width="50%"
-              height="400px"
-              style={{
-                marginTop: 40,
-                padding: '20px 40px',
-                borderRadius: 12
-              }}
+          </div>
+          <h1>Dog Recent Updates</h1>
+          <div style={{ width: 200, marginBottom: 20 }}>
+            <Select
+              options={[
+                { label: 'Daily', value: 'day' },
+                { label: 'Weekly', value: 'week' },
+                { label: 'Monthly', value: 'month' }
+              ]}
+              styles={selectStyles}
+              value={dogRecentOption}
+              onChange={(selected) => setDogRecentOption(selected)}
             />
+          </div>
+          <div className="flex w-full justify-between">
+            {/* <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Registered Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{registeredDogs}</h1>
+            </div> */}
+            {user?.role !== 'admin' && (
+              <div
+                style={{
+                  width: 200,
+                  minHeight: 100,
+                  backgroundColor: 'white',
+                  borderRadius: 12,
+                  padding: 20,
+                  marginRight: 10
+                }}>
+                <h5 style={{ padding: 0, margin: 0 }}>Impound Dogs</h5>
+                <h1 style={{ color: '#42c2d3' }}>{impoundDogs}</h1>
+              </div>
+            )}
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Surrendered Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{surrenderedDogs}</h1>
+            </div>
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Claimed Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{claimedDogs}</h1>
+            </div>
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Adopt Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{adoptDogs}</h1>
+            </div>
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Vaccinated Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{vaccinatedDogs}</h1>
+            </div>
+          </div>
+          <div
+            className="w-full item-center justify-center"
+            style={{ marginTop: 20 }}>
+            <div
+              style={{
+                width: '50%',
+                backgroundColor: 'white',
+                padding: 20,
+                borderRadius: 12
+              }}>
+              <Bar
+                data={{
+                  labels: [
+                    'Impound Dogs',
+                    'Surrendered Dogs',
+                    'Claimed Dogs',
+                    'Adopt Dogs',
+                    'Vaccinated Dogs'
+                  ],
+                  datasets: [
+                    {
+                      data: chartData,
+                      borderWidth: 1,
+                      backgroundColor: [
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                      ],
+                      borderColor: [
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                      ]
+                    }
+                  ]
+                }}
+                options={options}
+              />
+            </div>
+            <div
+              style={{
+                width: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexDirection: 'column'
+              }}>
+              <h1>Total</h1>
+              <label
+                style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
+                {totalDogs}
+              </label>
+            </div>
           </div>
           <div
             style={{

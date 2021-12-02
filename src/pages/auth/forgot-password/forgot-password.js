@@ -98,8 +98,11 @@ const ForgotPassword = () => {
         </div>
         <div>
           <span>
-            <label>Already have an account?</label>
-            <label onClick={() => history.push('/login')} className="register">
+            <label style={{ fontSize: 15 }}>Already have an account?</label>
+            <label
+              style={{ fontSize: 15 }}
+              onClick={() => history.push('/login')}
+              className="register">
               Sign In
             </label>
           </span>

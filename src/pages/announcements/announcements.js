@@ -14,6 +14,8 @@ import { toast } from 'react-toastify'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import ConfirmationModal from 'components/modal/ConfirmationModal'
 import { UserContext } from 'contexts/user.context'
+import Select from 'react-select'
+import { dogOptions, selectStyles } from 'utils/helpers'
 
 const Announcements = () => {
   const dispatch = useDispatch()
@@ -26,6 +28,10 @@ const Announcements = () => {
   const [showConfirmModal, setShowConfirmModal] = useState(false)
   const [isArchiveClick, setIsArchiveClick] = useState(false)
   const [confirmContent, setConfirmContent] = useState('')
+  const [filterBy, setFilterBy] = useState({
+    label: 'Active Announcements',
+    value: false
+  })
 
   const { user } = useContext(UserContext)
 
@@ -169,7 +175,16 @@ const Announcements = () => {
     setAnnouncementId(item?.id)
     setShowConfirmModal(true)
     setIsArchiveClick(true)
+    setFormValues(item)
     setConfirmContent(`Are you sure you want to archive ${item?.title}?`)
+  }
+
+  const onRestore = (item) => {
+    setAnnouncementId(item?.id)
+    setShowConfirmModal(true)
+    setIsArchiveClick(false)
+    setFormValues(item)
+    setConfirmContent(`Are you sure you want to restore ${item?.title}?`)
   }
 
   const onUpdate = (item) => {
@@ -182,11 +197,12 @@ const Announcements = () => {
   useEffect(() => {
     dispatch(
       getAnnouncementsAction({
+        data: { filterBy: filterBy.value },
         onSuccess: (payload) => setAnnouncements(payload),
         onFailed: (error) => console.error(error)
       })
     )
-  }, [])
+  }, [filterBy])
 
   const HornIcon = ({ color = '#334D67' }) => (
     <svg
@@ -226,19 +242,43 @@ const Announcements = () => {
         <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Announcements</h1>
           {user?.role === 'admin' && (
-            <Button
-              onClick={() => {
-                setIsUpdate(false)
-                setShowFormModal(true)
-                setFormValues({
-                  title: '',
-                  content: ''
-                })
-              }}
-              width={80}
-              height={35}
-              value="Add"
-            />
+            <div className="flex items-center">
+              <div className="flex items-center">
+                <label className="margin-t-10 margin-r-10">Filter By:</label>
+                <div style={{ width: 300, marginRight: 10 }}>
+                  <Select
+                    styles={selectStyles}
+                    defaultValue={filterBy}
+                    options={[
+                      {
+                        label: 'Archive Announcements',
+                        value: true
+                      },
+                      {
+                        label: 'Active Announcements',
+                        value: false
+                      }
+                    ]}
+                    onChange={(selected) => {
+                      setFilterBy(selected)
+                    }}
+                  />
+                </div>
+              </div>
+              <Button
+                onClick={() => {
+                  setIsUpdate(false)
+                  setShowFormModal(true)
+                  setFormValues({
+                    title: '',
+                    content: ''
+                  })
+                }}
+                width={80}
+                height={35}
+                value="Add"
+              />
+            </div>
           )}
         </div>
         {announcements?.length ? (
@@ -257,6 +297,7 @@ const Announcements = () => {
                 role={user?.role}
                 onArchive={() => onArchive(item)}
                 onUpdate={() => onUpdate(item)}
+                onRestore={() => onRestore(item)}
               />
             ))}
           </div>

@@ -4,8 +4,9 @@ import Divider from 'components/divider/Divider'
 import moment from 'moment'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
 import DeleteBinLineIcon from 'remixicon-react/DeleteBinLineIcon'
+import RestartLineIcon from 'remixicon-react/RestartLineIcon'
 
-const AnnouncementMessage = ({ item, onArchive, onUpdate, role }) => {
+const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => {
   const HornIcon = ({ color = '#334D67' }) => (
     <svg
       className="sidebar-menu-icon"
@@ -30,19 +31,28 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role }) => {
             <h1>{item?.title}</h1>
           </div>
           {role === 'admin' ? (
-            <div className="flex items-center">
-              <div onClick={onUpdate} className="flex items-center update">
-                <PencilLineIcon size={20} />
-                <label className="cursor-pointer">Update</label>
+            !item?.archive ? (
+              <div className="flex items-center">
+                <div onClick={onUpdate} className="flex items-center update">
+                  <PencilLineIcon size={20} />
+                  <label className="cursor-pointer">Update</label>
+                </div>
+                <div
+                  onClick={onArchive}
+                  className="flex items-center archive"
+                  style={{ marginLeft: 12 }}>
+                  <DeleteBinLineIcon size={18} />
+                  <label className="cursor-pointer">Archive</label>
+                </div>
               </div>
-              <div
-                onClick={onArchive}
-                className="flex items-center archive"
-                style={{ marginLeft: 12 }}>
-                <DeleteBinLineIcon size={18} />
-                <label className="cursor-pointer">Archive</label>
+            ) : (
+              <div className="flex items-center">
+                <div onClick={onRestore} className="flex items-center update">
+                  <RestartLineIcon size={20} style={{ marginRight: 10 }} />
+                  <label className="cursor-pointer">Restore</label>
+                </div>
               </div>
-            </div>
+            )
           ) : (
             <div />
           )}

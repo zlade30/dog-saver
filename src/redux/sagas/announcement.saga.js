@@ -47,10 +47,16 @@ const update = async (payload) => {
 }
 
 function* getAnnouncements(action) {
-  const { onSuccess, onFailure } = deconstructSagaPayload(action.payload)
+  const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
+
+  console.log(data)
+
   const response = yield call(
     getList,
-    firestore.collection('announcements').where('archive', '==', false).get()
+    firestore
+      .collection('announcements')
+      .where('archive', '==', data.filterBy ? data.filterBy : false)
+      .get()
   )
 
   if (response?.isSuccess) {
@@ -97,7 +103,7 @@ function* removeAnnouncement(action) {
   const { onSuccess, onFailure, data } = deconstructSagaPayload(action.payload)
   const response = yield call(
     update,
-    firestore.doc(`dogs/${data?.id}`).update(data?.values)
+    firestore.doc(`announcements/${data?.id}`).update(data?.values)
   )
   if (response) {
     yield put(removeAnnouncementActionSuccess(response))

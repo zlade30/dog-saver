@@ -162,6 +162,7 @@ const Login = () => {
                 <div className="justify-center margin-t-20">
                   <label
                     onClick={() => history.push('/forgot-password')}
+                    style={{ fontSize: 15 }}
                     className="forgot-password">
                     Forgot Password?
                   </label>
@@ -172,9 +173,10 @@ const Login = () => {
         </div>
         <div>
           <span>
-            <label>Do not have an account yet?</label>
+            <label style={{ fontSize: 15 }}>Do not have an account yet?</label>
             <label
               onClick={() => history.push('/register')}
+              style={{ fontSize: 15 }}
               className="register">
               Sign Up
             </label>
