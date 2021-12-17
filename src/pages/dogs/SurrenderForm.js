@@ -284,7 +284,7 @@ const SurrenderForm = ({
               ) : (
                 <div />
               )}
-              <div className="flex items-center">
+              {/* <div className="flex items-center">
                 <input
                   checked={checkPP}
                   type="checkbox"
@@ -301,22 +301,15 @@ const SurrenderForm = ({
                   className="register">
                   Privacy Policy
                 </label>
-              </div>
+              </div> */}
               <Button
                 id="sign-up"
                 type="submit"
                 width={320}
                 onClick={() => {
                   setIsSubmit(true)
-                  if (checkPP) {
-                    if (
-                      Object?.keys(selected).length > 0 &&
-                      reason.length > 0
-                    ) {
-                      onSubmit(formValues)
-                    }
-                  } else {
-                    setErrorMsg('Error: Privacy policy must be check.')
+                  if (Object?.keys(selected).length > 0 && reason.length > 0) {
+                    onSubmit(formValues)
                   }
                 }}
                 value="Surrender Dog"

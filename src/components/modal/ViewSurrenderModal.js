@@ -64,7 +64,7 @@ const ViewSurrenderModal = ({
           justifyContent: 'space-between',
           paddingLeft: 50,
           paddingRight: 50,
-          paddingTop: 300
+          paddingTop: role === 'admin' ? 450 : 400
         }}>
         <img src="assets/icons/damilag.png" style={{ width: 80 }} />
         <div

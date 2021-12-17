@@ -23,6 +23,12 @@ import AdoptDogModal from './AdoptDogModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 import ReasonModal from './ReasonModal'
 import ViewSurrenderModal from 'components/modal/ViewSurrenderModal'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import ReactDatePicker from 'react-datepicker'
+import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
+import Pdf from 'react-to-pdf'
+import ActivityReport from './ActivityReport'
+import emailjs from 'emailjs-com'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -40,6 +46,11 @@ const Activities = () => {
   const [dogImage2, setDogImage2] = useState()
   const [dogImage3, setDogImage3] = useState()
   const [dogImage4, setDogImage4] = useState()
+  const [activityStartDate, setActivityStartDate] = useState(
+    moment().startOf('year').toDate()
+  )
+  const [activityEndDate, setActivityEndDate] = useState(moment().toDate())
+  const ref = React.createRef()
 
   const { user } = useContext(UserContext)
 
@@ -252,7 +263,14 @@ const Activities = () => {
         },
         onSuccess: (response) => {
           setShowLoader(false)
-          setActivityList(response?.data)
+          setActivityList(
+            response?.data?.filter((item) =>
+              moment(item?.dateAdded?.toDate()).isBetween(
+                activityStartDate,
+                activityEndDate
+              )
+            )
+          )
         },
         onFailure: (error) => {
           setShowLoader(false)
@@ -260,7 +278,7 @@ const Activities = () => {
         }
       })
     )
-  }, [])
+  }, [activityStartDate, activityEndDate])
 
   return (
     <div className="container">
@@ -283,7 +301,15 @@ const Activities = () => {
                 id: selectedActivity?.id,
                 values: { status: 'approved' }
               },
-              onSuccess: () => {
+              onSuccess: async () => {
+                if (selectedActivity?.user?.email) {
+                  await emailjs.send('service_asfu4ce', 'template_29ccqfk', {
+                    email: selectedActivity?.user?.email,
+                    last_name: selectedActivity?.user?.lastName,
+                    first_name: selectedActivity?.user?.firstName,
+                    status: 'approved'
+                  })
+                }
                 dispatch(
                   removeDogAction({
                     data: {
@@ -377,7 +403,16 @@ const Activities = () => {
                 id: selectedActivity?.id,
                 values: { status: 'approved' }
               },
-              onSuccess: () => {
+              onSuccess: async () => {
+                if (selectedActivity?.user?.email) {
+                  await emailjs.send('service_asfu4ce', 'template_29ccqfk', {
+                    email: selectedActivity?.user?.email,
+                    last_name: selectedActivity?.user?.lastName,
+                    first_name: selectedActivity?.user?.firstName,
+                    status: 'approved'
+                  })
+                }
+
                 dispatch(
                   removeDogImpoundAction({
                     data: {
@@ -475,7 +510,15 @@ const Activities = () => {
                 id: selectedActivity?.id,
                 values: { status: 'approved' }
               },
-              onSuccess: () => {
+              onSuccess: async () => {
+                if (selectedActivity?.user?.email) {
+                  await emailjs.send('service_asfu4ce', 'template_29ccqfk', {
+                    email: selectedActivity?.user?.email,
+                    last_name: selectedActivity?.user?.lastName,
+                    first_name: selectedActivity?.user?.firstName,
+                    status: 'approved'
+                  })
+                }
                 dispatch(
                   removeDogImpoundAction({
                     data: {
@@ -573,7 +616,15 @@ const Activities = () => {
                 id: selectedActivity?.id,
                 values: { status: 'approved' }
               },
-              onSuccess: () => {
+              onSuccess: async () => {
+                if (selectedActivity?.user?.email) {
+                  await emailjs.send('service_asfu4ce', 'template_29ccqfk', {
+                    email: selectedActivity?.user?.email,
+                    last_name: selectedActivity?.user?.lastName,
+                    first_name: selectedActivity?.user?.firstName,
+                    status: 'approved'
+                  })
+                }
                 dispatch(
                   removeDogAction({
                     data: {
@@ -670,7 +721,7 @@ const Activities = () => {
                 id: selectedActivity?.id,
                 values: { status: 'rejected', rejectReason }
               },
-              onSuccess: () => {
+              onSuccess: async () => {
                 setShowLoader(false)
                 setShowSurrenderDogModal(false)
                 setShowClaimDogModal(false)
@@ -685,6 +736,15 @@ const Activities = () => {
                       : item
                   )
                 )
+                if (selectedActivity?.user?.email) {
+                  await emailjs.send('service_asfu4ce', 'template_29ccqfk', {
+                    email: selectedActivity?.user?.email,
+                    last_name: selectedActivity?.user?.lastName,
+                    first_name: selectedActivity?.user?.firstName,
+                    message: rejectReason,
+                    status: 'rejected'
+                  })
+                }
                 toast.success('Activity updated successfully.', {
                   position: 'bottom-right',
                   autoClose: 3000,
@@ -715,6 +775,69 @@ const Activities = () => {
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Activities</h1>
+          <div className="flex items-center">
+            <label className="margin-b-10 margin-r-10">Filter Date:</label>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={activityStartDate}
+                dateFormat="MM/dd/yyyy"
+                showPreviousMonths={false}
+                onChange={(date) => {
+                  setActivityStartDate(date)
+                }}
+                maxDate={activityEndDate}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
+            <label
+              style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
+              -
+            </label>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={activityEndDate}
+                dateFormat="MM/dd/yyyy"
+                minDate={activityStartDate}
+                maxDate={new Date()}
+                onChange={(date) => {
+                  setActivityEndDate(date)
+                }}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
+            <Pdf targetRef={ref} filename="activity.pdf">
+              {({ toPdf }) => (
+                <PrinterLineIcon
+                  onClick={toPdf}
+                  className="margin-b-10 margin-l-10 cursor-pointer"
+                />
+              )}
+            </Pdf>
+          </div>
         </div>
         <div
           className="user-list-panel"
@@ -736,6 +859,7 @@ const Activities = () => {
           )}
         </div>
       </div>
+      <ActivityReport ref={ref} props={activityList} />
     </div>
   )
 }

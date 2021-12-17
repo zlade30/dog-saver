@@ -67,7 +67,7 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
               justifyContent: 'space-between',
               paddingLeft: 50,
               paddingRight: 50,
-              paddingTop: 220
+              paddingTop: 400
             }}>
             <img src="assets/icons/damilag.png" style={{ width: 80 }} />
             <div

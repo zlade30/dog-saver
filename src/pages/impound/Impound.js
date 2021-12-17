@@ -7,7 +7,7 @@ import ConfirmationModal from 'components/modal/ConfirmationModal'
 import OptionModal from 'components/modal/OptionModal'
 import { UserContext } from 'contexts/user.context'
 import { fire } from 'firebase'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { createRef, useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { toast } from 'react-toastify'
 import {
@@ -28,6 +28,9 @@ import { createActivityAction } from 'redux/actions/activities.action'
 import DogImagesModal from 'components/modal/DogImagesModal'
 import ViewDogImagesModal from 'components/modal/ViewDogImagesModal'
 import moment from 'moment'
+import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
+import Pdf from 'react-to-pdf'
+import ImpoundReport from './ImpoundReport'
 
 const DogIcon = ({ color = '#334D67' }) => (
   <svg
@@ -85,6 +88,7 @@ const Impound = () => {
   const [errorMsg, setErrorMsg] = useState('')
   const [isUpdate, setIsUpdate] = useState(false)
   const [formValues, setFormValues] = useState(initialFormValues)
+  const ref = createRef()
 
   const { user } = useContext(UserContext)
 
@@ -649,6 +653,14 @@ const Impound = () => {
                 value="Add"
                 width={80}
               />
+              <Pdf targetRef={ref} filename="dog-impound.pdf">
+                {({ toPdf }) => (
+                  <PrinterLineIcon
+                    onClick={toPdf}
+                    className="margin-l-10 cursor-pointer margin-t-10"
+                  />
+                )}
+              </Pdf>
             </div>
           ) : (
             <div />
@@ -690,6 +702,7 @@ const Impound = () => {
           )}
         </div>
       </div>
+      <ImpoundReport ref={ref} props={dogImpoundList} />
     </div>
   )
 }

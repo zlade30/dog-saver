@@ -10,12 +10,19 @@ import {
   getDogImpoundListAction,
   getDogsAction
 } from 'redux/actions/dog.action'
-import { dogOptions, orderOptions, selectStyles, userSortOptions } from 'utils/helpers'
+import {
+  dogOptions,
+  orderOptions,
+  selectStyles,
+  userSortOptions
+} from 'utils/helpers'
 import moment from 'moment'
 import { getActivityListAction } from 'redux/actions/activities.action'
 import Select from 'react-select'
 import { Bar } from 'react-chartjs-2'
 import { UserContext } from 'contexts/user.context'
+import ReactDatePicker from 'react-datepicker'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
@@ -35,6 +42,11 @@ const Dashboard = () => {
     label: 'Weekly',
     value: 'week'
   })
+
+  const [dogStartDate, setDogStartDate] = useState(
+    moment().startOf('year').toDate()
+  )
+  const [dogEndDate, setDogEndDate] = useState(moment().toDate())
 
   const options = {
     scales: {
@@ -64,14 +76,14 @@ const Dashboard = () => {
     setIndex(index)
   }
 
-  useEffect(() => {
-    dispatch(
-      getAnnouncementsAction({
-        onSuccess: (payload) => setAnnouncement(payload.slice(0, 5)),
-        onFailed: (error) => console.error(error)
-      })
-    )
-  }, [])
+  // useEffect(() => {
+  //   dispatch(
+  //     getAnnouncementsAction({
+  //       onSuccess: (payload) => setAnnouncement(payload.slice(0, 5)),
+  //       onFailed: (error) => console.error(error)
+  //     })
+  //   )
+  // }, [])
 
   useEffect(() => {
     dispatch(
@@ -88,17 +100,17 @@ const Dashboard = () => {
             payload
               ?.filter((item) => item.vaccineReceived)
               ?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
           setRegisteredDogs(
             payload?.filter((item) =>
-              moment(item?.dateAdded?.toDate()).isSame(
-                new Date(),
-                dogRecentOption.value
+              moment(item?.dateAdded?.toDate()).isBetween(
+                dogStartDate,
+                dogEndDate
               )
             ).length
           )
@@ -117,9 +129,9 @@ const Dashboard = () => {
             const payload = list?.data
             setImpoundDogs(
               payload?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
             )
@@ -147,9 +159,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -164,9 +176,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -181,9 +193,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -223,7 +235,7 @@ const Dashboard = () => {
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900 }}>
-          <div
+          {/* <div
             style={{
               width: '100%',
               display: 'flex',
@@ -267,19 +279,61 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
           <h1>Dog Recent Updates</h1>
-          <div style={{ width: 200, marginBottom: 20 }}>
-            <Select
-              options={[
-                { label: 'Daily', value: 'day' },
-                { label: 'Weekly', value: 'week' },
-                { label: 'Monthly', value: 'month' }
-              ]}
-              styles={selectStyles}
-              value={dogRecentOption}
-              onChange={(selected) => setDogRecentOption(selected)}
-            />
+          <div className="flex items-center" style={{ width: 200 }}>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={dogStartDate}
+                dateFormat="MM/dd/yyyy"
+                showPreviousMonths={false}
+                onChange={(date) => {
+                  setDogStartDate(date)
+                }}
+                maxDate={dogEndDate}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
+            <label
+              style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
+              -
+            </label>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={dogEndDate}
+                dateFormat="MM/dd/yyyy"
+                minDate={dogStartDate}
+                maxDate={new Date()}
+                onChange={(date) => {
+                  setDogEndDate(date)
+                }}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
           </div>
           <div className="flex w-full justify-between">
             {/* <div
@@ -294,6 +348,18 @@ const Dashboard = () => {
               <h5 style={{ padding: 0, margin: 0 }}>Registered Dogs</h5>
               <h1 style={{ color: '#42c2d3' }}>{registeredDogs}</h1>
             </div> */}
+            <div
+              style={{
+                width: 200,
+                minHeight: 100,
+                backgroundColor: 'white',
+                borderRadius: 12,
+                padding: 20,
+                marginRight: 10
+              }}>
+              <h5 style={{ padding: 0, margin: 0 }}>Registered Dogs</h5>
+              <h1 style={{ color: '#42c2d3' }}>{registeredDogs}</h1>
+            </div>
             {user?.role !== 'admin' && (
               <div
                 style={{
@@ -370,6 +436,7 @@ const Dashboard = () => {
               <Bar
                 data={{
                   labels: [
+                    'Registered Dogs',
                     'Impound Dogs',
                     'Surrendered Dogs',
                     'Claimed Dogs',
@@ -411,10 +478,10 @@ const Dashboard = () => {
                 flexDirection: 'column'
               }}>
               <h1>Total</h1>
-              <label
+              <div
                 style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
                 {totalDogs}
-              </label>
+              </div>
             </div>
           </div>
           <div

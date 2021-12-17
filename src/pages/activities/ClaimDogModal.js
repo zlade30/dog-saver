@@ -77,7 +77,7 @@ const ClaimDogModal = ({
             justifyContent: 'space-between',
             paddingLeft: 50,
             paddingRight: 50,
-            paddingTop: role === 'admin' ? 260 : 220
+            paddingTop: role === 'admin' ? 450 : 400
           }}>
           <img src="assets/icons/damilag.png" style={{ width: 80 }} />
           <div

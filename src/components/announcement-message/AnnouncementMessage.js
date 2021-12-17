@@ -23,8 +23,8 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => 
   )
 
   return (
-    <div className="announcement-message mb-10" style={{ paddingTop: 0 }}>
-      <div className="ancmnt-msg-header">
+    <div className="announcement-message mb-10" style={{ paddingTop: 0, position: 'relative', overflow: 'hidden' }}>
+      <div className="ancmnt-msg-header" style={{ zIndex: 2 }}>
         <div className="ancmnt-msg-header-icon">
           <div className="flex items-center">
             <HornIcon />
@@ -60,9 +60,9 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => 
         <Divider width="95%" />
       </div>
       <div className="ancmnt-msg-content">
-        <label>{item?.content}</label>
+        <label style={{ zIndex: 2 }}>{item?.content}</label>
       </div>
-      <label className="ancmnt-date">
+      <label className="ancmnt-date" style={{ zIndex: 2 }}>
         {moment(item?.dateAdded?.toDate()).format('L')}
       </label>
     </div>

@@ -25,6 +25,8 @@ import {
 import Select from 'react-select'
 import { Bar } from 'react-chartjs-2'
 import { getUserListAction } from 'redux/actions/user.action'
+import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
+import ReactDatePicker from 'react-datepicker'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
@@ -41,10 +43,14 @@ const Dashboard = () => {
   const [archiveUsers, setArchiveUsers] = useState(0)
   const [activityList, setActivityList] = useState([])
   const { user } = useContext(UserContext)
-  const [dogRecentOption, setDogRecentOption] = useState({
-    label: 'Weekly',
-    value: 'week'
-  })
+  const [dogStartDate, setDogStartDate] = useState(
+    moment().startOf('year').toDate()
+  )
+  const [dogEndDate, setDogEndDate] = useState(moment().toDate())
+  const [userStartDate, setUserStartDate] = useState(
+    moment().startOf('year').toDate()
+  )
+  const [userEndDate, setUserEndDate] = useState(moment().toDate())
   const [userRecentOption, setUserRecentOption] = useState({
     label: 'Weekly',
     value: 'week'
@@ -241,6 +247,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(
       getAnnouncementsAction({
+        data: { filterBy: '' },
         onSuccess: (payload) => setAnnouncement(payload.slice(0, 5)),
         onFailed: (error) => console.error(error)
       })
@@ -259,9 +266,9 @@ const Dashboard = () => {
             payload
               ?.filter((item) => !item.archive)
               ?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  userRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  userStartDate,
+                  userEndDate
                 )
               ).length
           )
@@ -269,9 +276,9 @@ const Dashboard = () => {
             payload
               ?.filter((item) => item.archive)
               ?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  userRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  userStartDate,
+                  userEndDate
                 )
               ).length
           )
@@ -294,17 +301,17 @@ const Dashboard = () => {
             payload
               ?.filter((item) => item.vaccineReceived)
               ?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
           setRegisteredDogs(
             payload?.filter((item) =>
-              moment(item?.dateAdded?.toDate()).isSame(
-                new Date(),
-                dogRecentOption.value
+              moment(item?.dateAdded?.toDate()).isBetween(
+                dogStartDate,
+                dogEndDate
               )
             ).length
           )
@@ -323,9 +330,9 @@ const Dashboard = () => {
             const payload = list?.data
             setImpoundDogs(
               payload?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
             )
@@ -354,9 +361,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -371,9 +378,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -388,9 +395,9 @@ const Dashboard = () => {
                     : user.email === item.user.email)
               )
               .filter((item) =>
-                moment(item?.dateAdded?.toDate()).isSame(
-                  new Date(),
-                  dogRecentOption.value
+                moment(item?.dateAdded?.toDate()).isBetween(
+                  dogStartDate,
+                  dogEndDate
                 )
               ).length
           )
@@ -398,7 +405,7 @@ const Dashboard = () => {
         onFailure: () => {}
       })
     )
-  }, [dogRecentOption])
+  }, [dogStartDate, dogEndDate, userStartDate, userEndDate])
 
   useEffect(() => {
     setChartData([
@@ -436,17 +443,59 @@ const Dashboard = () => {
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900 }}>
           <h1>Dog Recent Updates</h1>
-          <div style={{ width: 200, marginBottom: 20 }}>
-            <Select
-              options={[
-                { label: 'Daily', value: 'day' },
-                { label: 'Weekly', value: 'week' },
-                { label: 'Monthly', value: 'month' }
-              ]}
-              styles={selectStyles}
-              value={dogRecentOption}
-              onChange={(selected) => setDogRecentOption(selected)}
-            />
+          <div className="flex items-center" style={{ width: 200 }}>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={dogStartDate}
+                dateFormat="MM/dd/yyyy"
+                showPreviousMonths={false}
+                onChange={(date) => {
+                  setDogStartDate(date)
+                }}
+                maxDate={dogEndDate}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
+            <label
+              style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
+              -
+            </label>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={dogEndDate}
+                dateFormat="MM/dd/yyyy"
+                minDate={dogStartDate}
+                maxDate={new Date()}
+                onChange={(date) => {
+                  setDogEndDate(date)
+                }}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
           </div>
           <div className="flex w-full justify-between">
             <div
@@ -581,24 +630,66 @@ const Dashboard = () => {
                 flexDirection: 'column'
               }}>
               <h1>Total</h1>
-              <label
+              <div
                 style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
                 {totalDogs}
-              </label>
+              </div>
             </div>
           </div>
           <h1>User Recent Updates</h1>
-          <div style={{ width: 200, marginBottom: 20 }}>
-            <Select
-              options={[
-                { label: 'Daily', value: 'day' },
-                { label: 'Weekly', value: 'week' },
-                { label: 'Monthly', value: 'month' }
-              ]}
-              styles={selectStyles}
-              value={userRecentOption}
-              onChange={(selected) => setUserRecentOption(selected)}
-            />
+          <div className="flex items-center" style={{ width: 200 }}>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={userStartDate}
+                dateFormat="MM/dd/yyyy"
+                showPreviousMonths={false}
+                onChange={(date) => {
+                  setUserStartDate(date)
+                }}
+                maxDate={userEndDate}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
+            <label
+              style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
+              -
+            </label>
+            <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={userEndDate}
+                dateFormat="MM/dd/yyyy"
+                minDate={userStartDate}
+                maxDate={new Date()}
+                onChange={(date) => {
+                  setUserEndDate(date)
+                }}
+                onChangeRaw={(evt) => evt.preventDefault()}
+                placeholderText="Start Date"
+              />
+            </div>
           </div>
           <div className="flex w-full items-center">
             <div
@@ -665,10 +756,10 @@ const Dashboard = () => {
                 flexDirection: 'column'
               }}>
               <h1>Total</h1>
-              <label
+              <div
                 style={{ color: '#42c2d3', fontSize: 80, fontWeight: 'bold' }}>
                 {totalUsers}
-              </label>
+              </div>
             </div>
           </div>
           {/* <h1>Recent Announcement</h1>

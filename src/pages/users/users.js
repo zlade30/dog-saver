@@ -4,7 +4,7 @@ import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import RightModal from 'components/modal/RightModal'
 import ConfirmationModal from 'components/modal/ConfirmationModal'
 import SearchField from 'components/text-fields/SearchField'
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import {
   adminRemoveUserAction,
@@ -26,6 +26,9 @@ import UserLineIcon from 'remixicon-react/UserLineIcon'
 import { toast } from 'react-toastify'
 import Select from 'react-select'
 import ViewUserModal from 'components/modal/ViewUserModal'
+import Pdf from 'react-to-pdf'
+import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
+import UserReport from './UserReport'
 
 const Users = () => {
   const dispatch = useDispatch()
@@ -45,6 +48,7 @@ const Users = () => {
   const [sortBy, setSortBy] = useState(userSortOptions[0].value)
   const [order, setOrder] = useState(orderOptions[0].value)
   const [isArchiveClick, setIsArchiveClick] = useState(false)
+  const ref = createRef()
 
   const onSubmit = (values) => {
     setShowLoader(true)
@@ -642,6 +646,14 @@ const Users = () => {
               height={35}
               value="Add"
             />
+            <Pdf targetRef={ref} filename="users.pdf">
+              {({ toPdf }) => (
+                <PrinterLineIcon
+                  onClick={toPdf}
+                  className="margin-l-10 cursor-pointer margin-t-10"
+                />
+              )}
+            </Pdf>
           </div>
         </div>
         <div className="user-list-panel">
@@ -665,6 +677,7 @@ const Users = () => {
             </div>
           )}
         </div>
+        <UserReport ref={ref} props={userList} />
       </div>
     </div>
   )

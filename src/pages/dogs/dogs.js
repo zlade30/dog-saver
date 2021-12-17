@@ -2,7 +2,7 @@ import Button from 'components/buttons/Button'
 import LoadingOverlay from 'components/loading-overlays/LoadingOverlay'
 import ConfirmationModal from 'components/modal/ConfirmationModal'
 import SearchField from 'components/text-fields/SearchField'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { createRef, useContext, useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Select from 'react-select'
 import DogAvatarCard from 'components/avatar/DogAvatarCard'
@@ -33,6 +33,9 @@ import ViewImpoundDogModal from 'components/modal/ViewImpoundDogModal'
 import ViewDogModal from 'components/modal/ViewDogModal'
 import PrivacyPolicyModal from 'components/modal/PrivacyPolicyModal'
 import SurrenderModal from 'components/modal/SurrenderModal'
+import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
+import Pdf from 'react-to-pdf'
+import DogReport from './DogReport'
 
 const Dogs = () => {
   const dispatch = useDispatch()
@@ -79,6 +82,7 @@ const Dogs = () => {
   const [showPP, setShowPP] = useState(false)
   const [surrenderValue, setSurrenderValue] = useState()
   const [surrenderModal, setSurrenderModal] = useState(false)
+  const ref = createRef()
 
   const { user } = useContext(UserContext)
 
@@ -702,6 +706,14 @@ const Dogs = () => {
                 />
               </div>
             )}
+            <Pdf targetRef={ref} filename="registered-dogs.pdf">
+              {({ toPdf }) => (
+                <PrinterLineIcon
+                  onClick={toPdf}
+                  className="margin-l-10 cursor-pointer margin-t-10"
+                />
+              )}
+            </Pdf>
           </div>
         </div>
         <div className="user-list-panel">
@@ -732,6 +744,7 @@ const Dogs = () => {
             </div>
           )}
         </div>
+        <DogReport ref={ref} props={dogList} />
       </div>
     </div>
   )
