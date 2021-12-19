@@ -70,11 +70,23 @@ const Report = React.forwardRef(({ props }, ref) => (
         </div>
         <h1 style={{ marginTop: 40 }}>{props?.impound?.adoptDogs}</h1>
       </div>
-      <div style={{ width: '25%', border: '1px solid black', height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+      <div style={{ width: '25%', border: '1px solid black', borderRight: 0, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
         <div style={{ width: '100%', position: 'absolute', top: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid black', height: 30 }}>
           <label>EUTHANIZED</label>
         </div>
         <h1 style={{ marginTop: 40 }}>{props?.impound?.euthanizedDogs}</h1>
+      </div>
+      <div style={{ width: '25%', border: '1px solid black', borderRight: 0, height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        <div style={{ width: '100%', position: 'absolute', top: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid black', height: 30 }}>
+          <label>SURRENDERED</label>
+        </div>
+        <h1 style={{ marginTop: 40 }}>{props?.impound?.surrenderedDogs}</h1>
+      </div>
+      <div style={{ width: '25%', border: '1px solid black', height: 150, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+        <div style={{ width: '100%', position: 'absolute', top: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', borderBottom: '1px solid black', height: 30 }}>
+          <label>VACCINATED</label>
+        </div>
+        <h1 style={{ marginTop: 40 }}>{props?.impound?.vaccinatedDogs}</h1>
       </div>
     </div>
     <div style={{ display: 'flex', flexDirection: 'column', marginTop: 40, paddingLeft: 20 }}>
