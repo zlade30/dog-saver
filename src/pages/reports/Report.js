@@ -43,7 +43,11 @@ const Report = React.forwardRef(({ props }, ref) => (
       <div style={{ fontSize: 14, fontWeight: 'bold' }}>MONTHLY SUMMARY REPORT</div>
       <div style={{ display: 'flex', alignItems: 'center', marginTop: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <div style={{ fontSize: 14, marginRight: 10 }}>{`${moment(props.month).format('MMMM')} ${moment(props.month).format('YYYY')}`}</div>
+          <div style={{ fontSize: 14, marginRight: 10 }}>
+            {`
+              ${props.month.label === 'All' ? `January - December` : moment(props.month.value).format('MMMM')} ${moment(props.month).format('YYYY')}
+            `}
+          </div>
         </div>
       </div>
     </div>

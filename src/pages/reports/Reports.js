@@ -56,7 +56,7 @@ const Reports = () => {
     moment(moment('1', 'MM', 'YYYY').toDate()).startOf('month').toDate()
   )
   const [userEndDate, setUserEndDate] = useState(
-    moment(moment('1', 'MM', 'YYYY').toDate()).endOf('month').toDate()
+    moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate()
   )
   const ref = createRef()
 
@@ -460,7 +460,7 @@ const Reports = () => {
     setTotalUsers(activeUsers + archiveUsers)
   }, [activeUsers, archiveUsers])
 
-  const [month, setMonth] = useState({ label: 'January', value: moment('1', 'MM', 'YYYY').toDate() })
+  const [month, setMonth] = useState({ label: 'All', value: moment('1', 'MM', 'YYYY').toDate() })
 
   return (
     <div className="container">
@@ -470,6 +470,7 @@ const Reports = () => {
           <div className="margin-b-10" style={{ width: 200 }}>
             <Select
               options={[
+                { label: 'All', value: moment('1', 'MM', 'YYYY').toDate() },
                 { label: 'January', value: moment('1', 'MM', 'YYYY').toDate() },
                 { label: 'February', value: moment('2', 'MM', 'YYYY').toDate() },
                 { label: 'March', value: moment('3', 'MM', 'YYYY').toDate() },
@@ -488,8 +489,13 @@ const Reports = () => {
               value={month}
               onChange={(selected) => {
                 setMonth(selected)
-                setUserStartDate(moment(selected.value).startOf('month').toDate())
-                setUserEndDate(moment(selected.value).endOf('month').toDate())
+                if (selected.label === 'All') {
+                  setUserStartDate(moment(moment('1', 'MM', 'YYYY').toDate()).startOf('month').toDate())
+                  setUserEndDate(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate())
+                } else {
+                  setUserStartDate(moment(selected.value).startOf('month').toDate())
+                  setUserEndDate(moment(selected.value).endOf('month').toDate())
+                }
               }}
             />
           </div>
@@ -514,7 +520,7 @@ const Reports = () => {
                     setUserStartDate(date)
                   }}
                   minDate={moment(month.value).startOf('month').toDate()}
-                  maxDate={moment(month.value).endOf('month').toDate()}
+                  maxDate={month.label === 'All' ? moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate() : moment(month.value).endOf('month').toDate()}
                   placeholderText="Start Date"
                 />
               </div>
@@ -537,8 +543,8 @@ const Reports = () => {
                   className="text-field"
                   selected={userEndDate}
                   dateFormat="MM/dd/yyyy"
-                  minDate={moment(month.value).startOf('month').toDate()}
-                  maxDate={moment(month.value).endOf('month').toDate()}
+                  minDate={userStartDate}
+                  maxDate={month.label === 'All' ? moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate() : moment(month.value).endOf('month').toDate()}
                   onChange={(date) => {
                     setUserEndDate(date)
                   }}
@@ -569,7 +575,7 @@ const Reports = () => {
                 vaccinatedDogs,
                 euthanizedDogs
               },
-              month: month.value
+              month: month
             }}
           />
           <div style={{ marginTop: 20, paddingTop: 20 }} />
