@@ -25,7 +25,7 @@ const ForgotPassword = () => {
       <div className="auth-form">
         <div>
           <div className="logo">
-            <img className="logo-img" src="assets/icons/dog.png" />
+            <img className="logo-img" src="assets/icons/damilag.png" style={{ width: 50, height: 50 }} />
             BARK
           </div>
           <div className="form-item" style={{ width: 200 }}>

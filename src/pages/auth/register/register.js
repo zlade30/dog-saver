@@ -153,7 +153,7 @@ const Register = () => {
       <div className="auth-form" style={{ height: '500', overflow: 'auto' }}>
         <div>
           <div className="logo">
-            <img className="logo-img" src="assets/icons/dog.png" />
+            <img className="logo-img" src="assets/icons/damilag.png" style={{ width: 50, height: 50 }} />
             BARK
           </div>
           <Formik
