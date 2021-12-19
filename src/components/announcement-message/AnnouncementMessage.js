@@ -25,7 +25,7 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => 
   return (
     <div className="announcement-message mb-10" style={{ paddingTop: 0, position: 'relative', overflow: 'hidden', backgroundColor: '#daf2f5' }}>
       <img src="assets/icons/bg.png" style={{ position: 'absolute', left: 600, width: 150, height: 100, bottom: 0, zIndex: 0 }} />
-      <div className="ancmnt-msg-header" style={{ zIndex: 2 }}>
+      <div className="ancmnt-msg-header">
         <div className="ancmnt-msg-header-icon">
           <div className="flex items-center">
             <HornIcon />
@@ -61,9 +61,9 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => 
         <Divider width="95%" color="black" />
       </div>
       <div className="ancmnt-msg-content">
-        <label style={{ zIndex: 2 }}>{item?.content}</label>
+        <label>{item?.content}</label>
       </div>
-      <label className="ancmnt-date" style={{ zIndex: 2 }}>
+      <label className="ancmnt-date">
         {moment(item?.dateAdded?.toDate()).format('L')}
       </label>
     </div>

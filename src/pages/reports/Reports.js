@@ -461,47 +461,82 @@ const Reports = () => {
   }, [activeUsers, archiveUsers])
 
   const [month, setMonth] = useState({ label: 'All', value: moment('1', 'MM', 'YYYY').toDate() })
+  const [year, setYear] = useState(moment().toDate())
+  const [dates, setDates] = useState([
+    { label: 'All', value: moment('1', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'January', value: moment('1', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'February', value: moment('2', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'March', value: moment('3', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'April', value: moment('4', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'May', value: moment('5', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'June', value: moment('6', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'July', value: moment('7', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'August', value: moment('8', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'September', value: moment('9', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'October', value: moment('10', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'November', value: moment('11', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() },
+    { label: 'December', value: moment('12', 'MM', 'YYYY').set('year', moment(year).format('YYYY')).toDate() }
+  ])
 
   return (
     <div className="container">
       <div className="right-container" style={{ justifyContent: 'flex-start' }}>
         <div className="w-full" style={{ width: '98%', height: 900, paddingTop: 20 }}>
           <label style={{ fontWeight: 'bold'}}>Date Range</label>
-          <div className="margin-b-10" style={{ width: 200 }}>
-            <Select
-              options={[
-                { label: 'All', value: moment('1', 'MM', 'YYYY').toDate() },
-                { label: 'January', value: moment('1', 'MM', 'YYYY').toDate() },
-                { label: 'February', value: moment('2', 'MM', 'YYYY').toDate() },
-                { label: 'March', value: moment('3', 'MM', 'YYYY').toDate() },
-                { label: 'April', value: moment('4', 'MM', 'YYYY').toDate() },
-                { label: 'May', value: moment('5', 'MM', 'YYYY').toDate() },
-                { label: 'June', value: moment('6', 'MM', 'YYYY').toDate() },
-                { label: 'July', value: moment('7', 'MM', 'YYYY').toDate() },
-                { label: 'August', value: moment('8', 'MM', 'YYYY').toDate() },
-                { label: 'September', value: moment('9', 'MM', 'YYYY').toDate() },
-                { label: 'October', value: moment('10', 'MM', 'YYYY').toDate() },
-                { label: 'November', value: moment('11', 'MM', 'YYYY').toDate() },
-                { label: 'December', value: moment('12', 'MM', 'YYYY').toDate() }
-              ]}
-              styles={selectStyles}
-              placeholder="Select Month"
-              value={month}
-              onChange={(selected) => {
-                setMonth(selected)
-                if (selected.label === 'All') {
-                  setUserStartDate(moment(moment('1', 'MM', 'YYYY').toDate()).startOf('month').toDate())
-                  setUserEndDate(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate())
-                } else {
-                  setUserStartDate(moment(selected.value).startOf('month').toDate())
-                  setUserEndDate(moment(selected.value).endOf('month').toDate())
-                }
-              }}
-            />
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="margin-b-10" style={{ width: 200 }}>
+              <Select
+                options={dates}
+                styles={selectStyles}
+                placeholder="Select Month"
+                value={month}
+                onChange={(selected) => {
+                  setMonth(selected)
+                  if (selected.label === 'All') {
+                    setUserStartDate(moment(moment(moment('1', 'MM', 'YYYY').toDate()).startOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate())
+                    setUserEndDate(moment(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate())
+                  } else {
+                    setUserStartDate(moment(moment(selected.value).startOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate())
+                    setUserEndDate(moment(moment(selected.value).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate())
+                  }
+                }}
+              />
+            </div>
+            <div className="relative" style={{ marginTop: 10, marginLeft: 10 }}>
+              <CalendarLineIcon
+                size={18}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  zIndex: 10,
+                  marginTop: 10,
+                  marginRight: 10
+                }}
+              />
+              <ReactDatePicker
+                className="text-field"
+                selected={year}
+                showYearPicker
+                dateFormat="yyyy"
+                onChange={(date) => {
+                  setYear(date)
+                  setDates(data => data.map(item => ({ label: item.label, value: moment(item.value).set('year', moment(date).format('YYYY')).toDate() })))
+                  if (month.label === 'All') {
+                    setUserStartDate(moment(moment(moment('1', 'MM', 'YYYY').toDate()).startOf('month').toDate()).set('year', moment(date).format('YYYY')).toDate())
+                    setUserEndDate(moment(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate()).set('year', moment(date).format('YYYY')).toDate())
+                  } else {
+                    setUserStartDate(moment(moment(month.value).startOf('month').toDate()).set('year', moment(date).format('YYYY')).toDate())
+                    setUserEndDate(moment(moment(month.value).endOf('month').toDate()).set('year', moment(date).format('YYYY')).toDate())
+                  }
+                }}
+                placeholderText="Select Year"
+                maxDate={new Date()}
+              />
+            </div>
           </div>
           <div style={{ width: '7.9in', display: 'flex', justifyContent: 'space-between' }}>
             <div className="flex items-center" style={{ width: 200 }}>
-              <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <div className="margin-b-10 relative" style={{ marginTop: 10, zIndex: 0 }}>
                 <CalendarLineIcon
                   size={18}
                   style={{
@@ -519,8 +554,8 @@ const Reports = () => {
                   onChange={(date) => {
                     setUserStartDate(date)
                   }}
-                  minDate={moment(month.value).startOf('month').toDate()}
-                  maxDate={month.label === 'All' ? moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate() : moment(month.value).endOf('month').toDate()}
+                  minDate={moment(moment(month.value).startOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate()}
+                  maxDate={month.label === 'All' ? moment(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate() : moment(moment(month.value).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate()}
                   placeholderText="Start Date"
                 />
               </div>
@@ -528,7 +563,7 @@ const Reports = () => {
                 style={{ marginBottom: 10, marginLeft: 10, marginRight: 10 }}>
                 -
               </label>
-              <div className="margin-b-10 relative" style={{ marginTop: 10 }}>
+              <div className="margin-b-10 relative" style={{ marginTop: 10, zIndex: 0 }}>
                 <CalendarLineIcon
                   size={18}
                   style={{
@@ -544,7 +579,7 @@ const Reports = () => {
                   selected={userEndDate}
                   dateFormat="MM/dd/yyyy"
                   minDate={userStartDate}
-                  maxDate={month.label === 'All' ? moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate() : moment(month.value).endOf('month').toDate()}
+                  maxDate={month.label === 'All' ? moment(moment(moment('12', 'MM', 'YYYY').toDate()).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate() : moment(moment(month.value).endOf('month').toDate()).set('year', moment(year).format('YYYY')).toDate()}
                   onChange={(date) => {
                     setUserEndDate(date)
                   }}
@@ -575,7 +610,8 @@ const Reports = () => {
                 vaccinatedDogs,
                 euthanizedDogs
               },
-              month: month
+              month: month,
+              year: year
             }}
           />
           <div style={{ marginTop: 20, paddingTop: 20 }} />
