@@ -23,7 +23,7 @@ const AnnouncementMessage = ({ item, onArchive, onUpdate, role, onRestore }) => 
   )
 
   return (
-    <div className="announcement-message mb-10" style={{ paddingTop: 0, position: 'relative', overflow: 'hidden', backgroundColor: '#a1d3da' }}>
+    <div className="announcement-message mb-10" style={{ paddingTop: 0, position: 'relative', overflow: 'hidden', backgroundColor: '#daf2f5' }}>
       <img src="assets/icons/bg.png" style={{ position: 'absolute', left: 600, width: 150, height: 100, bottom: 0, zIndex: 0 }} />
       <div className="ancmnt-msg-header" style={{ zIndex: 2 }}>
         <div className="ancmnt-msg-header-icon">
