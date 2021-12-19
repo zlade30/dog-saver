@@ -89,7 +89,7 @@ const Dashboard = () => {
     dispatch(
       getDogsAction({
         data: {
-          emailOwner: user?.email,
+          emailOwner: 'admin@dogsaver.com',
           filterBy: dogOptions[0].value,
           sortBy: userSortOptions[0].value,
           order: orderOptions[0].value
@@ -119,33 +119,31 @@ const Dashboard = () => {
       })
     )
 
-    if (user?.role === 'admin') {
-      dispatch(
-        getDogImpoundListAction({
-          data: {
-            archive: false
-          },
-          onSuccess: (list) => {
-            const payload = list?.data
-            setImpoundDogs(
-              payload?.filter((item) =>
-                moment(item?.dateAdded?.toDate()).isBetween(
-                  dogStartDate,
-                  dogEndDate
-                )
-              ).length
-            )
-          },
-          onFailure: () => {}
-        })
-      )
-    }
+    dispatch(
+      getDogImpoundListAction({
+        data: {
+          archive: false
+        },
+        onSuccess: (list) => {
+          const payload = list?.data
+          setImpoundDogs(
+            payload?.filter((item) =>
+              moment(item?.dateAdded?.toDate()).isBetween(
+                dogStartDate,
+                dogEndDate
+              )
+            ).length
+          )
+        },
+        onFailure: () => {}
+      })
+    )
 
     dispatch(
       getActivityListAction({
         data: {
           archive: false,
-          emailOwner: user?.email
+          emailOwner: 'admin@dogsaver.com'
         },
         onSuccess: (response) => {
           setClaimedDogs(
@@ -153,10 +151,7 @@ const Dashboard = () => {
               ?.filter(
                 (item) =>
                   item.type === 'claim' &&
-                  item.status === 'approved' &&
-                  (user?.role === 'admin'
-                    ? true
-                    : user.email === item.user.email)
+                  item.status === 'approved'
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isBetween(
@@ -170,10 +165,7 @@ const Dashboard = () => {
               ?.filter(
                 (item) =>
                   item.type === 'surrender' &&
-                  item.status === 'approved' &&
-                  (user?.role === 'admin'
-                    ? true
-                    : user.email === item.user.email)
+                  item.status === 'approved'
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isBetween(
@@ -187,10 +179,7 @@ const Dashboard = () => {
               ?.filter(
                 (item) =>
                   item.type === 'adoption' &&
-                  item.status === 'approved' &&
-                  (user?.role === 'admin'
-                    ? true
-                    : user.email === item.user.email)
+                  item.status === 'approved'
               )
               .filter((item) =>
                 moment(item?.dateAdded?.toDate()).isBetween(
