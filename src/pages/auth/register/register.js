@@ -42,7 +42,7 @@ const Register = () => {
     firstName: Yup.string().required('Required'),
     middleName: Yup.string().notRequired(),
     suffix: Yup.string().notRequired(),
-    phone: Yup.string().notRequired(),
+    phone: Yup.string().required('Required'),
     address: Yup.string().required('Required'),
     password: Yup.string().required('Required'),
     confirmPassword: Yup.string().required('Required')

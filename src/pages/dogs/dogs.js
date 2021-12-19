@@ -706,14 +706,14 @@ const Dogs = () => {
                 />
               </div>
             )}
-            <Pdf targetRef={ref} filename="registered-dogs.pdf">
+            {/* <Pdf targetRef={ref} filename="registered-dogs.pdf">
               {({ toPdf }) => (
                 <PrinterLineIcon
                   onClick={toPdf}
                   className="margin-l-10 cursor-pointer margin-t-10"
                 />
               )}
-            </Pdf>
+            </Pdf> */}
           </div>
         </div>
         <div className="user-list-panel">

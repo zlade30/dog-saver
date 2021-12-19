@@ -19,12 +19,14 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
   const agreementFeeRef = useRef()
   const offenseFeeRef = useRef()
 
-  const RenderField = React.forwardRef(({ key, value, onChange }, ref) => (
+  const RenderField = React.forwardRef(({ key, value, onChange, placeholder, isNum }, ref) => (
     <input
       key={key}
       value={value}
       ref={ref}
+      placeholder={placeholder}
       onChange={onChange}
+      type={`${isNum ? 'number' : 'text'}`}
       style={{ fontWeight: 'normal', fontFamily: 'Montserrat' }}
     />
   ))
@@ -198,23 +200,23 @@ const ClaimModal = ({ isOpen, onClose, onSendForm }) => {
                   textIndent: 50
                 }}>
                 <label style={{ textAlign: 'justify', lineHeight: 3 }}>
-                  AKO/KAMI SI {<RenderField key="name" ref={nameRef} />} NGA
+                  AKO/KAMI SI {<RenderField placeholder="Name" key="name" ref={nameRef} />} NGA
                   LUMULUPYO SA PUROK-
-                  {<RenderField key="purok" ref={purokRef} />} DAMILAG, MANOLO
+                  {<RenderField key="purok" placeholder="Purok" ref={purokRef} />} DAMILAG, MANOLO
                   FORTICH, BUKIDNON. NGA KAMI NANAG-IYA SA IRO/IRING NGA
-                  (KASARIAN) {<RenderField key="gender" ref={genderRef} />}
-                  (COLOR) {<RenderField key="color" ref={colorRef} />} NGA
+                  (KASARIAN) {<RenderField key="gender" placeholder="Gender" ref={genderRef} />}
+                  (COLOR) {<RenderField key="color" placeholder="Color" ref={colorRef} />} NGA
                   NADAKPAN SA ATONG BARANGAY DOG IMPOUNDING PERSONNEL DIDTO SA{' '}
-                  {<RenderField key="address" ref={addressRef} />} NIADTONG
-                  {<RenderField key="dateCaught" ref={dateCaughtRef} />}
+                  {<RenderField key="address" placeholder="Address" ref={addressRef} />} NIADTONG
+                  {<RenderField key="dateCaught" placeholder="Date caught" ref={dateCaughtRef} />}
                   KAMI NASAYOD NGA ADUNA KAMI TULUBAGON PINANSYAL NGA NAGKATIDAD
                   (P10.00/DAY DOG FOOD)
-                  {<RenderField key="dogFoodFee" ref={dogFoodFeeRef} />},
+                  {<RenderField key="dogFoodFee" placeholder="Dog Food Fee" isNum={true} ref={dogFoodFeeRef} />},
                   (P100.00 AGREEMENT FEE).
-                  {<RenderField key="agreementFee" ref={agreementFeeRef} />}
+                  {<RenderField key="agreementFee" placeholder="Agreement Fee" isNum={true} ref={agreementFeeRef} />}
                   FIRST OFFENSE, P1,500 - SECOND OFFENSE AS PER MUN. ORD. NO.
                   2019-1255){' '}
-                  {<RenderField key="offenseFee" ref={offenseFeeRef} />} 1st/2nd
+                  {<RenderField key="offenseFee" placeholder="Offense Fee" isNum={true} ref={offenseFeeRef} />} 1st/2nd
                   OFFENSE.
                 </label>
               </div>

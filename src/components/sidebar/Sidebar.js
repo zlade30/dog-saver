@@ -10,6 +10,7 @@ import HomeLineIcon from 'remixicon-react/HomeLineIcon'
 import BookLine from 'remixicon-react/BookLineIcon'
 import { useHistory, useLocation } from 'react-router'
 import PencilLineIcon from 'remixicon-react/PencilLineIcon'
+import FileLineIcon from 'remixicon-react/FileLineIcon'
 import RightModal from 'components/modal/RightModal'
 import { adminUpdateUserAction } from 'redux/actions/user.action'
 import { useDispatch } from 'react-redux'
@@ -95,6 +96,13 @@ const Sidebar = ({ user, onLogout, setUser }) => {
       color: '#334D67',
       isActive: false,
       path: '/announcements'
+    },
+    {
+      name: 'Reports',
+      color: '#334D67',
+      isActive: false,
+      path: '/reports',
+      isHidden: user?.role !== 'admin'
     }
   ])
 
@@ -258,6 +266,8 @@ const Sidebar = ({ user, onLogout, setUser }) => {
         return <GovernmentLineIcon className="sidebar-menu-icon" size={20} />
       case 'Announcements':
         return <HornIcon color={menu?.color} />
+      case 'Reports':
+        return <FileLineIcon color={menu?.color} size={20} style={{ marginLeft: 4, marginRight: 20 }} />
     }
     return ''
   }
@@ -276,7 +286,7 @@ const Sidebar = ({ user, onLogout, setUser }) => {
         isUpdate={true}
       />
       <div className="logo margin-b-20">
-        <img className="logo-img" src="assets/icons/dog.png" />
+        <img className="logo-img" src="assets/icons/damilag.png" style={{ width: 50, height: 50 }} />
         BARK
       </div>
       <Divider width={290} />

@@ -653,14 +653,14 @@ const Impound = () => {
                 value="Add"
                 width={80}
               />
-              <Pdf targetRef={ref} filename="dog-impound.pdf">
+              {/* <Pdf targetRef={ref} filename="dog-impound.pdf">
                 {({ toPdf }) => (
                   <PrinterLineIcon
                     onClick={toPdf}
                     className="margin-l-10 cursor-pointer margin-t-10"
                   />
                 )}
-              </Pdf>
+              </Pdf> */}
             </div>
           ) : (
             <div />

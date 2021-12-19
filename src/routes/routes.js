@@ -12,6 +12,7 @@ const AboutUs = lazy(() => import('pages/about-us'))
 const Impound = lazy(() => import('pages/impound'))
 const Activities = lazy(() => import('pages/activities'))
 const PasswordReset = lazy(() => import('pages/auth/password-reset'))
+const Reports = lazy(() => import('pages/reports'))
 
 const Routes = [
   {
@@ -85,6 +86,12 @@ const Routes = [
     path: '/announcements',
     name: 'Announcements',
     component: Announcements,
+    hidden: false
+  },
+  {
+    path: '/reports',
+    name: 'Reports',
+    component: Reports,
     hidden: false
   }
 ]

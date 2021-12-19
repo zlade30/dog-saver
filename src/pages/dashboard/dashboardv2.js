@@ -464,7 +464,6 @@ const Dashboard = () => {
                   setDogStartDate(date)
                 }}
                 maxDate={dogEndDate}
-                onChangeRaw={(evt) => evt.preventDefault()}
                 placeholderText="Start Date"
               />
             </div>
@@ -492,7 +491,6 @@ const Dashboard = () => {
                 onChange={(date) => {
                   setDogEndDate(date)
                 }}
-                onChangeRaw={(evt) => evt.preventDefault()}
                 placeholderText="Start Date"
               />
             </div>
@@ -658,7 +656,6 @@ const Dashboard = () => {
                   setUserStartDate(date)
                 }}
                 maxDate={userEndDate}
-                onChangeRaw={(evt) => evt.preventDefault()}
                 placeholderText="Start Date"
               />
             </div>
@@ -686,7 +683,6 @@ const Dashboard = () => {
                 onChange={(date) => {
                   setUserEndDate(date)
                 }}
-                onChangeRaw={(evt) => evt.preventDefault()}
                 placeholderText="Start Date"
               />
             </div>

@@ -829,14 +829,14 @@ const Activities = () => {
                 placeholderText="Start Date"
               />
             </div>
-            <Pdf targetRef={ref} filename="activity.pdf">
+            {/* <Pdf targetRef={ref} filename="activity.pdf">
               {({ toPdf }) => (
                 <PrinterLineIcon
                   onClick={toPdf}
                   className="margin-b-10 margin-l-10 cursor-pointer"
                 />
               )}
-            </Pdf>
+            </Pdf> */}
           </div>
         </div>
         <div

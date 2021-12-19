@@ -14,11 +14,13 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
   const colorRef = useRef()
   const dogRef = useRef()
 
-  const RenderField = React.forwardRef(({ key, value, onChange }, ref) => (
+  const RenderField = React.forwardRef(({ key, value, onChange, placeholder, isNum }, ref) => (
     <input
       key={key}
       value={value}
       ref={ref}
+      placeholder={placeholder}
+      isNum={`${isNum ? 'number' : 'text'}`}
       onChange={onChange}
       style={{ fontWeight: 'normal', fontFamily: 'Montserrat' }}
     />
@@ -210,10 +212,10 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
                   marginBottom: 20
                 }}>
                 <label style={{ textAlign: 'justify', lineHeight: 2 }}>
-                  BETWEEN, {<RenderField key="owner" ref={ownerRef} />} owner of{' '}
-                  {<RenderField key="dog" ref={dogRef} />} (color),{' '}
-                  {<RenderField key="color" ref={colorRef} />} (gender)
-                  {<RenderField key="gender" ref={genderRef} />} dogs and the
+                  BETWEEN, {<RenderField placeholder="Owner" key="owner" ref={ownerRef} />} owner of{' '}
+                  {<RenderField key="dog" placeholder="Dog" ref={dogRef} />} (color),{' '}
+                  {<RenderField key="color" placeholder="Color" ref={colorRef} />} (gender)
+                  {<RenderField key="gender" placeholder="Gender" ref={genderRef} />} dogs and the
                   Damilag Barangay Council, Manolo Fortich, Bukidnon and Doctor
                   Richard Duites DVM.
                 </label>

@@ -646,14 +646,14 @@ const Users = () => {
               height={35}
               value="Add"
             />
-            <Pdf targetRef={ref} filename="users.pdf">
+            {/* <Pdf targetRef={ref} filename="users.pdf">
               {({ toPdf }) => (
                 <PrinterLineIcon
                   onClick={toPdf}
                   className="margin-l-10 cursor-pointer margin-t-10"
                 />
               )}
-            </Pdf>
+            </Pdf> */}
           </div>
         </div>
         <div className="user-list-panel">
