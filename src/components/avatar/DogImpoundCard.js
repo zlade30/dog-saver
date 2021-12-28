@@ -6,6 +6,7 @@ import PaintFill from 'remixicon-react/PaintFillIcon'
 import MenLineIcon from 'remixicon-react/MenLineIcon'
 import WomenLineIcon from 'remixicon-react/WomenLineIcon'
 import MapPinLineIcon from 'remixicon-react/MapPinLineIcon'
+import SyringeLineIcon from 'remixicon-react/SyringeLineIcon'
 
 import moment from 'moment'
 import Select from 'components/icons/Select'
@@ -37,7 +38,8 @@ const DogImpoundCard = ({
   onRemove,
   onView,
   onRestore,
-  onClickImage
+  onClickImage,
+  isEuthanized
 }) => {
   return (
     <div className="user-card">
@@ -86,10 +88,17 @@ const DogImpoundCard = ({
         </div>
         <div className="flex">
           <div className="user-card-label">
-            <CalendarLineIcon size={18} />
+            {isEuthanized ? (
+              <SyringeLineIcon size={18} />
+            ) : (
+              <CalendarLineIcon size={18} />
+            )}
           </div>
           <label className="user-card-value">
-            {moment(value?.dateAdded?.toDate()).format('L')}
+            {}
+            {isEuthanized
+              ? moment(value?.euthSched?.toDate()).format('L')
+              : moment(value?.dateAdded?.toDate()).format('L')}
           </label>
         </div>
       </div>
@@ -127,7 +136,8 @@ const DogImpoundCard = ({
 }
 
 DogImpoundCard.defaultProps = {
-  isAdmin: false
+  isAdmin: false,
+  isEuthanized: false
 }
 
 DogImpoundCard.propTypes = {
@@ -138,7 +148,8 @@ DogImpoundCard.propTypes = {
   onRestore: PropTypes.func,
   onClickImage: PropTypes.func,
   onView: PropTypes.func,
-  value: PropTypes.object.isRequired
+  value: PropTypes.object.isRequired,
+  isEuthanized: PropTypes.bool
 }
 
 export default DogImpoundCard

@@ -73,7 +73,7 @@ const Impound = () => {
   const [showSurrenderModal, setShowSurrenderModal] = useState(false)
   const [dogId, setDogId] = useState(null)
   const [filterStatus, setFilterStatus] = useState({
-    label: 'Active',
+    label: 'Impound Dogs',
     value: false
   })
   const [isOpenOptionModal, setIsOpenOptionModal] = useState(false)
@@ -478,11 +478,15 @@ const Impound = () => {
     dispatch(
       getDogImpoundListAction({
         data: {
-          archive: filterStatus?.value
+          archive: filterStatus?.label === 'Archive Dogs'
         },
         onSuccess: (list) => {
           setShowLoader(false)
-          setDogImpoundList(list?.data)
+          if (filterStatus.label === 'Euthanized Dogs') {
+            setDogImpoundList(list?.data?.filter((item) => item.euthSched))
+          } else {
+            setDogImpoundList(list?.data?.filter((item) => !item.euthSched))
+          }
         },
         onFailure: () => {
           setShowLoader(false)
@@ -630,12 +634,13 @@ const Impound = () => {
             <div className="flex items-center">
               <div className="flex items-center">
                 <label className="margin-t-10 margin-r-10">Filter By:</label>
-                <div style={{ width: 150, marginRight: 10 }}>
+                <div style={{ width: 200, marginRight: 10 }}>
                   <Select
                     styles={selectStyles}
                     defaultValue={filterStatus}
                     options={[
-                      { label: 'Active Dogs', value: false },
+                      { label: 'Impound Dogs', value: 'Impound Dogs' },
+                      { label: 'Euthanized Dogs', value: 'Euthanized Dogs' },
                       { label: 'Archive Dogs', value: true }
                     ]}
                     onChange={(selected) => {
@@ -686,6 +691,7 @@ const Impound = () => {
                     setDogImage4(item.profile[3])
                     setShowViewDogImagesModal(true)
                   }}
+                  isEuthanized={filterStatus.label === 'Euthanized Dogs'}
                   onUpdate={() => onUpdate(item)}
                   onRemove={() => onRemove(item)}
                   onRestore={() => onRestore(item)}

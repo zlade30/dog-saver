@@ -200,10 +200,10 @@ const ViewSurrenderModal = ({
               marginBottom: 20
             }}>
             <label style={{ textAlign: 'justify', lineHeight: 2 }}>
-              BETWEEN, {<strong>{values?.surrender?.owner}</strong>} owner of{' '}
-              {<strong>{values?.surrender?.dog}</strong>} (color),{' '}
-              {<strong>{values?.surrender?.color}</strong>} (gender){' '}
-              {<strong>{values?.surrender?.gender}</strong>} dogs and the
+              BETWEEN, {<strong>{values?.surrender?.owner.charAt(0).toUpperCase() + values?.surrender?.owner.slice(1)}</strong>} owner of{' '}
+              {<strong>{values?.surrender?.dog.charAt(0).toUpperCase() + values?.surrender?.dog.slice(1)}</strong>} (color),{' '}
+              {<strong>{values?.surrender?.color.charAt(0).toUpperCase() + values?.surrender?.color.slice(1)}</strong>} (gender){' '}
+              {<strong>{values?.surrender?.gender.charAt(0).toUpperCase() + values?.surrender?.gender.slice(1)}</strong>} dogs and the
               Damilag Barangay Council, Manolo Fortich, Bukidnon and Doctor
               Richard Duites DVM.
             </label>

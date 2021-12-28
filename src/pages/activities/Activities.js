@@ -103,7 +103,18 @@ const Activities = () => {
           paddingLeft: 20,
           fontWeight: 'bold'
         }}>
-        <label>Name</label>
+        <label>Evaluated By</label>
+      </div>
+      <div
+        style={{
+          width: '16.6%',
+          display: 'flex',
+          alignItems: 'center',
+          height: 45,
+          paddingLeft: 20,
+          fontWeight: 'bold'
+        }}>
+        <label>User</label>
       </div>
       <div
         style={{
@@ -176,6 +187,23 @@ const Activities = () => {
         display: 'flex',
         alignItems: 'center'
       }}>
+      <div
+        style={{
+          width: '16.6%',
+          display: 'flex',
+          alignItems: 'center',
+          height: 45,
+          paddingLeft: 20,
+          fontWeight: 'bold'
+        }}>
+        <label>
+          {item?.admin
+            ? `${item?.admin?.firstName} ${item?.admin?.lastName}`
+            : item?.status !== 'pending'
+            ? 'Admin'
+            : ''}
+        </label>
+      </div>
       <div
         style={{
           width: '16.6%',
@@ -299,7 +327,7 @@ const Activities = () => {
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'approved' }
+                values: { status: 'approved', admin: user }
               },
               onSuccess: async () => {
                 if (selectedActivity?.user?.email) {
@@ -335,7 +363,7 @@ const Activities = () => {
                       setActivityList((prevList) =>
                         prevList?.map((item) =>
                           item?.id === selectedActivity?.id
-                            ? { ...item, status: 'approved' }
+                            ? { ...item, status: 'approved', admin: user }
                             : item
                         )
                       )
@@ -401,7 +429,7 @@ const Activities = () => {
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'approved' }
+                values: { status: 'approved', admin: user }
               },
               onSuccess: async () => {
                 if (selectedActivity?.user?.email) {
@@ -443,7 +471,7 @@ const Activities = () => {
                       setActivityList((prevList) =>
                         prevList?.map((item) =>
                           item?.id === selectedActivity?.id
-                            ? { ...item, status: 'approved' }
+                            ? { ...item, status: 'approved', admin: user }
                             : item
                         )
                       )
@@ -508,7 +536,7 @@ const Activities = () => {
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'approved' }
+                values: { status: 'approved', admin: user }
               },
               onSuccess: async () => {
                 if (selectedActivity?.user?.email) {
@@ -549,7 +577,7 @@ const Activities = () => {
                       setActivityList((prevList) =>
                         prevList?.map((item) =>
                           item?.id === selectedActivity?.id
-                            ? { ...item, status: 'approved' }
+                            ? { ...item, status: 'approved', admin: user }
                             : item
                         )
                       )
@@ -614,7 +642,7 @@ const Activities = () => {
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'approved' }
+                values: { status: 'approved', admin: user }
               },
               onSuccess: async () => {
                 if (selectedActivity?.user?.email) {
@@ -651,7 +679,7 @@ const Activities = () => {
                       setActivityList((prevList) =>
                         prevList?.map((item) =>
                           item?.id === selectedActivity?.id
-                            ? { ...item, status: 'approved' }
+                            ? { ...item, status: 'approved', admin: user }
                             : item
                         )
                       )
@@ -719,7 +747,7 @@ const Activities = () => {
             updateActivityAction({
               data: {
                 id: selectedActivity?.id,
-                values: { status: 'rejected', rejectReason }
+                values: { status: 'rejected', rejectReason, admin: user }
               },
               onSuccess: async () => {
                 setShowLoader(false)
@@ -732,7 +760,7 @@ const Activities = () => {
                 setActivityList((prevList) =>
                   prevList?.map((item) =>
                     item?.id === selectedActivity?.id
-                      ? { ...item, status: 'rejected' }
+                      ? { ...item, status: 'rejected', admin: user }
                       : item
                   )
                 )

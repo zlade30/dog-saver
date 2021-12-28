@@ -316,8 +316,10 @@ const Sidebar = ({ user, onLogout, setUser }) => {
               color="#42C2D3"
             />
           </div>
-          <label>
-            {user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)}
+          <label style={{ wordWrap: 'break-word', width: 220 }}>
+            {!user?.subRole
+              ? user?.role?.charAt(0).toUpperCase() + user?.role?.slice(1)
+              : user?.subRole}
           </label>
         </div>
       </div>

@@ -27,6 +27,7 @@ import { Bar } from 'react-chartjs-2'
 import { getUserListAction } from 'redux/actions/user.action'
 import CalendarLineIcon from 'remixicon-react/CalendarLineIcon'
 import ReactDatePicker from 'react-datepicker'
+import { firestore } from 'firebase'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Dashboard = () => {
