@@ -623,7 +623,7 @@ const Dogs = () => {
           <div
             className="justify-between"
             style={{
-              width: user?.role === 'admin' ? 1150 : 1200
+              width: user?.role === 'admin' ? 1150 : 1300
             }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
@@ -703,6 +703,7 @@ const Dogs = () => {
                   }}
                   value="Surrender"
                   width={80}
+                  height={35}
                 />
               </div>
             )}
