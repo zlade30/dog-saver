@@ -592,7 +592,7 @@ const Users = () => {
       <div className="right-container">
         <div className="w-full justify-between" style={{ width: '98%' }}>
           <h1>Users</h1>
-          <div className="justify-between" style={{ width: 1050 }}>
+          <div className="justify-between" style={{ width: 1150 }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
               <Select
@@ -646,14 +646,17 @@ const Users = () => {
               height={35}
               value="Add"
             />
-            {/* <Pdf targetRef={ref} filename="users.pdf">
+            <Pdf targetRef={ref} filename="users.pdf">
               {({ toPdf }) => (
-                <PrinterLineIcon
+                <Button
                   onClick={toPdf}
-                  className="margin-l-10 cursor-pointer margin-t-10"
+                  width={80}
+                  height={35}
+                  value="Print"
+                  showIcon
                 />
               )}
-            </Pdf> */}
+            </Pdf>
           </div>
         </div>
         <div className="user-list-panel">

@@ -28,7 +28,7 @@ const UserReport = React.forwardRef((props, ref) => (
             fontSize: 24,
             fontWeight: 'bold'
           }}>
-          REGISTERED DOGS
+          USERS
         </div>
         <label>{moment(new Date()).format('YYYY-MM-DD')}</label>
       </div>

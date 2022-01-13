@@ -17,7 +17,7 @@ const SurrenderModal = ({ isOpen, onClose, onSendForm }) => {
   const RenderField = React.forwardRef(({ key, value, onChange, placeholder, isNum }, ref) => (
     <input
       key={key}
-      value={value}
+      value={value.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}
       ref={ref}
       placeholder={placeholder}
       isNum={`${isNum ? 'number' : 'text'}`}

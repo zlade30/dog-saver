@@ -29,6 +29,7 @@ import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
 import Pdf from 'react-to-pdf'
 import ActivityReport from './ActivityReport'
 import emailjs from 'emailjs-com'
+import Button from 'components/buttons/Button'
 
 const Activities = () => {
   const dispatch = useDispatch()
@@ -857,14 +858,19 @@ const Activities = () => {
                 placeholderText="Start Date"
               />
             </div>
-            {/* <Pdf targetRef={ref} filename="activity.pdf">
-              {({ toPdf }) => (
-                <PrinterLineIcon
-                  onClick={toPdf}
-                  className="margin-b-10 margin-l-10 cursor-pointer"
-                />
-              )}
-            </Pdf> */}
+            <div style={{ marginLeft: 10, marginBottom: 20 }}>
+              <Pdf targetRef={ref} filename="activity.pdf">
+                {({ toPdf }) => (
+                  <Button
+                    onClick={toPdf}
+                    width={80}
+                    height={35}
+                    value="Print"
+                    showIcon
+                  />
+                )}
+              </Pdf>
+            </div>
           </div>
         </div>
         <div

@@ -200,7 +200,7 @@ const ViewSurrenderModal = ({
               marginBottom: 20
             }}>
             <label style={{ textAlign: 'justify', lineHeight: 2 }}>
-              BETWEEN, {<strong>{values?.surrender?.owner.charAt(0).toUpperCase() + values?.surrender?.owner.slice(1)}</strong>} owner of{' '}
+              BETWEEN, {<strong>{values?.surrender?.owner?.replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())}</strong>} owner of{' '}
               {<strong>{values?.surrender?.dog.charAt(0).toUpperCase() + values?.surrender?.dog.slice(1)}</strong>} (color),{' '}
               {<strong>{values?.surrender?.color.charAt(0).toUpperCase() + values?.surrender?.color.slice(1)}</strong>} (gender){' '}
               {<strong>{values?.surrender?.gender.charAt(0).toUpperCase() + values?.surrender?.gender.slice(1)}</strong>} dogs and the

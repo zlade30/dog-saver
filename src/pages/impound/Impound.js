@@ -657,7 +657,21 @@ const Impound = () => {
                 }}
                 value="Add"
                 width={80}
+                height={35}
               />
+              <div style={{ marginLeft: 10 }}>
+                <Pdf targetRef={ref} filename="dog-impound.pdf">
+                  {({ toPdf }) => (
+                    <Button
+                      onClick={toPdf}
+                      width={80}
+                      height={35}
+                      value="Print"
+                      showIcon
+                    />
+                  )}
+                </Pdf>
+              </div>
               {/* <Pdf targetRef={ref} filename="dog-impound.pdf">
                 {({ toPdf }) => (
                   <PrinterLineIcon

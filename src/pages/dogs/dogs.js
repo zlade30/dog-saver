@@ -623,7 +623,7 @@ const Dogs = () => {
           <div
             className="justify-between"
             style={{
-              width: user?.role === 'admin' ? 1050 : 1200
+              width: user?.role === 'admin' ? 1150 : 1200
             }}>
             <div className="flex items-center">
               <label className="margin-t-10 margin-r-10">Filter By:</label>
@@ -706,14 +706,17 @@ const Dogs = () => {
                 />
               </div>
             )}
-            {/* <Pdf targetRef={ref} filename="registered-dogs.pdf">
+            <Pdf targetRef={ref} filename="registered-dogs.pdf">
               {({ toPdf }) => (
-                <PrinterLineIcon
+                <Button
                   onClick={toPdf}
-                  className="margin-l-10 cursor-pointer margin-t-10"
+                  width={80}
+                  height={35}
+                  value="Print"
+                  showIcon
                 />
               )}
-            </Pdf> */}
+            </Pdf>
           </div>
         </div>
         <div className="user-list-panel">

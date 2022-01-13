@@ -31,6 +31,7 @@ import Report from './Report'
 import { firestore } from 'firebase'
 import Pdf from 'react-to-pdf'
 import PrinterLineIcon from 'remixicon-react/PrinterLineIcon'
+import Button from 'components/buttons/Button'
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews)
 
 const Reports = () => {
@@ -587,14 +588,19 @@ const Reports = () => {
                 />
               </div>
             </div>
-            <Pdf targetRef={ref} filename="report.pdf">
-              {({ toPdf }) => (
-                <PrinterLineIcon
-                  onClick={toPdf}
-                  className="margin-l-10 cursor-pointer margin-t-10"
-                />
-              )}
-            </Pdf>
+            <div style={{ marginLeft: 10 }}>
+              <Pdf targetRef={ref} filename="report.pdf">
+                {({ toPdf }) => (
+                  <Button
+                    onClick={toPdf}
+                    width={80}
+                    height={35}
+                    value="Print"
+                    showIcon
+                  />
+                )}
+              </Pdf>
+            </div>
           </div>
           <Report
             ref={ref}
