@@ -58,7 +58,7 @@ const DogForm = ({
     spayed: Yup.boolean().required('Required'),
     vaccineReceived: Yup.string('').notRequired(),
     vaccineDate: Yup.string('').notRequired(),
-    birthday: Yup.string().required('Required')
+    birthday: Yup.string('').notRequired()
   })
 
   useEffect(() => {
@@ -496,7 +496,7 @@ DogForm.defaultProps = {
     gender: '',
     spayed: false,
     vaccineReceived: '',
-    birthday: new Date(),
+    birthday: '',
     vaccineDate: new Date()
   },
   isUpdate: false

@@ -23,16 +23,16 @@ const DogReport = React.forwardRef((props, ref) => (
           alignItems: 'center',
           justifyContent: 'center'
         }}>
-        <div
-          style={{
-            fontSize: 24,
-            fontWeight: 'bold'
-          }}>
-          REGISTERED DOGS
-        </div>
-        <label>{moment(new Date()).format('YYYY-MM-DD')}</label>
+          <div style={{ fontSize: 14 }}>Republic of the Philippines</div>
+          <div style={{ fontSize: 14 }}>Province of Bukidnon</div>
+          <div style={{ fontSize: 14, fontWeight: 'bold' }}>MUNICIPALITY OF MANOLO FORTICH</div>
+          <div style={{ fontSize: 14 }}>Barangay Damilag</div>
       </div>
       <img src="assets/icons/sk.png" style={{ width: 100 }} />
+    </div>
+    <div style={{ width: '7.9in', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', marginTop: 50, marginBottom: 50 }}>
+      <div style={{ fontSize: 14, fontWeight: 'bold' }}>REGISTERED DOGS</div>
+      <div style={{ fontSize: 14, fontWeight: 'bold' }}>MONTHLY SUMMARY REPORT</div>
     </div>
     <div
       style={{
@@ -68,6 +68,21 @@ const DogReport = React.forwardRef((props, ref) => (
           </tr>
         ))}
       </table>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop: 40, paddingLeft: 20 }}>
+      <div style={{ fontSize: 14 }}>Prepared by:</div>
+      <div style={{ fontSize: 14, marginTop: 20 }}>________________________________</div>
+      <div style={{ fontSize: 14 }}>Barangay Animal Health Worker</div>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20, paddingLeft: 20 }}>
+      <div style={{ fontSize: 14, textDecoration: 'underline', fontWeight: 'bold' }}>ANTHONY G. INIHAO</div>
+      <div style={{ fontSize: 14, marginTop: 5 }}>Committee Chairperson</div>
+      <div style={{ fontSize: 14, marginTop: 5 }}>On Agriculture & the environment</div>
+    </div>
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop: 20, paddingLeft: 20 }}>
+      <div style={{ fontSize: 14, }}>Noted By:</div>
+      <div style={{ fontSize: 14, textDecoration: 'underline', fontWeight: 'bold', marginTop: 10 }}>ALLAN G. TORRES JR.</div>
+      <div style={{ fontSize: 14, marginTop: 5 }}>Punong Barangay</div>
     </div>
   </div>
 ))

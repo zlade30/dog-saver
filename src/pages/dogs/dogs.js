@@ -45,7 +45,7 @@ const Dogs = () => {
     name: '',
     profile: [],
     color: '',
-    birthday: null,
+    birthday: '',
     breed: '',
     gender: '',
     spayed: false,
@@ -413,7 +413,10 @@ const Dogs = () => {
     setDogId(dog?.id)
     setIsUpdate(true)
     setShowFormModal(true)
-    setFormValues(dog)
+    setFormValues({
+      ...dog,
+      name: ''
+    })
   }
 
   const onRemove = (dog) => {

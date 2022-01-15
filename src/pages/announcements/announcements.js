@@ -265,19 +265,21 @@ const Announcements = () => {
                   />
                 </div>
               </div>
-              <Button
-                onClick={() => {
-                  setIsUpdate(false)
-                  setShowFormModal(true)
-                  setFormValues({
-                    title: '',
-                    content: ''
-                  })
-                }}
-                width={80}
-                height={35}
-                value="Add"
-              />
+              {filterBy.label !== 'Archive Announcements' && (
+                <Button
+                  onClick={() => {
+                    setIsUpdate(false)
+                    setShowFormModal(true)
+                    setFormValues({
+                      title: '',
+                      content: ''
+                    })
+                  }}
+                  width={80}
+                  height={35}
+                  value="Add"
+                />
+              )}
             </div>
           )}
         </div>
